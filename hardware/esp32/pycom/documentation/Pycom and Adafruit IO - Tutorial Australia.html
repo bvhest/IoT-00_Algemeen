@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<!-- saved from url=(0092)https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html -->
+<html lang="en" id="top" class=" js no-touch localstorage no-ios" style=""><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Internet of Things with Pycom and Adafruit IO - From Zero to Hero - Tutorial Australia</title>
+<meta name="description" content="Introduction
+We’re going from zero to hero. Starting from nothing we’ll get a WiPy communicating with Adafruit IO, an IoT service out on the Internet. We’ll be able to send data from the device to the cloud and control the device from the website at Adafruit IO. While this is a long guide it’s the fastest path to Pycom satisfaction. From here you can do anything!
+UPDATE! Project code now available on Github.
+Requirements
+We&#39;ll need:
+
+Windows PC with WiFi
+A wireless access point with Internet access
+Any Pycom board (WiPy 3.0, SiPy, LoPy, GPy or FiPy)
+Any Pycom expansion board (Expansion Board 2.0, PySense or PyTrack)
+USB 2.0 Micro-B cable
+Single jumper wire (male-male)
+
+When using a Pycom board with one of the available expansion boards; orient them with the LED to the USB socket.
+WARNING: External aerials must be attached before attaching power to LoRa, Sigfox or cellular LTE devices! That’s LoPy, SiPy, GPy or FiPy.
+Driver Setup
+I’ll cover only the basics with getting the hardware working. The Pycom documentation is excellent, head to docs.pycom.io for help if you get stuck. After connecting the expansion board to the PC with a micro-USB cable, open Device Manager to see if the Pycom board is set up.
+
+Device Manager showing WiPy installed
+
+
+
+Device Manager showing WiPy not installed
+
+Installing the Pycom WiPy manually:
+
+Even in Windows 10 I found the board is not set up automatically. No problem, we can get a link to the correct driver from the Pycom documentation (1.3.1 Updating Firmware).
+Scrolling down the page shows all the available drivers. I have a 64-bit Windows system, so I’ll pick that driver.
+Once downloaded, extract the file.
+Go back to Device Manager and right click on the FT230X Basic UART under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software … 
+Click the Browse button and navigate to the folder where you extracted the download file. Click OK.
+Click Next. The driver should be installed. The device is now identified as a USB Serial Converter.
+Click Close. The new USB Serial Converter is located under Universal Serial Bus Controllers
+If you look under Other devices, you’ll see another device that’s not installed. It’s called USB Serial Port.
+Right click on the USB Serial Port under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software …
+The correct folder should already be selected. Click Next.
+After installing the device it’s now called USB Serial Port. Click Close
+Now in Device Manager you can see the USB Serial Port is now listed under Ports (COM &amp; LPT)
+15. Take a note of the COM number associated with the port. Mine is COM3.
+
+The WiPy is now fully installed.
+Firmware Upgrade
+It’s quite probable that any issues you might have getting started with a device have already been fixed. So always update your firmware.
+
+Download and install the Pycom Firmware Updater from the Firmware Update Tools page. Allow the app to start at the end of installation but stop on the Welcome screen.
+Unplug the USB cable from the WiPy. Add a jumper from G23 to GND. Plug the USB back in.
+Work through the Pycom Upgrade wizard. Read everything. This process will not work if don’t follow it fully. But don’t worry about breaking your Pycom device. If it’s not unplugged during the update, it’ll be fine!
+
+After the update is complete you should find your WiPy is broadcasting its own WiFi network called (something like) wipy-wlan-238c. We’ll use this in a minute.
+Communicating with the WiPy
+Your WiPy is ready to communicate! It can “talk” Telnet and FTP right out of the box. Because MicroPython doesn’t need to be compiled first then uploaded, we can write code and run it immediately. Python calls this Read-Evaluate-Print-Loop, or REPL for short. You need a Telnet application (like PuTTY) to do this. Here’s what it looks like:
+
+Using PuTTY to Telnet directly to the WiPy
+
+Check the documentation for more: 2.3.2 Telnet and 2.4 FTP.
+Software Setup
+So that we can have a nice place to write code for our Pycom devices, we need an Integrated Development Environment (IDE). This will give use a REPL prompt, like Telnet, as well as the ability to create multiple code files, run these directly on the device and upload/download features. Atom is good, so we’ll install that.
+The Atom IDE
+
+The Atom IDE
+
+
+
+Go to Atom on Github and scroll down the page to find the Windows heading. Find the Atom installer link and click that to go to the download page for the latest version of Atom.
+There are all kinds of downloads available. If you’re using 64-bit Windows version, download the AtomSetup-x64.exe file, otherwise get AtomSetup.exe.
+After downloading, run the file to install the Atom IDE. It’s fully automatic. When Atom is installed it will open by itself.
+A dialog will be asking to Register as default atom:// URI handler?. Click Yes, Always.
+Below that question, find Install a Package and click it. Then click Open Installer.
+The left side of Atom now shows the Install Packages heading.
+Search for pymakr. When the latest pymakr package is found, install it. It might take a minute or two.
+
+Atom is now installed and pymakr is ready to communicate with the WiPy. At this point Atom should have opened an empty panel across the bottom of the application. It should be Connecting on 192.168.4.1… but failing. We mentioned the WiPy will broadcast its own WiFi network. We need to join it now. When I look at the list of networks near my computer, one is called wipy-wlan-238c. That’s the one I will use. Join this WiFi network using the username micro and password python.
+
+WiFi networks list
+
+Having joined to the network created by the WiPy we can now go back to Atom and click in the bottom panel to connect. When connected, you’ll see a triple “greater than” which is the command prompt for MicroPython.
+Trying It Out
+Tradition dictates our first program should print out “Hello World”. Boring. Let’s print something else!
+
+Pycom ROCKS!
+
+You may have noticed the WiPy gives a blue flash “heartbeat” ever 4 seconds. That LED is something we can play with. Have a look at the RGB LED page in the Tutorials &amp; Examples section of the Pycom documentation. When I enter this code, I get a bright green on the LED:
+&gt;&gt;&gt; print(" pycom="" rocks!")="" rocks!="" &gt;&gt;&gt;="" import="" pycom.heartbeat(false)="" pycom.rgbled(0x00ff00)="" this="" ability="" to="" write="" code="" directly="" on="" the="" microcontroller="" isn&rsquo;t="" available="" some="" other="" device.="" if="" you="" know="" arduino,="" then="" you&rsquo;ll="" need="" verify="" (compile)="" and="" upload="" (transfer)="" your="" entire="" project="" every="" time="" want="" run="" it.="" but="" micropython="" can="" read,="" evaluate,="" print="" loop="" (repl)="" without="" any="" compile="" or="" process.="" fantastic!="" switching="" serial="" because="" we="" connect="" our="" wipy="" internet="" do="" cool="" things,="" change="" over="" communicating="" with="" it="" by="" serial.="" simply="" in="" atom="" ide.="" one="" of="" tabs="" open="" should="" be="" called="" settings.="" close="" rest.="" scroll="" down="" settings,="" find="" device="" address="" box.="" let&rsquo;s="" replace="" default="" 192.168.4.1="" com3="" (use="" com="" number="" saw="" manager="" earlier).="" able="" disconnect="" using="" buttons="" above="" repl="" prompt.="" adafruit="" io="" configuration="" now="" configure="" &ldquo;iot="" cloud="" service&rdquo;="" so="" has="" something="" communicate="" with.="" go="" click="" get="" started="" for="" free="" at="" top="" page="" fill="" form,="" only="" an="" email="" address.="" create="" account="" bottom.="" jump="" back="" io,="" show="" you&rsquo;re="" signed="" in.="" hit="" learn="" link="" menu="" out="" how="" works!="" i&rsquo;ve="" contrived="" is="" where="" creates="" random="" numbers="" sends="" them="" 5="" seconds.="" make="" a="" nice="" graph="" from="" them.="" also="" controllable="" we&rsquo;ll="" use="" toggle="" button="" website="" send="" messages="" wipy.="" shouldn&rsquo;t="" too="" hard="" both="" things="" work="" same="" time.="" dashboard="" uses="" &lsquo;feeds&rsquo;="" describe="" separate="" sets="" data.="" feed="" &lsquo;randoms&rsquo;="" &lsquo;lights&rsquo;.="" off="" command="" via="" &lsquo;lights&rsquo;="" feed.="" as="" per="" basics="" tutorial:="" feeds="" navigation="" bottom="" page.="" actions="" menu,="" select="" new="" randoms.="" create.="" add="" second="" lights="" line="" chart="" well:="" dashboards="" navigation.="" dashboard.="" when="" list,="" just="" created.="" blue="" +="" block.="" pick="" chart.="" have="" there&rsquo;s="" data="" randoms="" next="" step="" values="" again="" accept="" done.="" python="" done="" respond="" changes="" toggle.="" &ldquo;cloud&rdquo;="" service="" ready="" talk="" set="" up="" develop="" software="" great!="" more="" easily="" manage="" files,="" project.="" folder.="" file="" folder...="" navigate="" you&rsquo;d="" like="" put="" while="" still="" inside="" folder="" dialog,="" right-clicking="" list="" area="" give="" descriptive="" window="" opens="" pane="" shown="" left.="" previous="" now.="" squeaky="" clean="" will="" files="" boot.py="" main.py="" not,="" reset="" lower="" ensure="" connected="" comx="" port,="" not="" ip="" (192.168.4.1)="" download="" pull="" copy="" main.py.="" fails,="" press="" switch="" wipy,="" try="" again.="" that="" experiment="" save="" straight="" away.="" i&rsquo;m="" going="" call="" mine="" adafruitio.py.="" tutorial="" already="" very="" long,="" i&rsquo;ll="" skip="" full="" walkthrough="" code.="" i="" documented="" sufficient="" understanding="" what="" does="" why.="" here="" file:="" [github="" link].="" paste="" into="" file;="" putting="" #="" https:="" github.com="" micropython-lib="" blob="" master="" umqtt.simple="" example_sub_led.py="" network="" wlan="" operation="" wifi="" allows="" time.sleep()="" delays="" base="" library="" devices="" umqtt="" mqttclient="" mqtt="" protocol="" ubinascii="" needed="" machine="" interfaces="" hardware="" components="" begin="" settings="" these="" suit="" environment="" randoms_interval="5000" milliseconds="" last_random_sent_ticks="0" wireless="" wifi_ssid="IoT" wifi_pass="password77#" no="" regular="" password.="" :)="" (aio)="" aio_server="io.adafruit.com" aio_port="1883" aio_user="CoreChris" aio_key="83e6218dc6ad47d698ab1747566f3561" aio_client_id="ubinascii.hexlify(machine.unique_id())" anything="" aio_control_feed="CoreChris/feeds/lights" aio_randoms_feed="CoreChris/feeds/randoms" end="" rgbled="" disable="" on-board="" heartbeat="" (blue="" flash="" 4="" seconds)="" we'll="" led="" time.sleep(0.1)="" workaround="" bug.="" actioned="" another="" process="" occurs="" immediately="" afterwards="" pycom.rgbled(0xff0000)="" status="" red="not" working="" connection="" access="" source:="" docs.pycom.io="" chapter="" tutorials="" all="" wlan.html="" wlan.connect(wifi_ssid,="" auth="(WLAN.WPA2," wifi_pass),="" timeout="5000)" wlan.isconnected():="" waits="" until="" connects="" machine.idle()="" print("connected="" wifi")="" pycom.rgbled(0xffd7000)="" orange:="" partially="" functions="" function="" def="" sub_cb(topic,="" msg):="" sub_cb="" means="" "callback="" subroutine"="" print((topic,="" msg))="" outputs="" message="" was="" received.="" debugging="" use.="" msg="=" b"on":="" says="" "on"="" ...="" pycom.rgbled(0xffffff)="" elif="" b"off":="" "off"="" pycom.rgbled(0x000000)="" else:="" received="" print("unknown="" message")="" nothing="" output="" happened.="" random_integer(upper_bound):="" return="" machine.rng()="" %="" upper_bound="" send_random():="" global="" ((time.ticks_ms()="" -="" last_random_sent_ticks)="" &lt;="" randoms_interval):="" return;="" soon="" since="" last="" sent.="" some_number="random_integer(100)" print("publishing:="" {0}="" {1}="" ".format(some_number,="" aio_randoms_feed),="" )="" try:="" client.publish(topic="AIO_RANDOMS_FEED," print("done")="" except="" exception="" e:="" print("failed")="" finally:="" client="MQTTClient(AIO_CLIENT_ID," aio_server,="" aio_port,="" aio_user,="" aio_key)="" subscribed="" delivered="" callback="" client.set_callback(sub_cb)="" client.connect()="" client.subscribe(aio_control_feed)="" %s,="" %s="" topic"="" (aio_server,="" aio_control_feed))="" green:="" online="" between="" may="" cause="" error="" disconnects="" server="" happens.="" 1:="" repeat="" forever="" client.check_msg()#="" action="" non-blocking.="" send_random()="" it's="" thrown="" client.disconnect()="" up.="" wlan.disconnect()="" pycom.rgbled(0x000022)#="" blue:="" stopped="" print("disconnected="" io.")="" below="" atom.="" error:="" traceback="" (most="" recent="" last):="" "",="" 10,="" importerror:="" module="" named="" 'umqtt'="" &gt;="" v1.8.6-849-d0dc708="" 2018-02-27;="" esp32="" type="" "help()"="" information.="" contains="" mqttclient.="" 'umqtt'.="" built-in="" micropython.="" it&rsquo;s="" so:="" project,="" umqtt.py="" github.="" simple.py,="" file.="" simple.py="" umqtt.py.="" happened?="" got="" why?="" well,="" although="" we&rsquo;ve="" added="" don&rsquo;t="" yet="" first.="" button.="" wait="" prompt="" return,="" see="" and,="" succeeds,="" rgb="" turns="" green.="" being="" graphed="" operate="" turning="" (white)="" off.="" making="" start="" adafruitio.py="" startup="" powered="" io.="" useful="" displaying="" internal="" program.="" notes="" code:="" connected,="" orange="WiFi" green="Adafruit" connected.="" cancel="" program,="" blue.="" remember="" runs="" application="" uploaded.="" can&rsquo;t="" anymore="" requesting="" receiving="" local="" network.="" built="" port="" gain="" access.="" &ldquo;hands="" off&rdquo;="" mode,="" fixed="" that&rsquo;s="" then!="" hope="" helps="" prototype="" big="" iot="" idea."="">
+<meta name="keywords" content="">
+<meta name="robots" content="INDEX,FOLLOW">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="https://core-electronics.com.au/media/favicon/default/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://core-electronics.com.au/media/favicon/default/favicon.ico" type="image/x-icon">
+<!--
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' forum.core-electronics.com.au maps.googleapis.com ajax.googleapis.com static.zdassets.com fonts.googleapis.com code.jquery.com www.facebook.com assets.zendesk.com www.googleadservices.com connect.facebook.net secure.ewaypayments.com v2.zopim.com www.google-analytics.com google.com.au googleads.g.doubleclick.net *.imgur.com oh391.infusionsoft.com; object-src 'self' ; frame-src 'self' forum.core-electronics.com.au *.doubleclick.net *.youtube.com oh391.infusionsoft.com *.facebook.com; upgrade-insecure-requests; block-all-mixed-content;">
+-->
+
+	<meta property="og:title" content="Internet of Things with Pycom and Adafruit IO - From Zero to Hero - Tutorial">
+	<meta property="og:type" content="article">
+        <meta property="og:image" content="https://core-electronics.com.au/media/kbase/iot-with-wipy-and-adafruit-io-social.jpg">
+	<meta property="og:url" content="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html">
+
+	<meta property="og:description" content="Introduction
+We’re going from zero to hero. Starting from nothing we’ll get a WiPy communicating with Adafruit IO, an IoT service out on the Internet. We’ll be able to send data from the device to the cloud and control the device from the website at Adafruit IO. While this is a long guide it’s the fastest path to Pycom satisfaction. From here you can do anything!
+UPDATE! Project code now available on Github.
+Requirements
+We&#39;ll need:
+
+Windows PC with WiFi
+A wireless access point with Internet access
+Any Pycom board (WiPy 3.0, SiPy, LoPy, GPy or FiPy)
+Any Pycom expansion board (Expansion Board 2.0, PySense or PyTrack)
+USB 2.0 Micro-B cable
+Single jumper wire (male-male)
+
+When using a Pycom board with one of the available expansion boards; orient them with the LED to the USB socket.
+WARNING: External aerials must be attached before attaching power to LoRa, Sigfox or cellular LTE devices! That’s LoPy, SiPy, GPy or FiPy.
+Driver Setup
+I’ll cover only the basics with getting the hardware working. The Pycom documentation is excellent, head to docs.pycom.io for help if you get stuck. After connecting the expansion board to the PC with a micro-USB cable, open Device Manager to see if the Pycom board is set up.
+
+Device Manager showing WiPy installed
+
+
+
+Device Manager showing WiPy not installed
+
+Installing the Pycom WiPy manually:
+
+Even in Windows 10 I found the board is not set up automatically. No problem, we can get a link to the correct driver from the Pycom documentation (1.3.1 Updating Firmware).
+Scrolling down the page shows all the available drivers. I have a 64-bit Windows system, so I’ll pick that driver.
+Once downloaded, extract the file.
+Go back to Device Manager and right click on the FT230X Basic UART under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software … 
+Click the Browse button and navigate to the folder where you extracted the download file. Click OK.
+Click Next. The driver should be installed. The device is now identified as a USB Serial Converter.
+Click Close. The new USB Serial Converter is located under Universal Serial Bus Controllers
+If you look under Other devices, you’ll see another device that’s not installed. It’s called USB Serial Port.
+Right click on the USB Serial Port under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software …
+The correct folder should already be selected. Click Next.
+After installing the device it’s now called USB Serial Port. Click Close
+Now in Device Manager you can see the USB Serial Port is now listed under Ports (COM &amp; LPT)
+15. Take a note of the COM number associated with the port. Mine is COM3.
+
+The WiPy is now fully installed.
+Firmware Upgrade
+It’s quite probable that any issues you might have getting started with a device have already been fixed. So always update your firmware.
+
+Download and install the Pycom Firmware Updater from the Firmware Update Tools page. Allow the app to start at the end of installation but stop on the Welcome screen.
+Unplug the USB cable from the WiPy. Add a jumper from G23 to GND. Plug the USB back in.
+Work through the Pycom Upgrade wizard. Read everything. This process will not work if don’t follow it fully. But don’t worry about breaking your Pycom device. If it’s not unplugged during the update, it’ll be fine!
+
+After the update is complete you should find your WiPy is broadcasting its own WiFi network called (something like) wipy-wlan-238c. We’ll use this in a minute.
+Communicating with the WiPy
+Your WiPy is ready to communicate! It can “talk” Telnet and FTP right out of the box. Because MicroPython doesn’t need to be compiled first then uploaded, we can write code and run it immediately. Python calls this Read-Evaluate-Print-Loop, or REPL for short. You need a Telnet application (like PuTTY) to do this. Here’s what it looks like:
+
+Using PuTTY to Telnet directly to the WiPy
+
+Check the documentation for more: 2.3.2 Telnet and 2.4 FTP.
+Software Setup
+So that we can have a nice place to write code for our Pycom devices, we need an Integrated Development Environment (IDE). This will give use a REPL prompt, like Telnet, as well as the ability to create multiple code files, run these directly on the device and upload/download features. Atom is good, so we’ll install that.
+The Atom IDE
+
+The Atom IDE
+
+
+
+Go to Atom on Github and scroll down the page to find the Windows heading. Find the Atom installer link and click that to go to the download page for the latest version of Atom.
+There are all kinds of downloads available. If you’re using 64-bit Windows version, download the AtomSetup-x64.exe file, otherwise get AtomSetup.exe.
+After downloading, run the file to install the Atom IDE. It’s fully automatic. When Atom is installed it will open by itself.
+A dialog will be asking to Register as default atom:// URI handler?. Click Yes, Always.
+Below that question, find Install a Package and click it. Then click Open Installer.
+The left side of Atom now shows the Install Packages heading.
+Search for pymakr. When the latest pymakr package is found, install it. It might take a minute or two.
+
+Atom is now installed and pymakr is ready to communicate with the WiPy. At this point Atom should have opened an empty panel across the bottom of the application. It should be Connecting on 192.168.4.1… but failing. We mentioned the WiPy will broadcast its own WiFi network. We need to join it now. When I look at the list of networks near my computer, one is called wipy-wlan-238c. That’s the one I will use. Join this WiFi network using the username micro and password python.
+
+WiFi networks list
+
+Having joined to the network created by the WiPy we can now go back to Atom and click in the bottom panel to connect. When connected, you’ll see a triple “greater than” which is the command prompt for MicroPython.
+Trying It Out
+Tradition dictates our first program should print out “Hello World”. Boring. Let’s print something else!
+
+Pycom ROCKS!
+
+You may have noticed the WiPy gives a blue flash “heartbeat” ever 4 seconds. That LED is something we can play with. Have a look at the RGB LED page in the Tutorials &amp; Examples section of the Pycom documentation. When I enter this code, I get a bright green on the LED:
+&gt;&gt;&gt; print(" pycom="" rocks!")="" rocks!="" &gt;&gt;&gt;="" import="" pycom.heartbeat(false)="" pycom.rgbled(0x00ff00)="" this="" ability="" to="" write="" code="" directly="" on="" the="" microcontroller="" isn&rsquo;t="" available="" some="" other="" device.="" if="" you="" know="" arduino,="" then="" you&rsquo;ll="" need="" verify="" (compile)="" and="" upload="" (transfer)="" your="" entire="" project="" every="" time="" want="" run="" it.="" but="" micropython="" can="" read,="" evaluate,="" print="" loop="" (repl)="" without="" any="" compile="" or="" process.="" fantastic!="" switching="" serial="" because="" we="" connect="" our="" wipy="" internet="" do="" cool="" things,="" change="" over="" communicating="" with="" it="" by="" serial.="" simply="" in="" atom="" ide.="" one="" of="" tabs="" open="" should="" be="" called="" settings.="" close="" rest.="" scroll="" down="" settings,="" find="" device="" address="" box.="" let&rsquo;s="" replace="" default="" 192.168.4.1="" com3="" (use="" com="" number="" saw="" manager="" earlier).="" able="" disconnect="" using="" buttons="" above="" repl="" prompt.="" adafruit="" io="" configuration="" now="" configure="" &ldquo;iot="" cloud="" service&rdquo;="" so="" has="" something="" communicate="" with.="" go="" click="" get="" started="" for="" free="" at="" top="" page="" fill="" form,="" only="" an="" email="" address.="" create="" account="" bottom.="" jump="" back="" io,="" show="" you&rsquo;re="" signed="" in.="" hit="" learn="" link="" menu="" out="" how="" works!="" i&rsquo;ve="" contrived="" is="" where="" creates="" random="" numbers="" sends="" them="" 5="" seconds.="" make="" a="" nice="" graph="" from="" them.="" also="" controllable="" we&rsquo;ll="" use="" toggle="" button="" website="" send="" messages="" wipy.="" shouldn&rsquo;t="" too="" hard="" both="" things="" work="" same="" time.="" dashboard="" uses="" &lsquo;feeds&rsquo;="" describe="" separate="" sets="" data.="" feed="" &lsquo;randoms&rsquo;="" &lsquo;lights&rsquo;.="" off="" command="" via="" &lsquo;lights&rsquo;="" feed.="" as="" per="" basics="" tutorial:="" feeds="" navigation="" bottom="" page.="" actions="" menu,="" select="" new="" name="" randoms.="" create.="" add="" second="" lights="" line="" chart="" well:="" dashboards="" navigation.="" dashboard.="" when="" list,="" just="" created.="" blue="" +="" block.="" pick="" chart.="" have="" there&rsquo;s="" data="" randoms="" next="" step="" values="" again="" accept="" done.="" python="" done="" respond="" changes="" toggle.="" &ldquo;cloud&rdquo;="" service="" ready="" talk="" set="" up="" develop="" software="" great!="" more="" easily="" manage="" files,="" project.="" folder.="" file="" folder...="" navigate="" you&rsquo;d="" like="" put="" while="" still="" inside="" folder="" dialog,="" right-clicking="" list="" area="" give="" descriptive="" window="" opens="" pane="" shown="" left.="" previous="" now.="" squeaky="" clean="" will="" files="" boot.py="" main.py="" not,="" reset="" lower="" ensure="" connected="" comx="" port,="" not="" ip="" (192.168.4.1)="" download="" pull="" copy="" main.py.="" fails,="" press="" switch="" wipy,="" try="" again.="" that="" experiment="" save="" straight="" away.="" i&rsquo;m="" going="" call="" mine="" adafruitio.py.="" tutorial="" already="" very="" long,="" i&rsquo;ll="" skip="" full="" walkthrough="" code.="" i="" documented="" sufficient="" understanding="" what="" does="" why.="" here="" file:="" [github="" link].="" paste="" into="" file;="" putting="" #="" https:="" github.com="" micropython-lib="" blob="" master="" umqtt.simple="" example_sub_led.py="" network="" wlan="" operation="" wifi="" allows="" time.sleep()="" delays="" base="" library="" devices="" umqtt="" mqttclient="" mqtt="" protocol="" ubinascii="" needed="" machine="" interfaces="" hardware="" components="" begin="" settings="" these="" suit="" environment="" randoms_interval="5000" milliseconds="" last_random_sent_ticks="0" wireless="" wifi_ssid="IoT" wifi_pass="password77#" no="" regular="" password.="" :)="" (aio)="" aio_server="io.adafruit.com" aio_port="1883" aio_user="CoreChris" aio_key="83e6218dc6ad47d698ab1747566f3561" aio_client_id="ubinascii.hexlify(machine.unique_id())" anything="" aio_control_feed="CoreChris/feeds/lights" aio_randoms_feed="CoreChris/feeds/randoms" end="" rgbled="" disable="" on-board="" heartbeat="" (blue="" flash="" 4="" seconds)="" we'll="" led="" time.sleep(0.1)="" workaround="" bug.="" actioned="" another="" process="" occurs="" immediately="" afterwards="" pycom.rgbled(0xff0000)="" status="" red="not" working="" connection="" access="" source:="" docs.pycom.io="" chapter="" tutorials="" all="" wlan.html="" wlan.connect(wifi_ssid,="" auth="(WLAN.WPA2," wifi_pass),="" timeout="5000)" wlan.isconnected():="" waits="" until="" connects="" machine.idle()="" print("connected="" wifi")="" pycom.rgbled(0xffd7000)="" orange:="" partially="" functions="" function="" def="" sub_cb(topic,="" msg):="" sub_cb="" means="" "callback="" subroutine"="" print((topic,="" msg))="" outputs="" message="" was="" received.="" debugging="" use.="" msg="=" b"on":="" says="" "on"="" ...="" pycom.rgbled(0xffffff)="" elif="" b"off":="" "off"="" pycom.rgbled(0x000000)="" else:="" received="" print("unknown="" message")="" nothing="" output="" happened.="" random_integer(upper_bound):="" return="" machine.rng()="" %="" upper_bound="" send_random():="" global="" ((time.ticks_ms()="" -="" last_random_sent_ticks)="" &lt;="" randoms_interval):="" return;="" soon="" since="" last="" sent.="" some_number="random_integer(100)" print("publishing:="" {0}="" {1}="" ".format(some_number,="" aio_randoms_feed),="" )="" try:="" client.publish(topic="AIO_RANDOMS_FEED," print("done")="" except="" exception="" e:="" print("failed")="" finally:="" client="MQTTClient(AIO_CLIENT_ID," aio_server,="" aio_port,="" aio_user,="" aio_key)="" subscribed="" delivered="" callback="" client.set_callback(sub_cb)="" client.connect()="" client.subscribe(aio_control_feed)="" %s,="" %s="" topic"="" (aio_server,="" aio_control_feed))="" green:="" online="" between="" may="" cause="" error="" disconnects="" server="" happens.="" 1:="" repeat="" forever="" client.check_msg()#="" action="" non-blocking.="" send_random()="" it's="" thrown="" client.disconnect()="" up.="" wlan.disconnect()="" pycom.rgbled(0x000022)#="" blue:="" stopped="" print("disconnected="" io.")="" below="" atom.="" error:="" traceback="" (most="" recent="" last):="" "",="" 10,="" importerror:="" module="" named="" 'umqtt'="" &gt;="" v1.8.6-849-d0dc708="" 2018-02-27;="" esp32="" type="" "help()"="" information.="" contains="" mqttclient.="" 'umqtt'.="" built-in="" micropython.="" it&rsquo;s="" so:="" project,="" umqtt.py="" github.="" simple.py,="" file.="" simple.py="" umqtt.py.="" happened?="" got="" why?="" well,="" although="" we&rsquo;ve="" added="" don&rsquo;t="" yet="" first.="" button.="" wait="" prompt="" return,="" see="" and,="" succeeds,="" rgb="" turns="" green.="" being="" graphed="" operate="" turning="" (white)="" off.="" making="" start="" adafruitio.py="" startup="" powered="" io.="" useful="" displaying="" internal="" program.="" notes="" code:="" connected,="" orange="WiFi" green="Adafruit" connected.="" cancel="" program,="" blue.="" remember="" runs="" application="" uploaded.="" can&rsquo;t="" anymore="" requesting="" receiving="" local="" network.="" built="" port="" gain="" access.="" &ldquo;hands="" off&rdquo;="" mode,="" fixed="" that&rsquo;s="" then!="" hope="" helps="" prototype="" big="" iot="" idea."="">
+	<meta property="og:site_name" content="Core Electronics">
+	
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@CoreElecAU">
+	<meta name="twitter:title" content="Internet of Things with Pycom and Adafruit IO - From Zero to Hero - Tutorial">
+	<meta name="twitter:image" content="https://core-electronics.com.au/media/kbase/iot-with-wipy-and-adafruit-io-social.jpg">
+	
+		<meta property="twitter:description" content="Introduction
+We’re going from zero to hero. Starting from nothing we’ll get a WiPy communicating with Adafruit IO, an IoT service out on the Internet. We’ll be able to send data from the device to the cloud and control the device from the website at Adafruit IO. While this is a long guide it’s the fastest path to Pycom satisfaction. From here you can do anything!
+UPDATE! Project code now available on Github.
+Requirements
+We&#39;ll need:
+
+Windows PC with WiFi
+A wireless access point with Internet access
+Any Pycom board (WiPy 3.0, SiPy, LoPy, GPy or FiPy)
+Any Pycom expansion board (Expansion Board 2.0, PySense or PyTrack)
+USB 2.0 Micro-B cable
+Single jumper wire (male-male)
+
+When using a Pycom board with one of the available expansion boards; orient them with the LED to the USB socket.
+WARNING: External aerials must be attached before attaching power to LoRa, Sigfox or cellular LTE devices! That’s LoPy, SiPy, GPy or FiPy.
+Driver Setup
+I’ll cover only the basics with getting the hardware working. The Pycom documentation is excellent, head to docs.pycom.io for help if you get stuck. After connecting the expansion board to the PC with a micro-USB cable, open Device Manager to see if the Pycom board is set up.
+
+Device Manager showing WiPy installed
+
+
+
+Device Manager showing WiPy not installed
+
+Installing the Pycom WiPy manually:
+
+Even in Windows 10 I found the board is not set up automatically. No problem, we can get a link to the correct driver from the Pycom documentation (1.3.1 Updating Firmware).
+Scrolling down the page shows all the available drivers. I have a 64-bit Windows system, so I’ll pick that driver.
+Once downloaded, extract the file.
+Go back to Device Manager and right click on the FT230X Basic UART under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software … 
+Click the Browse button and navigate to the folder where you extracted the download file. Click OK.
+Click Next. The driver should be installed. The device is now identified as a USB Serial Converter.
+Click Close. The new USB Serial Converter is located under Universal Serial Bus Controllers
+If you look under Other devices, you’ll see another device that’s not installed. It’s called USB Serial Port.
+Right click on the USB Serial Port under Other Devices, pick Update Driver
+Choose the option to Browse my computer for driver software …
+The correct folder should already be selected. Click Next.
+After installing the device it’s now called USB Serial Port. Click Close
+Now in Device Manager you can see the USB Serial Port is now listed under Ports (COM &amp; LPT)
+15. Take a note of the COM number associated with the port. Mine is COM3.
+
+The WiPy is now fully installed.
+Firmware Upgrade
+It’s quite probable that any issues you might have getting started with a device have already been fixed. So always update your firmware.
+
+Download and install the Pycom Firmware Updater from the Firmware Update Tools page. Allow the app to start at the end of installation but stop on the Welcome screen.
+Unplug the USB cable from the WiPy. Add a jumper from G23 to GND. Plug the USB back in.
+Work through the Pycom Upgrade wizard. Read everything. This process will not work if don’t follow it fully. But don’t worry about breaking your Pycom device. If it’s not unplugged during the update, it’ll be fine!
+
+After the update is complete you should find your WiPy is broadcasting its own WiFi network called (something like) wipy-wlan-238c. We’ll use this in a minute.
+Communicating with the WiPy
+Your WiPy is ready to communicate! It can “talk” Telnet and FTP right out of the box. Because MicroPython doesn’t need to be compiled first then uploaded, we can write code and run it immediately. Python calls this Read-Evaluate-Print-Loop, or REPL for short. You need a Telnet application (like PuTTY) to do this. Here’s what it looks like:
+
+Using PuTTY to Telnet directly to the WiPy
+
+Check the documentation for more: 2.3.2 Telnet and 2.4 FTP.
+Software Setup
+So that we can have a nice place to write code for our Pycom devices, we need an Integrated Development Environment (IDE). This will give use a REPL prompt, like Telnet, as well as the ability to create multiple code files, run these directly on the device and upload/download features. Atom is good, so we’ll install that.
+The Atom IDE
+
+The Atom IDE
+
+
+
+Go to Atom on Github and scroll down the page to find the Windows heading. Find the Atom installer link and click that to go to the download page for the latest version of Atom.
+There are all kinds of downloads available. If you’re using 64-bit Windows version, download the AtomSetup-x64.exe file, otherwise get AtomSetup.exe.
+After downloading, run the file to install the Atom IDE. It’s fully automatic. When Atom is installed it will open by itself.
+A dialog will be asking to Register as default atom:// URI handler?. Click Yes, Always.
+Below that question, find Install a Package and click it. Then click Open Installer.
+The left side of Atom now shows the Install Packages heading.
+Search for pymakr. When the latest pymakr package is found, install it. It might take a minute or two.
+
+Atom is now installed and pymakr is ready to communicate with the WiPy. At this point Atom should have opened an empty panel across the bottom of the application. It should be Connecting on 192.168.4.1… but failing. We mentioned the WiPy will broadcast its own WiFi network. We need to join it now. When I look at the list of networks near my computer, one is called wipy-wlan-238c. That’s the one I will use. Join this WiFi network using the username micro and password python.
+
+WiFi networks list
+
+Having joined to the network created by the WiPy we can now go back to Atom and click in the bottom panel to connect. When connected, you’ll see a triple “greater than” which is the command prompt for MicroPython.
+Trying It Out
+Tradition dictates our first program should print out “Hello World”. Boring. Let’s print something else!
+
+Pycom ROCKS!
+
+You may have noticed the WiPy gives a blue flash “heartbeat” ever 4 seconds. That LED is something we can play with. Have a look at the RGB LED page in the Tutorials &amp; Examples section of the Pycom documentation. When I enter this code, I get a bright green on the LED:
+&gt;&gt;&gt; print(" pycom="" rocks!")="" rocks!="" &gt;&gt;&gt;="" import="" pycom.heartbeat(false)="" pycom.rgbled(0x00ff00)="" this="" ability="" to="" write="" code="" directly="" on="" the="" microcontroller="" isn&rsquo;t="" available="" some="" other="" device.="" if="" you="" know="" arduino,="" then="" you&rsquo;ll="" need="" verify="" (compile)="" and="" upload="" (transfer)="" your="" entire="" project="" every="" time="" want="" run="" it.="" but="" micropython="" can="" read,="" evaluate,="" print="" loop="" (repl)="" without="" any="" compile="" or="" process.="" fantastic!="" switching="" serial="" because="" we="" connect="" our="" wipy="" internet="" do="" cool="" things,="" change="" over="" communicating="" with="" it="" by="" serial.="" simply="" in="" atom="" ide.="" one="" of="" tabs="" open="" should="" be="" called="" settings.="" close="" rest.="" scroll="" down="" settings,="" find="" device="" address="" box.="" let&rsquo;s="" replace="" default="" 192.168.4.1="" com3="" (use="" com="" number="" saw="" manager="" earlier).="" able="" disconnect="" using="" buttons="" above="" repl="" prompt.="" adafruit="" io="" configuration="" now="" configure="" &ldquo;iot="" cloud="" service&rdquo;="" so="" has="" something="" communicate="" with.="" go="" click="" get="" started="" for="" free="" at="" top="" page="" fill="" form,="" only="" an="" email="" address.="" create="" account="" bottom.="" jump="" back="" io,="" show="" you&rsquo;re="" signed="" in.="" hit="" learn="" link="" menu="" out="" how="" works!="" i&rsquo;ve="" contrived="" is="" where="" creates="" random="" numbers="" sends="" them="" 5="" seconds.="" make="" a="" nice="" graph="" from="" them.="" also="" controllable="" we&rsquo;ll="" use="" toggle="" button="" website="" send="" messages="" wipy.="" shouldn&rsquo;t="" too="" hard="" both="" things="" work="" same="" time.="" dashboard="" uses="" &lsquo;feeds&rsquo;="" describe="" separate="" sets="" data.="" feed="" &lsquo;randoms&rsquo;="" &lsquo;lights&rsquo;.="" off="" command="" via="" &lsquo;lights&rsquo;="" feed.="" as="" per="" basics="" tutorial:="" feeds="" navigation="" bottom="" page.="" actions="" menu,="" select="" new="" name="" randoms.="" create.="" add="" second="" lights="" line="" chart="" well:="" dashboards="" navigation.="" dashboard.="" when="" list,="" just="" created.="" blue="" +="" block.="" pick="" chart.="" have="" there&rsquo;s="" data="" randoms="" next="" step="" values="" again="" accept="" done.="" python="" done="" respond="" changes="" toggle.="" &ldquo;cloud&rdquo;="" service="" ready="" talk="" set="" up="" develop="" software="" great!="" more="" easily="" manage="" files,="" project.="" folder.="" file="" folder...="" navigate="" you&rsquo;d="" like="" put="" while="" still="" inside="" folder="" dialog,="" right-clicking="" list="" area="" give="" descriptive="" window="" opens="" pane="" shown="" left.="" previous="" now.="" squeaky="" clean="" will="" files="" boot.py="" main.py="" not,="" reset="" lower="" ensure="" connected="" comx="" port,="" not="" ip="" (192.168.4.1)="" download="" pull="" copy="" main.py.="" fails,="" press="" switch="" wipy,="" try="" again.="" that="" experiment="" save="" straight="" away.="" i&rsquo;m="" going="" call="" mine="" adafruitio.py.="" tutorial="" already="" very="" long,="" i&rsquo;ll="" skip="" full="" walkthrough="" code.="" i="" documented="" sufficient="" understanding="" what="" does="" why.="" here="" file:="" [github="" link].="" paste="" into="" file;="" putting="" #="" https:="" github.com="" micropython-lib="" blob="" master="" umqtt.simple="" example_sub_led.py="" network="" wlan="" operation="" wifi="" allows="" time.sleep()="" delays="" base="" library="" devices="" umqtt="" mqttclient="" mqtt="" protocol="" ubinascii="" needed="" machine="" interfaces="" hardware="" components="" begin="" settings="" these="" suit="" environment="" randoms_interval="5000" milliseconds="" last_random_sent_ticks="0" wireless="" wifi_ssid="IoT" wifi_pass="password77#" no="" regular="" password.="" :)="" (aio)="" aio_server="io.adafruit.com" aio_port="1883" aio_user="CoreChris" aio_key="83e6218dc6ad47d698ab1747566f3561" aio_client_id="ubinascii.hexlify(machine.unique_id())" anything="" aio_control_feed="CoreChris/feeds/lights" aio_randoms_feed="CoreChris/feeds/randoms" end="" rgbled="" disable="" on-board="" heartbeat="" (blue="" flash="" 4="" seconds)="" we'll="" led="" time.sleep(0.1)="" workaround="" bug.="" actioned="" another="" process="" occurs="" immediately="" afterwards="" pycom.rgbled(0xff0000)="" status="" red="not" working="" connection="" access="" source:="" docs.pycom.io="" chapter="" tutorials="" all="" wlan.html="" wlan.connect(wifi_ssid,="" auth="(WLAN.WPA2," wifi_pass),="" timeout="5000)" wlan.isconnected():="" waits="" until="" connects="" machine.idle()="" print("connected="" wifi")="" pycom.rgbled(0xffd7000)="" orange:="" partially="" functions="" function="" def="" sub_cb(topic,="" msg):="" sub_cb="" means="" "callback="" subroutine"="" print((topic,="" msg))="" outputs="" message="" was="" received.="" debugging="" use.="" msg="=" b"on":="" says="" "on"="" ...="" pycom.rgbled(0xffffff)="" elif="" b"off":="" "off"="" pycom.rgbled(0x000000)="" else:="" received="" print("unknown="" message")="" nothing="" output="" happened.="" random_integer(upper_bound):="" return="" machine.rng()="" %="" upper_bound="" send_random():="" global="" ((time.ticks_ms()="" -="" last_random_sent_ticks)="" &lt;="" randoms_interval):="" return;="" soon="" since="" last="" sent.="" some_number="random_integer(100)" print("publishing:="" {0}="" {1}="" ".format(some_number,="" aio_randoms_feed),="" )="" try:="" client.publish(topic="AIO_RANDOMS_FEED," print("done")="" except="" exception="" e:="" print("failed")="" finally:="" client="MQTTClient(AIO_CLIENT_ID," aio_server,="" aio_port,="" aio_user,="" aio_key)="" subscribed="" delivered="" callback="" client.set_callback(sub_cb)="" client.connect()="" client.subscribe(aio_control_feed)="" %s,="" %s="" topic"="" (aio_server,="" aio_control_feed))="" green:="" online="" between="" may="" cause="" error="" disconnects="" server="" happens.="" 1:="" repeat="" forever="" client.check_msg()#="" action="" non-blocking.="" send_random()="" it's="" thrown="" client.disconnect()="" up.="" wlan.disconnect()="" pycom.rgbled(0x000022)#="" blue:="" stopped="" print("disconnected="" io.")="" below="" atom.="" error:="" traceback="" (most="" recent="" last):="" "",="" 10,="" importerror:="" module="" named="" 'umqtt'="" &gt;="" v1.8.6-849-d0dc708="" 2018-02-27;="" esp32="" type="" "help()"="" information.="" contains="" mqttclient.="" 'umqtt'.="" built-in="" micropython.="" it&rsquo;s="" so:="" project,="" umqtt.py="" github.="" simple.py,="" file.="" simple.py="" umqtt.py.="" happened?="" got="" why?="" well,="" although="" we&rsquo;ve="" added="" don&rsquo;t="" yet="" first.="" button.="" wait="" prompt="" return,="" see="" and,="" succeeds,="" rgb="" turns="" green.="" being="" graphed="" operate="" turning="" (white)="" off.="" making="" start="" adafruitio.py="" startup="" powered="" io.="" useful="" displaying="" internal="" program.="" notes="" code:="" connected,="" orange="WiFi" green="Adafruit" connected.="" cancel="" program,="" blue.="" remember="" runs="" application="" uploaded.="" can&rsquo;t="" anymore="" requesting="" receiving="" local="" network.="" built="" port="" gain="" access.="" &ldquo;hands="" off&rdquo;="" mode,="" fixed="" that&rsquo;s="" then!="" hope="" helps="" prototype="" big="" iot="" idea."="">
+	
+
+
+
+
+
+
+<!--[if lt IE 7]>
+<script type="text/javascript">
+//<![CDATA[
+    var BLANK_URL = 'https://core-electronics.com.au/js/blank.html';
+    var BLANK_IMG = 'https://core-electronics.com.au/js/spacer.gif';
+//]]>
+</script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/24741df5c7f9d60d49402ed0b8e428f4.css">
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/f593d2b26a5457d549b229e1586770a7.css" media="all">
+<script src="./Pycom and Adafruit IO - Tutorial Australia_files/sdk.js" async="" crossorigin="anonymous"></script><script async="" charset="utf-8" src="./Pycom and Adafruit IO - Tutorial Australia_files/saved_resource" type="text/javascript"></script><script async="" src="./Pycom and Adafruit IO - Tutorial Australia_files/fbds.js"></script><script async="" src="./Pycom and Adafruit IO - Tutorial Australia_files/analytics.js"></script><script id="facebook-jssdk" src="./Pycom and Adafruit IO - Tutorial Australia_files/sdk(1).js"></script><script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/prototype.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery-1.12.1.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/noconflict.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/ccard.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/validation.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/builder.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/effects.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/dragdrop.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/controls.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/slider.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/js.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/form.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/translate.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/cookies.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/iwd-jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/modal.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/popup.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/lightbox.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/autocomplete.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/modernizr.custom.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/selectivizr.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/matchMedia.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/matchMedia.addListener.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/enquire.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/app.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery.cycle2.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery.cycle2.swipe.min.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/slideshow.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/imagesloaded.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/minicart.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery_002.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/jcarousel.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/core.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/abstract.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/input.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/fromto.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/range.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/custom.js"></script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/projects.js"></script>
+<link href="https://core-electronics.com.au/projects/rss/index/store_id/1/" title="Projects" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html">
+<!--[if  (lte IE 8) & (!IEMobile)]>
+<link rel="stylesheet" type="text/css" href="https://core-electronics.com.au/media/css_secure/37cb1b07f197c42b76ee4da1acf2ac99.css" media="all" />
+<![endif]-->
+<!--[if (gte IE 9) | (IEMobile)]><!-->
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/d5f0696fad5add9b7e56b0eb16c05af3.css" media="all">
+<!--<![endif]-->
+
+
+<script type="text/javascript">
+//<![CDATA[
+Mage.Cookies.path     = '/';
+Mage.Cookies.domain   = '.core-electronics.com.au';
+//]]>
+</script>
+<meta name="viewport" content="initial-scale=1.0, width=device-width">
+
+<script type="text/javascript">
+//<![CDATA[
+optionalZipCountries = ["HK","IE","MO","PA"];
+//]]>
+</script>
+ <!-- BEGIN GOOGLE UNIVERSAL ANALYTICS CODE -->
+<script type="text/javascript">
+//<![CDATA[
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44034167-1', 'auto');
+ga('set', 'dimension1', 'guest');
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+ga('send', 'pageview');
+//]]>
+</script>
+<!-- END GOOGLE UNIVERSAL ANALYTICS CODE -->
+<!-- GRAHAM RANDOM TEST -->
+<script type="text/javascript">
+jQuery(document).ready(function() {
+jQuery("#search,#searchmob").focus(function(){
+if(window.$zopim === undefined || window.$zopim.livechat === undefined) {
+return;
+}
+$zopim(function() {
+$zopim.livechat.addTags("searching");
+});
+});
+jQuery("#search,#searchmob").focusout(function(){
+if(window.$zopim === undefined || window.$zopim.livechat === undefined) {
+return;
+}
+$zopim(function() {
+$zopim.livechat.removeTags("searching");
+});
+});
+jQuery("#search").keyup(function(){
+var searchterm = jQuery("#search").val();
+if (searchterm == "Search") {
+jQuery("#search").val("");
+}
+if (searchterm.indexOf("Search") >= 0) {
+var searchterm2 = searchterm.replace("Search", "");
+jQuery("#search").val(searchterm2);
+}
+});
+jQuery("#searchmob").keyup(function(event){
+var key = event.keyCode || event.which;
+if (key === 13) {
+jQuery("#search_mini_form").submit();
+}
+var searchmob = jQuery("#searchmob").val();
+if (searchmob == "Search") {
+jQuery("#searchmob").val("");
+}
+if (searchmob.indexOf("Search") >= 0) {
+var searchmob2 = searchmob.replace("Search", "");
+jQuery("#searchmob").val(searchmob2);
+}
+});
+if(window.location.href.indexOf("/search/") > -1)
+{
+var urlParams = new URLSearchParams(window.location.search);
+OriginalString=urlParams.get('q');
+StrippedString = OriginalString.replace(/(<([^>]+)>)/ig,"");
+jQuery("#search").val(StrippedString);
+jQuery("#searchmob").val(StrippedString);
+if(StrippedString.length > 35) {
+str = StrippedString.substring(0,35);
+jQuery("#search").val(str);
+jQuery("#searchmob").val(str);
+}
+}
+if(window.location.href.indexOf("/catalogsearch/") > -1)
+{
+var urlParams = new URLSearchParams(window.location.search);
+OriginalString=urlParams.get('q');
+StrippedString = OriginalString.replace(/(<([^>]+)>)/ig,"");
+jQuery("#search").val(StrippedString);
+jQuery("#searchmob").val(StrippedString);
+if(StrippedString.length > 35) {
+str = StrippedString.substring(0,35);
+jQuery("#search").val(str);
+jQuery("#searchmob").val(str);
+}
+}
+});
+</script>
+
+
+
+
+
+
+<script type="text/javascript">//<![CDATA[
+        var Translator = new Translate([]);
+        //]]></script>
+
+<!-- Start of coreelectronics Zendesk Widget script -->
+<iframe src="javascript:false" title="" style="display: none;" src="./Pycom and Adafruit IO - Tutorial Australia_files/saved_resource.html"></iframe><script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="coreelectronics.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+/*]]>*/</script>
+<!-- End of coreelectronics Zendesk Widget script -->
+
+
+<link rel="”publisher”" href="https://core-electronics.com.au/tutorials/%E2%80%9Dhttps://plus.google.com/+CoreElectronicsAU%E2%80%9D">
+
+<script>(function() {
+  var _fbq = window._fbq || (window._fbq = []);
+  if (!_fbq.loaded) {
+    var fbds = document.createElement('script');
+    fbds.async = true;
+    fbds.src = '//connect.facebook.net/en_US/fbds.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(fbds, s);
+    _fbq.loaded = true;
+  }
+  _fbq.push(['addPixelId', '570757683025086']);
+})();
+window._fbq = window._fbq || [];
+window._fbq.push(['track', 'PixelInitialized', {}]);
+</script>
+<noscript>
+<img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=570757683025086&amp;ev=PixelInitialized"/>
+</noscript>
+
+<meta name="p:domain_verify" content="b5cba853412534e403bf7bc961a6aec1"><script type="text/javascript" async="" src="./Pycom and Adafruit IO - Tutorial Australia_files/embed.js"></script><style type="text/css">:root topadblock, :root td[valign="top"] > .mainmenu[style="padding:10px 0 0 0 !important;"], :root input[onclick^="window.open('http://www.friendlyduck.com/"], :root img[alt^="Fuckbook"], :root iframe[src^="http://cdn1.adexprt.com/"], :root iframe[src^="http://ad.yieldmanager.com/"], :root header#hdr + #main > div[data-hveid], :root div[role="navigation"] + c-wiz > script + div > .kxhcC, :root div[id^="mainads"], :root div[id^="dmRosAdWrapper"], :root div[id^="div-ads-"], :root iframe[id^="google_ads_iframe"], :root div[id^="crt-"][style], :root div[id^="cns_ads_"], :root div[id^="adspot-"], :root div[id^="tms-ad-dfp-"], :root div[id^="ads300_250-widget"], :root div[id^="ads250_250-widget"], :root div[id^="adrotate_widgets-"], :root div[id^="adfox_"], :root div[id^="ad_script_"], :root div[id^="ad_bigbox_"], :root div[id^="ad-server-"], :root div[id^="acm-ad-tag-"], :root div[id^="MarketGid"], :root div[id^="ADV-SLOT-"], :root div[data-native_ad], :root div[class^="proadszone-"], :root div[class^="pane-google-admanager-"], :root div[class^="index_displayAd_"], :root div[class^="index_adBeforeContent_"], :root div[class^="index_adAfterContent_"], :root div[class^="block-openx-"], :root div[class^="ads-partner-"], :root div[class^="ad_position_"], :root div[class^="ad_border_"], :root div[class^="Ad__container"], :root div[id^="div-adtech-ad-"], :root div[class*="_AdInArticle_"], :root div > [class][onclick*=".updateAnalyticsEvents"], :root bottomadblock, :root aside[itemtype="https://schema.org/WPAdBlock"], :root aside[id^="div-gpt-ad"], :root div[id^="ad-cid-"], :root aside[id^="advads_ad_widget-"], :root aside[id^="adrotate_widgets-"], :root a[target="_blank"][href^="http://api.taboola.com/"], :root a[style="display:block;width:300px;min-height:250px"][href^="http://li.cnet.com/click?"], :root a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[onmousedown^="this.href='http://staffpicks.outbrain.com/network/redir?"][target="_blank"], :root a[onmousedown^="this.href='http://paid.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[onmousedown^="this.href='/wp-content/embed-ad-content/"], :root div[class^="Ad__bigBox"], :root a[onclick*="//m.economictimes.com/etmack/click.htm"], :root a[href^="https://www.share-online.biz/affiliate/"], :root a[href^="https://www.moscarossa.biz/"], :root a[href^="https://www.incontri-matura.com/"], :root a[href^="https://www.goldenfrog.com/vyprvpn?offer_id="][href*="&aff_id="], :root a[href^="https://www.firstload.com/affiliate/"], :root a[href^="https://www.camyou.com/?cam="][href*="&track="], :root a[href^="https://www.bebi.com"], :root a[href^="https://www.adskeeper.co.uk/"], :root div[id^="ad-gpt-"], :root a[href^="https://windscribe.com/promo/"], :root a[href^="https://vodexor.us/"], :root a[href^="https://trust.zone/go/r.php?RID="], :root a[href^="https://traffic.bannerator.com/"], :root a[href^="https://tracking.truthfinder.com/?a="], :root a[href^="https://track.healthtrader.com/"], :root a[href^="https://track.clickmoi.xyz/"], :root a[href^="https://track.adform.net/"], :root a[href^="https://track.52zxzh.com/"], :root div[class^="gemini-ad"], :root a[href^="https://torguard.net/aff.php"], :root a[href^="https://t.mobtya.com/"], :root aside[id^="tn_ads_widget-"], :root a[href^="https://syndication.exoclick.com/splash.php?"], :root div[id^="YFBMSN"], :root a[href^="https://secure.eveonline.com/ft/?aid="], :root div[id^="zergnet-widget"], :root a[href^="https://rev.adsession.com/"], :root a[href^="https://redirect.ero-advertising.com/"], :root a[href^="https://www.pornhat.com/"][rel="nofollow"], :root a[href^="https://pubads.g.doubleclick.net/"], :root a[href^="https://prf.hn/click/"][href*="/adref:"], :root a[href^="https://mk-cdn.net/"], :root div[id^="proadszone-"], :root a[href^="https://mk-ads.com/"], :root a[href^="https://members.linkifier.com/public/affiliateLanding?refCode="], :root a[href^="https://medleyads.com/"], :root iframe[src^="http://cdn2.adexprt.com/"], :root div[id^="ads300_100-widget"], :root a[href^="https://lingthatsparleso.info/"], :root a[href^="https://land.rk.com/landing/"], :root a[href^="https://land.brazzersnetwork.com/landing/"], :root a[href^="https://jmp.awempire.com/"], :root a[href^="https://incisivetrk.cvtr.io/click?"], :root a[href^="https://iactrivago.ampxdirect.com/"], :root a[onmousedown^="this.href='http://staffpicks.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[href^="https://googleads.g.doubleclick.net/pcs/click"], :root a[href^="https://gogoman.me/"], :root a[href^="https://go.stripchat.com/"][href*="&campaignId="], :root div[class^="BlockAdvert-"], :root a[href^="https://go.onclasrv.com/"], :root a[href^="https://go.ad2up.com/"], :root a[href^="https://freeadult.games/"], :root a[href^="https://flirtaescopa.com/"], :root a[href^="https://farm.plista.com/pets"], :root a[href^="https://evaporate.pw/"], :root div[class^="local-feed-banner-ads"], :root a[href^="https://djtcollectorclub.org/"][href*="?affiliate_id="], :root a[href^="https://click.plista.com/pets"], :root a[href^="https://chaturbate.xyz/"], :root a[href^="https://chaturbate.jjgirls.com/"][href*="?tour="], :root a[href^="https://chaturbate.com/in/?tour="], :root a[href^="https://chaturbate.com/affiliates/"], :root a[href^="https://www.googleadservices.com/pagead/aclk?"], :root a[href^="https://awentw.com/"], :root a[href^="https://servedbyadbutler.com/"], :root a[href^="https://affiliates.bet-at-home.com/processing/"], :root a[href^="https://adswick.com/"], :root a[href^="https://adserver.adreactor.com/"], :root a[href^="https://refpaano.host/"], :root a[href^="https://adhealers.com/"], :root a[href^="https://ad.atdmt.com/"], :root a[href^="https://aaucwbe.com/"], :root a[href^="https://a.adtng.com/"], :root a[href^="http://xtgem.com/click?"], :root a[href^="https://ads.trafficpoizon.com/"], :root a[href^="http://wxdownloadmanager.com/dl/"], :root a[href^="http://www.zergnet.com/i/"], :root a[href^="http://www.usearchmedia.com/signup?"], :root a[href^="http://www.torntv-downloader.com/"], :root a[href^="http://www.tirerack.com/affiliates/"], :root a[href^="http://www.text-link-ads.com/"], :root div[id^="div_openx_ad_"], :root a[href^="http://www.streamate.com/exports/"], :root a[href^="http://www.sfippa.com/"], :root a[href^="http://www.xmediaserve.com/"], :root a[href^="http://www.sex.com/videos/?utm_"], :root a[href^="http://www.sex.com/?utm_"], :root a[onmousedown^="this.href='http://paid.outbrain.com/network/redir?"][target="_blank"], :root a[href^="http://www.roboform.com/php/land.php"], :root a[href^="http://www.quick-torrent.com/download.html?aff"], :root a[href^="http://www.pinkvisualgames.com/?revid="], :root a[href^="http://www.paddypower.com/?AFF_ID="], :root div[data-spotim-slot], :root a[href^="http://www.mysuperpharm.com/"], :root a[href^="http://www.myfreepaysite.com/sfw_int.php?aid"], :root a[href^="http://www.myfreepaysite.com/sfw.php?aid"], :root a[href^="http://www.myfreecams.com/?co_id="][href*="&track="], :root a[href^="http://www.moneyducks.com/"], :root a[href^="http://www.menaon.com/installs/"], :root a[href^="http://www.securegfm.com/"], :root a[href^="http://www.liversely.net/"], :root a[href^="http://www.linkbucks.com/referral/"], :root a[href^="http://www.ireel.com/signup?ref"], :root a[href^="http://www.incredimail.com/?id="], :root a[href^="http://www.idownloadplay.com/"], :root a[href^="http://www.hitcpm.com/"], :root a[href^="http://www.greenmangaming.com/?tap_a="], :root a[href^="http://www.gamebookers.com/cgi-bin/intro.cgi?"], :root a[href^="http://www.friendlyquacks.com/"], :root a[href^="http://www.friendlyduck.com/AF_"], :root a[href^="http://www.fpcTraffic2.com/blind/in.cgi?"], :root a[href^="http://www.fonts.com/BannerScript/"], :root a[href^="http://www.fleshlight.com/"], :root a[href^="http://www.flashx.tv/downloadthis"], :root a[href^="http://www.firstload.de/affiliate/"], :root a[href^="http://www.fducks.com/"], :root a[href^="http://www.faceporn.net/free?"], :root a[href^="http://www.epicgameads.com/"], :root a[href^="http://www.easydownloadnow.com/"], :root a[href^="http://www.duckssolutions.com/"], :root a[href^="https://go.trkclick2.com/"], :root a[href^="http://www.duckcash.eu/"], :root a[href^="http://www.drowle.com/"], :root a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"][target="_blank"], :root a[href^="http://www.downloadweb.org/"], :root a[href^="http://www.installads.net/"], :root a[href^="http://www.download-provider.org/"], :root a[href^="http://www.down1oads.com/"], :root iframe[id^="google_ads_frame"], :root a[href^="http://www.dealcent.com/register.php?affid="], :root a[href^="http://www.clkads.com/adServe/"], :root a[href^="http://www.clickansave.net/"], :root a[href^="http://www.cash-duck.com/"], :root a[href^="http://www.bitlord.me/share/"], :root a[href^="http://www.bet365.com/"][href*="?affiliate="], :root a[href^="http://www.bet365.com/"][href*="&affiliate="], :root a[href^="http://www.badoink.com/go.php?"], :root div[id^="yandex_ad"], :root a[href^="http://www.richducks.com/"], :root a[href^="http://www.babylon.com/welcome/index?affID"], :root a[href^="http://www.sexgangsters.com/?pid="], :root a[href^="http://www.amazon.co.uk/exec/obidos/external-search?"], :root a[href^="http://www.socialsex.com/"], :root a[href^="http://www.affbuzzads.com/affiliate/"], :root a[href^="https://www.camsoda.com/enter.php?id="], :root a[href^="http://www.afco2go.com/srv.php?"], :root a[href^="http://www.adxpansion.com"], :root div[id^="advads-"], :root a[href^="http://www.ringtonematcher.com/"], :root a[href^="http://www.adshost2.com/"], :root a[href^="http://www.ragazzeinvendita.com/?rcid="], :root a[href^="http://www.adbrite.com/mb/commerce/purchase_form.php?"], :root a[href^="http://www.TwinPlan.com/AF_"], :root a[href^="https://porndeals.com/?track="], :root a[href^="http://www.1clickmoviedownloader.info/"], :root div[class^="adbanner_"], :root a[href^="http://www.brightwheel.info/"], :root a[href^="http://www.1clickdownloader.com/"], :root a[href^="http://www.123-reg.co.uk/affiliate2.cgi"], :root div[id^="lazyad-"], :root a[href^="http://wopertific.info/"], :root a[href^="http://wgpartner.com/"], :root a[href^="http://webgirlz.online/landing/"], :root div[id^="ads300_600-widget"], :root div[class^="Ad__adContainer"], :root a[href^="http://web.adblade.com/"], :root a[href^="https://www.nutaku.net/signup/landing/"], :root a[href^="http://us.marketgid.com"], :root a[href^="http://www.freefilesdownloader.com/"], :root a[href^="http://ul.to/ref/"], :root a[href^="http://trk.mdrtrck.com/"], :root div[id^="div_ad_stack_"], :root a[href^="http://traffic.tc-clicks.com/"], :root a[href^="http://www.graboid.com/affiliates/"], :root a[href^="http://tracking.toroadvertising.com/"], :root a[href^="http://www.liutilities.com/"], :root a[href^="http://www.dl-provider.com/search/"], :root a[href^="http://tracking.deltamediallc.com/"], :root a[href^="https://www.popads.net/users/"], :root a[href^="https://sexdatingz.live/"], :root a[href^="https://adultfriendfinder.com/go/page/landing"], :root a[href^="http://tracking.crazylead.com/"], :root div[role="navigation"] + c-wiz > div > .kxhcC, :root a[href^="http://tracker.mybroadband.co.za/"], :root a[href^="http://track.adform.net/"], :root a[href^="http://tour.affbuzzads.com/"], :root a[href^="https://iac.ampxdirect.com/"], :root a[href^="http://t.mdn2015x3.com/"], :root a[href^="http://steel.starflavor.bid/"], :root a[href^="http://stateresolver.link/"], :root a[href^="http://sharesuper.info/"], :root a[href^="http://getlinksinaseconds.com/"], :root a[href^="http://secure.signup-way.com/"], :root a[href*=".clkcln.com/"], :root a[href^="http://secure.signup-page.com/"], :root [onclick^="window.open('http://adultfriendfinder.com/search/"], :root a[href^="http://secure.hostgator.com/~affiliat/"], :root a[href^="http://uploaded.net/ref/"], :root a[href^="http://s9kkremkr0.com/"], :root a[href*="/cmd.php?ad="], :root a[href^="http://refpaano.host/"], :root a[href^="http://record.commissionking.com/"], :root div[class*="-storyBodyAd-"], :root a[href^="http://record.betsafe.com/"], :root a[href^="http://websitedhoome.com/"], :root a[href^="http://see-work.info/"], :root a[href^="http://prousa.work/"], :root a[href^="http://gca.sh/user/register?ref="], :root a[href^="http://promos.bwin.com/"], :root a[href^="http://prochina.link/"], :root a[href^="http://z1.zedo.com/"], :root a[href^="http://pokershibes.com/index.php?ref="], :root a[href^="http://mojofun.info/"], :root a[href^="http://mmo123.co/"], :root a[href^="http://media.paddypower.com/redirect.aspx?"], :root a[href*=".qertewrt.com/"], :root a[href^="http://lp.ncdownloader.com/"], :root #rhs_block .xpdopen > ._OKe > div > .mod > ._yYf, :root a[href^="http://lp.ezdownloadpro.info/"], :root a[href^="https://track.trkinator.com/"], :root a[href^="https://ads.ad4game.com/"], :root a[href*="/adServe/banners?"], :root a[href^="http://liversely.com/"], :root a[href^="http://feeds1.validclick.com/"], :root a[href^="http://latestdownloads.net/download.php?"], :root a[href^="http://keep2share.cc/pr/"], :root div[data-ad-underplayer], :root a[href^="http://k2s.cc/code/"], :root a[href*=".bang.com/"][href*="&aff="], :root a[href^="http://join3.bannedsextapes.com/track/"], :root a[href^="https://secure.bstlnk.com/"], :root a[href^="http://green.trafficinvest.com/"], :root a[href^="http://jobitem.org/"], :root a[href^="//adbit.co/?a=Advertise&"], :root a[href^="http://istri.it/?"], :root a[href^="http://www.fbooksluts.com/"], :root a[href^="http://www.cdjapan.co.jp/aff/click.cgi/"], :root a[href^="http://c.actiondesk.com/"], :root a[href^="http://intent.bingads.com/"], :root a[href^="http://igromir.info/"], :root a[href^="http://cdn.adstract.com/"], :root a[href^="http://hyperlinksecure.com/go/"], :root a[href^="http://45eijvhgj2.com/"], :root a[href^="http://hpn.houzz.com/"], :root a[href^="//look.djfiln.com/"], :root a[href^="http://greensmoke.com/"], :root a[href^="http://farm.plista.com/pets"], :root a[href^="http://mo8mwxi1.com/"], :root div[class^="ResponsiveAd-"], :root a[href^="http://www.revenuehits.com/"], :root a[href^="http://go.seomojo.com/tracking202/"], :root div[id^="block-views-topheader-ad-block-"], :root a[href^="http://go.oclaserver.com/"], :root .__y_elastic .__y_item, :root a[href^="http://go.mobisla.com/"], :root a[href^="//srv.buysellads.com/"], :root a[href^="http://g1.v.fwmrm.net/ad/"], :root a[href^="http://imads.integral-marketing.com/"], :root a[href^="http://freesoftwarelive.com/"], :root a[href^="http://adtrackone.eu/"], :root a[href^="http://finaljuyu.com/"], :root a[href^="http://fileupnow.rocks/"], :root a[href^="http://fileloadr.com/"], :root a[href^="https://dltags.com/"], :root a[href^="http://onclickads.net/"], :root a[href^="http://www.terraclicks.com/"], :root a[href^="http://www.coinducks.com/"], :root a[href^="http://internalredirect.site/"], :root a[href^="http://extra.bet365.com/"][href*="?affiliate="], :root a[href^="http://ethfw0370q.com/"], :root a[href^="http://elitefuckbook.com/"], :root a[href^="https://www.brazzersnetwork.com/landing/"], :root [href*="//xml.revrtb.com/"], :root a[href^="http://elite-sex-finder.com/?"], :root a[href^="http://eclkmpsa.com/"], :root a[href*="//3wr110.xyz/"], :root a[href^="http://earandmarketing.com/"], :root a[href^="http://data.committeemenencyclopedicrepertory.info/"], :root #content > #center > .dose > .dosesingle, :root a[href^="http://campaign.bharatmatrimony.com/track/"], :root a[href^="http://d2.zedo.com/"], :root a[href^="http://contractallsticker.net/"], :root a[href^="http://codec.codecm.com/"], :root div[id^="google_dfp_"], :root a[href^="//5e1fcb75b6d662d.com/"], :root a[href^="http://googleads.g.doubleclick.net/pcs/click"], :root div[id^="ads120_600-widget"], :root a[href^="http://clk.directrev.com/"], :root a[href^="http://refer.webhostingbuzz.com/"], :root a[href^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://clickserv.sitescout.com/"], :root a[href*=".intab.fun/"], :root a[href^="http://clicks.guamwnvgashbkashawhgkhahshmashcas.pw/"], :root a[href^="http://www.downloadplayer1.com/"], :root a[href^="http://clicks.binarypromos.com/"], :root div[class^="largeRectangleAd_"], :root a[href^="https://dediseedbox.com/clients/aff.php?"], :root a[href^="http://www.wantstraffic.com/"], :root .lads[width="100%"][style="background:#FFF8DD"], :root a[href^="http://databass.info/"], :root a[href^="http://www.urmediazone.com/signup"], :root a[href^="http://ads.pheedo.com/"], :root a[href^="http://click.plista.com/pets"], :root a[href^="http://chaturbate.com/affiliates/"], :root a[href^="http://www.friendlyadvertisements.com/"], :root a[href^="http://cdn3.adbrau.com/"], :root a[href^="http://get.slickvpn.com/"], :root a[href^="http://2pxg8bcf.top/"], :root a[href^="http://cpaway.afftrack.com/"], :root a[href^="http://cdn.adsrvmedia.net/"], :root a[href^="http://360ads.go2cloud.org/"], :root a[href^="http://dftrck.com/"], :root a[href^="http://casino-x.com/?partner"], :root div[data-flt-ve="sponsored_search_ads"], :root a[href^="http://campeeks.com/"][href*="&utm_"], :root a[href^="http://ads.expekt.com/affiliates/"], :root a[href^="http://callville.xyz/"], :root div[itemtype="http://schema.org/WPAdBlock"], :root a[href^="http://xads.zedo.com/"], :root a[href^="http://c.jumia.io/"], :root a[href^="https://gamescarousel.com/"], :root a[href^="http://down1oads.com/"], :root a[href^="http://buysellads.com/"], :root a[href^="http://serve.williamhill.com/promoRedirect?"], :root a[href^="https://uncensored.game/"], :root a[href^="http://feedads.g.doubleclick.net/"], :root a[href^="http://bs.serving-sys.com/"], :root a[href^="http://popup.taboola.com/"], :root a[href^="http://betahit.click/"], :root a[href^="http://cinema.friendscout24.de?"], :root [lazy-ad="lefttop_banner"], :root a[href^="http://servicegetbook.net/"], :root a[href^="https://trklvs.com/"], :root a[href^="http://bestorican.com/"], :root a[href^="http://bcp.crwdcntrl.net/"], :root a[href^="http://bc.vc/?r="], :root a[href^="http://banners.victor.com/processing/"], :root a[href^="https://uncensored3d.com/"], :root a[href^="http://dethao.com/"], :root div[class$="dealnews"] > .dealnews, :root a[href^="http://click.payserve.com/"], :root a[href^="http://pubads.g.doubleclick.net/"], :root a[href^="http://azmobilestore.co/"], :root a[href^="http://install.securewebsiteaccess.com/"], :root .inlineNewsletterSubscription + .inlineNewsletterSubscription div[class$="_item"], :root a[href^="http://clkmon.com/adServe/"], :root a[href^="https://www.adultempire.com/"][href*="?partner_id="], :root a[href^="http://www.torntvdl.com/"], :root a[href^="http://at.atwola.com/"], :root a[href^="//88d7b6aa44fb8eb.com/"], :root a[href^="http://api.ringtonematcher.com/"], :root div[id^="ad-position-"], :root a[href^="http://affiliate.glbtracker.com/"], :root a[href^="http://anonymous-net.com/"], :root a[href^="https://www.dsct1.com/"], :root a[href^="http://amzn.to/"] > img[src^="data"], :root .icons-rss-feed + .icons-rss-feed div[class$="_item"], :root a[href^="http://aflrm.com/"], :root a[href^="http://affiliates.pinnaclesports.com/processing/"], :root a[href^="http://affiliate.godaddy.com/"], :root a[href^="http://partner.sbaffiliates.com/"], :root a[href^="http://affiliate.coral.co.uk/processing/"], :root a[href^="http://aff.ironsocket.com/"], :root a[href^="http://zevera.com/afi.html"], :root a[href^="http://adsrv.keycaptcha.com"], :root a[href^="http://play4k.co/"], :root a[href^="http://adserving.liveuniversenetwork.com/"], :root a[href^="http://adserving.unibet.com/"], :root a[href^="https://bs.serving-sys.com"], :root a[href^="https://atomidownload.com/"], :root a[href^="http://adtransfer.net/"], :root a[href^="http://adserver.itsfogo.com/"], :root a[href^="https://secure.adnxs.com/clktrb?"], :root a[href^="http://adserver.adtechus.com/"], :root a[href^="http://adserver.adreactor.com/"], :root a[href^="http://www.yourfuckbook.com/?"], :root .GHOFUQ5BG2 > .GHOFUQ5BF2 > .GHOFUQ5BG5, :root a[href^="http://ads.sprintrade.com/"], :root .__ywvr .__y_item, :root a[href^="http://download-performance.com/"], :root #\5f _mom_ad_12, :root a[href^="http://ads.integral-marketing.com/"], :root a[href^="http://adserver.adtech.de/"], :root a[href*="deliver.trafficfabrik.com"], :root a[href^="http://ads.betfair.com/redirect.aspx?"], :root a[href^="http://ads.affbuzzads.com/"], :root a[href^="http://online.ladbrokes.com/promoRedirect?"], :root a[href^="http://go.trafficshop.com/"], :root a[href^="http://ads.ad-center.com/"], :root div[id^="advt-"], :root a[href^="http://admingame.info/"], :root a[href^="http://adlev.neodatagroup.com/"], :root div[id^="q1-adset-"], :root a[href^="http://adfarm.mediaplex.com/"], :root a[href^="http://ad.doubleclick.net/"], :root a[href^="http://ad.au.doubleclick.net/"], :root a[href^="http://www.adskeeper.co.uk/"], :root a[href^="http://ad-emea.doubleclick.net/"], :root a[href*="/servlet/click/zone?"], :root a[href^="http://ad-apac.doubleclick.net/"], :root a[href^="https://understandsolar.com/signup/?lead_source="][href*="&tracking_code="], :root a[href^="http://hdplugin.flashplayer-updates.com/"], :root a[href^="http://data.ad.yieldmanager.net/"], :root a[href^="http://a63t9o1azf.com/"], :root a[href^="http://NowDownloadAll.com"], :root a[href^="http://www.accuserveadsystem.com/accuserve-go.php?"], :root a[href^="http://c.ketads.com/"], :root a[target="_blank"][onmousedown="this.href^='http://paid.outbrain.com/network/redir?"], :root #tads + div + .c, :root a[href^="http://adtrack123.pl/"], :root a[href^="http://9amq5z4y1y.com/"], :root [id*="MGWrap"], :root a[href^="http://6kup12tgxx.com/"], :root a[href^="http://www.ducksnetwork.com/"], :root a[href^="http://3wr110.net/"], :root a[href^="http://www5.smartadserver.com/call/pubjumpi/"], :root a[href^="//ads.ad-center.com/"], :root a[href^="http://1phads.com/"], :root a[href^="https://chaturbate.com/in/?track="], :root a[href^="http://www1.clickdownloader.com/"], :root a[href^="//tracking.content-recommendation.net/"][href*="/sponsored/click.html?"], :root a[href^="http://adclick.g.doubleclick.net/"], :root #center_col > #resultStats + div[style="border:1px solid #dedede;margin-bottom:11px;padding:5px 7px 5px 6px"], :root a[href^="https://www.secureupload.eu/suprerefid="], :root a[href^="https://track.themadtrcker.com/"], :root a[href^="http://yads.zedo.com/"], :root #mbEnd[cellspacing="0"][cellpadding="0"], :root a[href^="//t.MtagMonetizationA.com/"], :root a[href^="//nlkdom.com/"], :root #MAIN.ShowTopic > .ad, :root a[href^="http://findersocket.com/"], :root a[href^="https://m.do.co/c/"] > img, :root a[href^="http://cdn3.adexprts.com/"], :root a[href^="//jsmptjmp.com/"], :root .ra[width="30%"][align="right"] + table[width="70%"][cellpadding="0"], :root a[href^="http://searchtabnew.com/"], :root a[href^="http://pan.adraccoon.com?"], :root a[href^="//healthaffiliate.center/"], :root a[href^="https://clixtrac.com/"], :root a[href^="//go.onclasrv.com/"], :root a[href^="http://games.ucoz.ru/"][target="_blank"], :root [id*="ScriptRoot"], :root div[id^="advads_"], :root a[href^="//db52cc91beabf7e8.com/"], :root a[href^="http://ads.activtrades.com/"], :root #\5f _mom_ad_2, :root div[id^="drudge-column-ads-"], :root a[href^="//api.ad-goi.com/"], :root a[href^="http://www.afgr2.com/"], :root #mn div[style="position:relative"] > #center_col > ._Ak, :root a[href^="http://bcntrack.com/"], :root a[href^="https://www.oboom.com/ad/"], :root a[href^="//4f6b2af479d337cf.com/"], :root a[href^="http://t.mdn2015x1.com/"], :root a[href^="http://s5prou7ulr.com/"], :root #content > #right > .dose > .dosesingle, :root a[href^="http://9nl.es/"], :root a[href^="https://www.friendlyduck.com/AF_"], :root #center_col > #resultStats + div + #res + #tads, :root a[href^="//40ceexln7929.com/"], :root a[href^="//00ae8b5a9c1d597.com/"], :root div[id^="div-gpt-ad"], :root a[href^="http://fusionads.net"], :root a[href^="https://awejmp.com/"], :root a[href^=" http://www.sex.com/"][href*="&utm_"], :root a[href^="https://keep2share.cc/pr/"], :root [onclick*="content.ad/"], :root div[class^="awpcp-random-ads"], :root a[href^="http://galleries.securewebsiteaccess.com/"], :root a[href^=" http://n47adshostnet.com/"], :root .section-result[data-result-ad-type], :root script[src^="http://free-shoutbox.net/app/webroot/shoutbox/sb.php?shoutbox="] + #freeshoutbox_content, :root a[href^=" http://ads.ad-center.com/"], :root .GPMV2XEDA2 > .GPMV2XEDP1 > .GPMV2XEDJBB, :root a[href*="onclkds."], :root div[id^="dfp-slot-"], :root .l-container > #fishtank, :root a[href^="//go.vedohd.org/"], :root a[href^="https://fileboom.me/pr/"], :root a[href^="http://marketgid.com"], :root a[href*="pussl3.com"], :root div[itemtype="http://www.schema.org/WPAdBlock"], :root .__zinit .__y_item, :root .ch[onclick="ga(this,event)"], :root a[href^="https://ad.doubleclick.net/"], :root a[href*="letsadvertisetogether.com"], :root div[class^="AdhesionAd_"], :root .trc_rbox_div .syndicatedItem, :root #ads > .dose > .dosesingle, :root a[href^="//bwnjijl7w.com/"], :root a[href*="delivery.trafficfabrik.com"], :root a[href^="http://galleries.pinballpublishernetwork.com/"], :root a[href^="http://4c7og3qcob.com/"], :root a[href*="?adlivk="][href*="&refer="], :root a[href^="http://data.linoleictanzaniatitanic.com/"], :root a[href*="=exoclick"], :root div[class^="backfill-taboola-home-slot-"], :root a[href^="https://gghf.mobi/"], :root a[href*="=adscript"], :root a[href^="http://abc2.mobile-10.com/"], :root #mn #center_col > div > h2.spon:first-child, :root a[href*="=Adtracker"], :root FBS-AD, :root .ra[align="right"][width="30%"], :root a[href*="5iclx7wa4q.com"], :root a[href*=".revimedia.com/"], :root a[href*=".irtyc.com/"], :root [lazy-ad="leftbottom_banner"], :root a[href^="http://fsoft4down.com/"], :root a[href*="ad2upapp.com/"], :root .plista_widget_belowArticleRelaunch_item[data-type="pet"], :root div[data-mediatype="advertising"], :root a[href*=".adsrv.eacdn.com/"] > img, :root a[href^="http://lp.ilivid.com/"], :root a[href*=".inclk.com/"], :root a[href^="https://transfer.xe.com/signup/track/redirect?"], :root a[href*=".ichlnk.com/"], :root a[href^="http://api.content.ad/"], :root a[href*=".approvallamp.club/"], :root a[href^="http://spygasm.com/track?"], :root .ob_dual_right > .ob_ads_header ~ .odb_div, :root a[href*=".adk2x.com/"], :root a[href^="http://www.firstload.com/affiliate/"], :root a[href^="http://duckcash.eu/"], :root a[href^="http://www.mobileandinternetadvertising.com/"], :root a[data-widget-outbrain-redirect^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://www.downloadthesefiles.com/"], :root a[href^="http://secure.cbdpure.com/aff/"], :root a[data-url^="http://paid.outbrain.com/network/redir?"] + .author, :root a[href^="http://www.my-dirty-hobby.com/?sub="], :root a[href^="http://liversely.net/"], :root a[href^="http://www.bluehost.com/track/"] > img, :root a[data-url^="http://paid.outbrain.com/network/redir?"], :root a[data-redirect^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://www.twinplan.com/AF_"], :root a[href^="http://n.admagnet.net/"], :root a[href^="http://connectlinking6.com/"], :root a[data-obtrack^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://www.getyourguide.com/?partner_id="], :root [onclick^="window.open('https://www.brazzersnetwork.com/landing/"], :root .plistaList > .itemLinkPET, :root a[href^="http://mgid.com/"], :root a[href^="http://adultfriendfinder.com/p/register.cgi?pid="], :root a[href*="a2g-secure.com"], :root a[href^="http://espn.zlbu.net/"], :root a[data-redirect^="this.href='http://paid.outbrain.com/network/redir?"], :root a[href^="http://k2s.cc/pr/"], :root p[id^="div-gpt-ad-"], :root #assetsListings[style="display: block;"], :root [onclick^="window.open('window.open('//delivery.trafficfabrik.com/"], :root a[href^="https://www.financeads.net/tc.php?"], :root [lazy-ad="top_banner"], :root a[href^="http://www.on2url.com/app/adtrack.asp"], :root #\5f _nq__hh[style="display:block!important"], :root a[href^="http://guideways.info/"], :root a[href^="http://campaign.bharatmatrimony.com/cbstrack/"], :root a[href*="//xml.revrtb.com/"], :root #rhs_block .mod > .gws-local-hotels__booking-module, :root a[href^="http://adrunnr.com/"], :root [lazy-ad="leftthin_banner"], :root a[href^="http://go.ad2up.com/"], :root [id*="MarketGid"], :root [id^="bunyad_ads_"], :root #mn #center_col > div > h2.spon:first-child + ol:last-child, :root .plistaList > .plista_widget_underArticle_item[data-type="pet"], :root a[href^="http://goldmoney.com/?gmrefcode="], :root a[href^="http://adexprt.me/"], :root a[href^="http://papi.mynativeplatform.com:80/pub2/"], :root LEADERBOARD-AD, :root a[href^="https://topoffers.com/"][href*="/?pid="], :root a[href^="http://vinfdv6b4j.com/"], :root a[href^="http://bonusfapturbo.nmvsite.com/"], :root DFP-AD, :root a[href^="//www.mgid.com/"], :root div[id^="ad-div-"], :root #center_col > div[style="font-size:14px;margin-right:0;min-height:5px"] > div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff8e7"], :root a[href^="http://track.affiliatenetwork.co.za/"], :root a[data-redirect^="http://paid.outbrain.com/network/redir?"], :root .jobs-information-call-to-action + .jobs-information-call-to-action div[class$="_item"], :root .__y_inner > .__y_item, :root a[href^="https://secure.cbdpure.com/aff/"], :root a[href^="https://bullads.net/get/"], :root AMP-AD, :root AD-SLOT, :root div[class^="lifeOnwerAd"], :root a[data-oburl^="http://paid.outbrain.com/network/redir?"], :root div[data-subscript="Advertising"], :root .widget-pane-section-result[data-result-ad-type], :root a[href^="http://ffxitrack.com/"], :root #center_col > #main > .dfrd > .mnr-c > .c._oc._zs, :root a[href^="http://t.mdn2015x2.com/"], :root a[href^="http://b.bestcompleteusa.info/"], :root .trc_rbox_div .syndicatedItemUB, :root a[href^="http://www.myvpn.pro/"], :root a[href^="http://hyperies.info/"], :root a[href^="//www.pd-news.com/"], :root .trc_rbox .syndicatedItem, :root a[href^="http://pwrads.net/"], :root div[class^="adpubs-"], :root #mn div[style="position:relative"] > #center_col > div > ._dPg, :root .rhsvw[style="background-color:#fff;margin:0 0 14px;padding-bottom:1px;padding-top:1px;"], :root a[href^="http://www.pinkvisualpad.com/?revid="], :root a[href^="//porngames.adult/?SID="], :root #main-content > [style="padding:10px 0 0 0 !important;"], :root a[href^="http://www.webtrackerplus.com/"], :root .GJJKPX2N1 > .GJJKPX2M1 > .GJJKPX2P4, :root a[href^="http://centertrust.xyz/"], :root .ob_container .item-container-obpd, :root a[href^="https://intrev.co/"], :root a[href^="http://record.sportsbetaffiliates.com.au/"], :root #topstuff > #tads, :root .mw > #rcnt > #center_col > #taw > #tvcap > .c, :root div[id^="google_ads_iframe_"], :root a[href^="http://www.pheedo.com/"], :root a[href^="http://www.affiliates1128.com/processing/"], :root .vi-lb-placeholder[title="ADVERTISEMENT"], :root a[href^="https://bongacams2.com/track?"], :root a[href^="//zenhppyad.com/"], :root .gbfwa > div[class$="_item"], :root a[href^="http://prochina.space/"], :root a[href^="http://www.uniblue.com/cm/"], :root a[data-redirect^="http://click.plista.com/pets"], :root #rhs_block > script + .c._oc._Ve.rhsvw, :root .rscontainer > .ellip, :root a[href^="http://track.incognitovpn.com/"], :root a[href^="http://click.guamwnvgashbkashawhgkhahshmashcas.pw/"], :root .__ywl .__y_item, :root a[href^="http://y1jxiqds7v.com/"], :root a[href^="http://www.afgr3.com/"], :root [ad-id^="googlead"], :root a[href^="https://control.trafficfabrik.com/"], :root a[href^="http://hd-plugins.com/download/"], :root a[href^="//voyeurhit.com/cs/"], :root a[href^="http://track.trkvluum.com/"], :root a[href*="/adrotate-out.php?"], :root [src^="/Redirect.a2b?"], :root a[href*=".clksite.com/"], :root #center_col > #resultStats + #tads, :root .__yinit .__y_item, :root .ra[align="left"][width="30%"], :root a[href^="https://trackjs.com/?utm_source"], :root AFS-AD, :root a[href^="http://server.cpmstar.com/click.aspx?poolid="], :root #cnt #center_col > #res > #topstuff > .ts, :root #cnt #center_col > #taw > #tvcap > .c._oc._Lp, :root .trc_rbox_div a[target="_blank"][href^="http://tab"], :root .GKJYXHBF2 > .GKJYXHBE2 > .GKJYXHBH5, :root a[href*="googleme.eu"], :root .mod > ._jH + .rscontainer, :root .GFYY1SVD2 > .GFYY1SVC2 > .GFYY1SVF5, :root a[href^="https://dcs.adgear.com/clicks/"], :root a[data-oburl^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://affiliates.score-affiliates.com/"], :root ADS-RIGHT, :root a[href^="https://betway.com/"][href*="&a="], :root a[href^="http://rekoverr.com/"], :root #rhswrapper > #rhssection[border="0"][bgcolor="#ffffff"], :root .Mpopup + #Mad > #MadZone, :root a[href^="http://landingpagegenius.com/"], :root a[href^="http://www.streamtunerhd.com/signup?"], :root #ssmiwdiv[jsdisplay], :root a[href^="https://www.adxtro.com/"], :root a[href^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://easydownload4you.com/"], :root #rhs_block > #mbEnd, :root #center_col > #\5f Emc, :root div[id^="dfp-ad-"], :root .GB3L-QEDGY .GB3L-QEDF- > .GB3L-QEDE-, :root #rhs_block .mod > .luhb-div > div[data-async-type="updateHotelBookingModule"], :root a[href^="http://srvpub.com/"], :root a[href^="http://a.adquantix.com/"], :root a[href^="http://ads2.williamhill.com/redirect.aspx?"], :root iframe[src^="http://static.mozo.com.au/strips/"], :root a[href^="https://www.spyoff.com/"], :root AD-TRIPLE-BOX, :root input[onclick^="window.open('http://www.FriendlyDuck.com/"], :root a[href^="//z6naousb.com/"], :root a[href^="http://taboola-"][href*="/redirect.php?app.type="], :root .mw > #rcnt > #center_col > #taw > .c, :root .rc-cta[data-target], :root #rhs_block > .ts[cellspacing="0"][cellpadding="0"][style="padding:0"], :root .GFYY1SVE2 > .GFYY1SVD2 > .GFYY1SVG5, :root #flowplayer > div[style="position: absolute; width: 300px; height: 275px; left: 222.5px; top: 85px; z-index: 999;"], :root a[href^="http://ddownload39.club/"], :root a[href^="http://www.sex.com/pics/?utm_"], :root a[href^="http://vo2.qrlsx.com/"], :root a[href^="http://engine.newsmaxfeednetwork.com/"], :root a[href^="http://ad.yieldmanager.com/"], :root a[href^="http://www.plus500.com/?id="], :root #flowplayer > div[style="z-index: 208; position: absolute; width: 300px; height: 275px; left: 222.5px; top: 85px;"], :root a[href^="http://cwcams.com/landing/click/"], :root a[href^="https://watchmygirlfriend.tv/"], :root .nrelate .nr_partner, :root #center_col > #resultStats + #tads + #res + #tads, :root .trc_related_container div[data-item-syndicated="true"], :root a[href^="//medleyads.com/spot/"], :root a[href*="mfroute.com/"], :root .trc_rbox_border_elm .syndicatedItem, :root a[href^="http://www.firstclass-download.com/"], :root a[href*=".trust.zone"], :root a[href^="http://dwn.pushtraffic.net/"], :root a[href$="/vghd.shtml"], :root a[href^="http://tezfiles.com/pr/"], :root a[href^="http://t.wowtrk.com/"], :root a[href^="http://adprovider.adlure.net/"], :root a[href^="https://porngames.adult/?SID="], :root #\5f _admvnlb_modal_container, :root a[href^="http://adf.ly/?id="], :root #center_col > #taw > #tvcap > .rscontainer, :root #rhs_block > ol > .rhsvw > .kp-blk > .xpdopen > ._OKe > ol > ._DJe > .luhb-div, :root a[href^="http://linksnappy.com/?ref="], :root #main_col > #center_col div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff7ed"], :root a[href^="http://webtrackerplus.com/"], :root a[href^="http://clickandjoinyourgirl.com/"], :root #center_col > #res > #topstuff + #search > div > #ires > #rso > #flun, :root a[href^="http://www.seekbang.com/cs/"], :root a[href^="http://syndication.exoclick.com/"], :root a[href^="http://bluehost.com/track/"], :root a[href^="https://squren.com/rotator/?atomid="], :root #resultspanel > #topads, :root a[href^="http://n217adserv.com/"], :root a[href^="//4c7og3qcob.com/"], :root #header + #content > #left > #rlblock_left, :root a[href*="emprestimo.eu"] { display: none !important; }</style><style media="print" class="jx_ui_StyleSheet" __jx__id="___$_2" type="text/css">.zopim { display: none !important }</style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style></head>
+<body class=" kbase-article-article">
+<section class="mt-container">
+
+
+
+
+
+
+<script type="text/javascript">
+
+var $jk = jQuery.noConflict();
+
+$jk(window).resize(function () {
+if($jk('#notification-bar').is(':visible')) {
+var height=$jk("#notification-bar").height();
+var size =  parseInt($jk('#notification').css('font-size'));
+var margintop=size + height;
+ $jk("body").css("margin-top", margintop);
+}
+});
+
+function notification() {
+if($jk('#notification-bar').is(':visible')) {
+var height=$jk("#notification-bar").height();
+var size =  parseInt($jk('#notification').css('font-size'));
+var margintop=size + height;
+ $jk("body").css("margin-top", margintop);
+var name="clear_notification_bar_tradinghours";
+Mage.Cookies.clear('name');
+Mage.Cookies.set("clear_notification_bar_tradinghours","",new Date((new Date()).getTime() + 365*24*60*60*1000),"/");
+}
+}
+setTimeout(notification, 300);
+
+</script>
+
+
+<div class="menu_left_list" id="mobile_menulist" style="">
+
+	<div class="left_list_search_top">
+<div class="mobile_header_ul_left"><a style="cursor:pointer;" onclick="mobilemenu(&#39;mobile_menulist&#39;)"><span>Menu</span></a></div>
+<div class="mobile_header_ul_right"><a class="close" onclick="mobilemenu(&#39;mobile_menulist&#39;)"></a></div>
+</div>
+	<div class="left_list_search_bottom">
+		<ul>
+			<li><a href="https://core-electronics.com.au/">Home</a></li>
+			<li><a href="https://core-electronics.com.au/categories/">Shop</a></li>
+            <li><a href="JavaScript:void(0)">Learn</a></li>
+
+
+<li class="mobile-side-learn"><a href="https://core-electronics.com.au/tutorials">- Tutorials</a></li>
+
+        
+        <li class="mobile-side-learn">
+    <a href="https://core-electronics.com.au/projects">- Projects</a>
+</li>
+
+<li class="mobile-side-learn"><a href="https://core-electronics.com.au/courses">- Courses</a></li>
+
+
+<li class="mobile-side-learn"> <a href="https://core-electronics.com.au/workshops.html">- Workshops</a></li>
+
+
+                <li class="mobile-side-learn"><a href="https://core-electronics.com.au/videos">- Videos</a></li>
+     
+
+
+
+<li> <a href="JavaScript:void(0)">Support</a></li>
+
+<li class="mobile-side-learn"> <a href="https://forum.core-electronics.com.au/">- Forum</a></li>
+<li class="mobile-side-learn"> <a href="https://core-electronics.com.au/customer-service/">- FAQ</a></li>
+<li class="mobile-side-learn"> <a href="https://www.education.core-electronics.com.au/">- Teachers &amp; Educators</a></li>
+
+<li><a href="https://core-electronics.com.au/electronics-blog">Blog</a></li>
+
+
+			<li><a href="https://core-electronics.com.au/customer/account/">Account Area</a></li>
+			<li><a href="https://core-electronics.com.au/customer/account/logout/">Sign Out</a></li>
+<li class="mobile_phone">
+
+	<div><a class="mobile_phone_img" href="tel:+61 2 4058 2818"><span>02 4058 2818</span></a></div>	<!--<span class="mobile_phone_img">
+	<img src=""/></span><span><a href="tel:(02) 4957 7931">(02) 4957 7931</a></span>--></li>
+
+
+
+		</ul>
+	</div>
+</div>
+<script>
+	 $rp =jQuery.noConflict();
+</script>
+<script>
+function mobilemenu(id) {
+
+
+var e = document.getElementById(id);
+if(e.style.display == 'block')
+e.style.display = 'none';
+else
+e.style.display = 'block';
+
+	$rp("body").toggleClass("body_menu");
+
+$rp( document ).width();
+
+}
+
+</script>
+<div class="site-overlay"></div>
+<div class="wrapper">
+        <noscript>
+        <div class="global-site-notice noscript">
+            <div class="notice-inner">
+                <p>
+                    <strong>JavaScript seems to be disabled in your browser.</strong><br />
+                    You must have JavaScript enabled in your browser to utilize the functionality of this website.                </p>
+            </div>
+        </div>
+    </noscript>
+    <div class="page">
+        
+<div class="mobile_header">
+<div class="mobile_header_left"><a style="cursor:pointer;" onclick="mobilemenu(&#39;mobile_menulist&#39;)"></a></div>
+<div class="mobile_header_middal"><a href="https://core-electronics.com.au/"> <img src="./Pycom and Adafruit IO - Tutorial Australia_files/logo.png" alt="Core Electronics"> </a></div>
+<div class="header-aw-acp-cart">
+<div class="mobile_header_right">
+<a href="https://core-electronics.com.au/checkout/cart/"><h1></h1></a></div>
+</div>
+<div class="mobile-searchbox">
+<div class="mobile_search"><form id="search_mini_form" action="https://core-electronics.com.au/search/index/post/" method="get">
+<input type="hidden" id="solrrun" value="0">
+<fieldset>
+<div class="input-box">
+<label for="search">Search:</label>
+<input id="searchmob" type="text" name="q" value="Search" class="input-text mob-input-text" autocomplete="off">
+<button type="submit" title="" class="button search-button"><span><span>search</span></span></button>
+<div id="search_autocomplete" class="search-autocomplete"></div>
+<script type="text/javascript">
+//<![CDATA[
+var searchForm = new Varien.searchForm('search_mini_form', 'searchmob', 'Search');
+var SolrBridgeAutocomplete = new SolrBridgeSearch('searchmob',{id:'autocomplete',target:'#search_mini_form',inputid:'searchmob',containerid:'search_mini_form',boxWidth:469,searchTextPlaceHolder:'Search',currencySign:'&nbsp;$&nbsp;',currencycode:'AUD',ajaxBaseUrl:'https://core-electronics.com.au/',searchResultUrl:'https://core-electronics.com.au/search',viewAllResultText:'View all search results for %s',categoryText:'Categories',viewAllCategoryText:'View all categories >>',viewAllBrandsText:'View all brands >>',keywordsText:'Keywords',productText:'product',productsText:'products',brandText:'Brands',storetimestamp:'1556508110',storeid:'1',customergroupid:'0',categoryRedirect:'0',showBrand:'1',showBrandAttributeCode:'aw_shopbybrand_brand',displaykeywordsuggestion:'true',displayResultOfText:'Search results for %s',displayResultOfInsteadText:'Search results for %s instead',currencyPos:'before',displayThumb:'1',allowFilter:'1',categoryLimit:'3',brandLimit:'3',fromPriceText:'from',ajaxprice:1});
+var brandimagepaths = {"Arduino":"aw_shopbybrand\/solrimage\/\/a\/r\/arduino_logo_sml_1.png","Ciseco":"aw_shopbybrand\/solrimage\/\/c\/i\/ciseco_logo_small.png","Mecanique":"aw_shopbybrand\/solrimage\/\/m\/e\/mecanique_logo_small.png","Kinsten":"aw_shopbybrand\/solrimage\/\/k\/i\/kinsten_logo_small.png","Sure Electronics":"aw_shopbybrand\/solrimage\/\/s\/u\/sure_electronics_logo_small.png","DFRobot":"aw_shopbybrand\/solrimage\/\/d\/f\/dfrobot_logo_small.png","Saleae":"aw_shopbybrand\/solrimage\/\/s\/a\/saleae_logo_small.png","Adafruit":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit_small.png","Rigol":"aw_shopbybrand\/solrimage\/\/r\/i\/rigol_small_1.png","Pololu":"aw_shopbybrand\/solrimage\/\/p\/o\/pololu_australia_small.png","Seeed Studio":"aw_shopbybrand\/solrimage\/\/s\/e\/seeed_studio_australia_logo.png","Pimoroni":"aw_shopbybrand\/solrimage\/\/p\/i\/pimoroni_australia_logo_sm_1.png","Intel Edison":"aw_shopbybrand\/solrimage\/\/i\/n\/intel_edison_australia_logo_sm.png","Sparkfun":"aw_shopbybrand\/solrimage\/\/s\/p\/sparkfun_logo_small.png","Freetronics":"aw_shopbybrand\/solrimage\/\/f\/r\/freetronics_logo_small.png","LulzBot":"aw_shopbybrand\/solrimage\/\/l\/u\/lulzbot_logo_sml_png.png","Core Electronics":"aw_shopbybrand\/solrimage\/\/c\/o\/core-electronics-solr.png","Micropython":"aw_shopbybrand\/solrimage\/\/m\/i\/micropython_logo_small.png","LittleBits":"aw_shopbybrand\/solrimage\/\/l\/i\/littlebits_logo_small.png","Particle":"aw_shopbybrand\/solrimage\/\/p\/a\/particle_solr.png","Solarbotics":"aw_shopbybrand\/solrimage\/\/s\/o\/solarbotics_australia_solr.png","Makeblock":"aw_shopbybrand\/solrimage\/\/m\/a\/makeblock-logo-solr_1.png","Metas Innobits":"aw_shopbybrand\/solrimage\/\/m\/e\/metas_innobits_solr.png","Raspberry Pi":"aw_shopbybrand\/solrimage\/\/r\/a\/raspberry-pi-solr.png","Genuino":"aw_shopbybrand\/solrimage\/\/g\/e\/genuino-solr.png","Chibitronics":"aw_shopbybrand\/solrimage\/\/c\/h\/chibitronics-logo-solr.png","Makey Makey":"aw_shopbybrand\/solrimage\/\/m\/a\/makey-makey-solr.png","LattePanda":"aw_shopbybrand\/solrimage\/\/l\/a\/lattepanda-solr.png","Teensy":"aw_shopbybrand\/solrimage\/\/p\/j\/pjrc-solr.png","Hobby Creek":"aw_shopbybrand\/solrimage\/\/h\/o\/hobby-creek-solr.png","8Bitdo":"aw_shopbybrand\/solrimage\/\/8\/b\/8bitdo-logo-solr.png","Hakko":"aw_shopbybrand\/solrimage\/\/h\/a\/hakko-solr.png","PanaVise":"aw_shopbybrand\/solrimage\/\/p\/a\/panavise-solr.png","Adafruit Feather":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit-feather-solr.png","Pi-Top":"aw_shopbybrand\/solrimage\/\/p\/i\/pi-top-australia-solr.png","RetroPie":"aw_shopbybrand\/solrimage\/\/r\/e\/retropie-logo-solr.png","Snap Circuits":"aw_shopbybrand\/solrimage\/\/s\/n\/snapcircuits-logo-solr.png","Espressif ESP32 & ESP8266":"aw_shopbybrand\/solrimage\/\/e\/s\/espressif-logo-solr.png","Mooshimeter":"aw_shopbybrand\/solrimage\/\/m\/o\/mooshim-logo-solr.png","Ozobot":"aw_shopbybrand\/solrimage\/\/o\/z\/ozobot-logo-solr.png","Circuit Scribe":"aw_shopbybrand\/solrimage\/\/c\/i\/circuitscribe-logo-solr.png","Strawbees":"aw_shopbybrand\/solrimage\/\/s\/t\/strawbees-logo-solr.png","Marbles the Brain Store":"aw_shopbybrand\/solrimage\/\/m\/a\/marblebrain-logo-solr.png","STEMTera":"aw_shopbybrand\/solrimage\/\/s\/t\/stemtera-logo-solr.png","Proto-Pasta":"aw_shopbybrand\/solrimage\/\/p\/r\/protopasta-logo-solr.png","Polymaker":"aw_shopbybrand\/solrimage\/\/p\/o\/polymaker-logo-solr.png","NinjaFlex":"aw_shopbybrand\/solrimage\/\/n\/i\/ninjaflex-logo-solr.png","Filaform":"aw_shopbybrand\/solrimage\/\/f\/i\/filaform-logo-solr.png","Nordic":"aw_shopbybrand\/solrimage\/\/n\/o\/nordic-logo-solr.png","Sphero":"aw_shopbybrand\/solrimage\/\/s\/p\/sphero-logo-solr.png","Village Plastics":"aw_shopbybrand\/solrimage\/\/v\/i\/villageplastics-logo-solr.png","micro:bit":"aw_shopbybrand\/solrimage\/\/m\/i\/microbit-logo-solr.png","Siglent":"aw_shopbybrand\/solrimage\/\/s\/i\/siglent-logo-solr.png","Kitronik":"aw_shopbybrand\/solrimage\/\/k\/i\/kitronik-logo-solr.png","Bee-Bot":"aw_shopbybrand\/solrimage\/\/b\/e\/beebot-logo-solr.png","Picaxe":"aw_shopbybrand\/solrimage\/\/p\/i\/picaxe-logo-solr.png","Onion Omega":"aw_shopbybrand\/solrimage\/\/o\/n\/onion-logo-solr.png","Proto-PIC":"aw_shopbybrand\/solrimage\/\/p\/r\/protopic-logo-solr.png","Pycom":"aw_shopbybrand\/solrimage\/\/p\/y\/pycom-logo-solr.png","colorFabb":"aw_shopbybrand\/solrimage\/\/c\/o\/colorfabb-logo-solr.png","Arckit":"aw_shopbybrand\/solrimage\/\/a\/r\/arckit-logo-solr.png","Bantam Tools":"aw_shopbybrand\/solrimage\/\/b\/a\/bantam-logo-solr.png","Primo Toys":"aw_shopbybrand\/solrimage\/\/p\/r\/primo-logo-solr.png","Zometool":"aw_shopbybrand\/solrimage\/\/z\/o\/zome-logo-solr.png","BeagleBone":"aw_shopbybrand\/solrimage\/\/b\/e\/beaglebone-logo-solr.png","Labcenter Electronics":"aw_shopbybrand\/solrimage\/\/p\/r\/proteus-solr.jpg","MikroElektronika":"aw_shopbybrand\/solrimage\/\/m\/i\/mikroelectronika-solr.jpg","Hologram":"aw_shopbybrand\/solrimage\/\/h\/o\/hologram-logo-solr.png","Kano":"aw_shopbybrand\/solrimage\/\/k\/a\/kano-logo-solr.png","4tronix":"aw_shopbybrand\/solrimage\/\/4\/t\/4tronix-logo-solr.png","ModMyPi":"aw_shopbybrand\/solrimage\/\/m\/o\/modmypi-logo-solr.png","Bare Conductive":"aw_shopbybrand\/solrimage\/\/b\/a\/bareconductive-logo-solr.png","Pi Supply":"aw_shopbybrand\/solrimage\/\/p\/i\/pisupply-logo-solr.png","Makedo":"aw_shopbybrand\/solrimage\/\/m\/a\/makedo-logo-solr.png","Robobloq":"aw_shopbybrand\/solrimage\/\/r\/o\/robobloq-logo-solr.png","Monk Makes":"aw_shopbybrand\/solrimage\/\/m\/o\/monkmakes-logo-solr.png","MG Chemicals":"aw_shopbybrand\/solrimage\/\/l\/o\/logo-mgchemicals-solr.png","Polyalchemy":"aw_shopbybrand\/solrimage\/\/p\/o\/polyalchemy-logo-solr.png","Edison":"aw_shopbybrand\/solrimage\/\/e\/d\/edison-logo-solr.png","Anki":"aw_shopbybrand\/solrimage\/\/a\/n\/anki-logo-solr.png","Qoitech":"aw_shopbybrand\/solrimage\/q\/o\/qoitech-logo-solr.png","DJI":"aw_shopbybrand\/solrimage\/d\/j\/dji-logo-solr.png","Ultimaker":"aw_shopbybrand\/solrimage\/u\/l\/ultimake-logo-solr.png","Dremel":"aw_shopbybrand\/solrimage\/d\/r\/dremel-logo-solr.png"};
+var searchurllinks={"links":"<div class='searchinconceptdiv'><\/div><span class='searchinconceptspan'>Products<\/span><a class='searchinconceptspan' href='http:\/\/forum.core-electronics.com.au\/search?q=%s'>Forum<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/tutorials\/search\/query\/%s\/'>Tutorials<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/projects\/search\/?text=%s'>Projects<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/videos\/search\/query\/%s\/'>Videos<\/a>"};
+//]]>
+</script>
+</div>
+</fieldset>
+</form>
+</div> </div>
+</div>
+<div class="header-language-background">
+<div class="header-language-container">
+<div class="store-language-container"> </div>
+<p class="welcome-msg"><amfpc name="welcome">empowering creative people</amfpc> </p>
+</div>
+</div>
+<header id="header" class="page-header">
+<div class="header_main_container">
+<div class="header-container">
+<div class="header_logo_main"><a class="logo" href="https://core-electronics.com.au/"> <img src="./Pycom and Adafruit IO - Tutorial Australia_files/logo.png" alt="Core Electronics" class="large"> <img src="./Pycom and Adafruit IO - Tutorial Australia_files/logo.gif" alt="Core Electronics" class="small"> </a></div>
+<div class="header_search_mainn">
+<div class="header_search_link_mainn">
+<div class="header_top_links">
+<amfpc name="top.links"><div class="links" style="float:left;">
+<div class="phone_number"><div class="phone"><a href="tel:+61 2 4058 2818">02 4058 2818</a></div></div>
+<div class="sign_in_header"><a class="signup" href="https://core-electronics.com.au/customer/account/create/"><span>Register</span></a></div>
+<div class="sign_in_header"><a class="signin" href="https://core-electronics.com.au/customer/account/login/"><span>Sign In</span></a></div>
+</div>
+</amfpc><div class="skip-links cart_header" style="clear:none;">
+<div class="header-minicart">
+<amfpc name="minicart_head"><div class="aw-minicart-wrapper">
+<a href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html#header-cart" class="skip-link skip-cart no-count">
+<span class="icon"></span>
+<span class="label">Cart</span>
+<span class="count">0</span>
+</a>
+<div id="header-cart" class="block block-cart skip-content">
+<div id="minicart-error-message" class="minicart-message"></div>
+<div id="minicart-success-message" class="minicart-message"></div>
+<div class="minicart-wrapper">
+<p class="block-subtitle">
+Recently added item(s) <a class="close skip-link-close" href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html#" title="Close">×</a>
+</p>
+<p class="empty">You have no items in your shopping cart.</p>
+</div>
+</div>
+</div>
+</amfpc> </div>
+</div>
+</div>
+</div>
+<div class="minibannersearch">
+<div class="minibanners">
+<a href="https://core-electronics.com.au/customer-service/" class="minicustomerservice" title="customer service"></a>
+<a href="https://core-electronics.com.au/purchase-orders/" class="minipurchaseorder" title="purchase orders"></a>
+</div>
+<div class="newsearchbox">
+<amfpc_ajax name="top.searchsolr"><form id="search_mini_form" action="https://core-electronics.com.au/search/index/post/" method="get">
+<input type="hidden" id="solrrun" value="0">
+<fieldset>
+<div class="input-box">
+<input id="search" type="text" name="q" value="Search" class="input-text" autocomplete="off">
+<button type="submit" onclick="displaysearch();" title="" class="button search-button"><span><span>search</span></span></button>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+var searchForm = new Varien.searchForm('search_mini_form', 'search', 'Search');
+var SolrBridgeAutocomplete = new SolrBridgeSearch('search',{id:'autocomplete',target:'#search_mini_form',inputid:'search',containerid:'search_mini_form',boxWidth:469,searchTextPlaceHolder:'Search',currencySign:'&nbsp;$&nbsp;',currencycode:'AUD',ajaxBaseUrl:'https://core-electronics.com.au/',searchResultUrl:'https://core-electronics.com.au/search',viewAllResultText:'View all search results for %s',categoryText:'Categories',viewAllCategoryText:'View all categories >>',viewAllBrandsText:'View all brands >>',keywordsText:'Keywords',productText:'product',productsText:'products',brandText:'Brands',storetimestamp:'1556513169',storeid:'1',customergroupid:'0',categoryRedirect:'0',showBrand:'1',showBrandAttributeCode:'aw_shopbybrand_brand',displaykeywordsuggestion:'true',displayResultOfText:'Search results for %s',displayResultOfInsteadText:'Search results for %s instead',currencyPos:'before',displayThumb:'1',allowFilter:'1',categoryLimit:'3',brandLimit:'3',fromPriceText:'from',ajaxprice:1});
+var brandimagepaths = {"Arduino":"aw_shopbybrand\/solrimage\/\/a\/r\/arduino_logo_sml_1.png","Ciseco":"aw_shopbybrand\/solrimage\/\/c\/i\/ciseco_logo_small.png","Mecanique":"aw_shopbybrand\/solrimage\/\/m\/e\/mecanique_logo_small.png","Kinsten":"aw_shopbybrand\/solrimage\/\/k\/i\/kinsten_logo_small.png","Sure Electronics":"aw_shopbybrand\/solrimage\/\/s\/u\/sure_electronics_logo_small.png","DFRobot":"aw_shopbybrand\/solrimage\/\/d\/f\/dfrobot_logo_small.png","Saleae":"aw_shopbybrand\/solrimage\/\/s\/a\/saleae_logo_small.png","Adafruit":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit_small.png","Rigol":"aw_shopbybrand\/solrimage\/\/r\/i\/rigol_small_1.png","Pololu":"aw_shopbybrand\/solrimage\/\/p\/o\/pololu_australia_small.png","Seeed Studio":"aw_shopbybrand\/solrimage\/\/s\/e\/seeed_studio_australia_logo.png","Pimoroni":"aw_shopbybrand\/solrimage\/\/p\/i\/pimoroni_australia_logo_sm_1.png","Intel Edison":"aw_shopbybrand\/solrimage\/\/i\/n\/intel_edison_australia_logo_sm.png","Sparkfun":"aw_shopbybrand\/solrimage\/\/s\/p\/sparkfun_logo_small.png","Freetronics":"aw_shopbybrand\/solrimage\/\/f\/r\/freetronics_logo_small.png","LulzBot":"aw_shopbybrand\/solrimage\/\/l\/u\/lulzbot_logo_sml_png.png","Core Electronics":"aw_shopbybrand\/solrimage\/\/c\/o\/core-electronics-solr.png","Micropython":"aw_shopbybrand\/solrimage\/\/m\/i\/micropython_logo_small.png","LittleBits":"aw_shopbybrand\/solrimage\/\/l\/i\/littlebits_logo_small.png","Particle":"aw_shopbybrand\/solrimage\/\/p\/a\/particle_solr.png","Solarbotics":"aw_shopbybrand\/solrimage\/\/s\/o\/solarbotics_australia_solr.png","Makeblock":"aw_shopbybrand\/solrimage\/\/m\/a\/makeblock-logo-solr_1.png","Metas Innobits":"aw_shopbybrand\/solrimage\/\/m\/e\/metas_innobits_solr.png","Raspberry Pi":"aw_shopbybrand\/solrimage\/\/r\/a\/raspberry-pi-solr.png","Genuino":"aw_shopbybrand\/solrimage\/\/g\/e\/genuino-solr.png","Chibitronics":"aw_shopbybrand\/solrimage\/\/c\/h\/chibitronics-logo-solr.png","Makey Makey":"aw_shopbybrand\/solrimage\/\/m\/a\/makey-makey-solr.png","LattePanda":"aw_shopbybrand\/solrimage\/\/l\/a\/lattepanda-solr.png","Teensy":"aw_shopbybrand\/solrimage\/\/p\/j\/pjrc-solr.png","Hobby Creek":"aw_shopbybrand\/solrimage\/\/h\/o\/hobby-creek-solr.png","8Bitdo":"aw_shopbybrand\/solrimage\/\/8\/b\/8bitdo-logo-solr.png","Hakko":"aw_shopbybrand\/solrimage\/\/h\/a\/hakko-solr.png","PanaVise":"aw_shopbybrand\/solrimage\/\/p\/a\/panavise-solr.png","Adafruit Feather":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit-feather-solr.png","Pi-Top":"aw_shopbybrand\/solrimage\/\/p\/i\/pi-top-australia-solr.png","RetroPie":"aw_shopbybrand\/solrimage\/\/r\/e\/retropie-logo-solr.png","Snap Circuits":"aw_shopbybrand\/solrimage\/\/s\/n\/snapcircuits-logo-solr.png","Espressif ESP32 & ESP8266":"aw_shopbybrand\/solrimage\/\/e\/s\/espressif-logo-solr.png","Mooshimeter":"aw_shopbybrand\/solrimage\/\/m\/o\/mooshim-logo-solr.png","Ozobot":"aw_shopbybrand\/solrimage\/\/o\/z\/ozobot-logo-solr.png","Circuit Scribe":"aw_shopbybrand\/solrimage\/\/c\/i\/circuitscribe-logo-solr.png","Strawbees":"aw_shopbybrand\/solrimage\/\/s\/t\/strawbees-logo-solr.png","Marbles the Brain Store":"aw_shopbybrand\/solrimage\/\/m\/a\/marblebrain-logo-solr.png","STEMTera":"aw_shopbybrand\/solrimage\/\/s\/t\/stemtera-logo-solr.png","Proto-Pasta":"aw_shopbybrand\/solrimage\/\/p\/r\/protopasta-logo-solr.png","Polymaker":"aw_shopbybrand\/solrimage\/\/p\/o\/polymaker-logo-solr.png","NinjaFlex":"aw_shopbybrand\/solrimage\/\/n\/i\/ninjaflex-logo-solr.png","Filaform":"aw_shopbybrand\/solrimage\/\/f\/i\/filaform-logo-solr.png","Nordic":"aw_shopbybrand\/solrimage\/\/n\/o\/nordic-logo-solr.png","Sphero":"aw_shopbybrand\/solrimage\/\/s\/p\/sphero-logo-solr.png","Village Plastics":"aw_shopbybrand\/solrimage\/\/v\/i\/villageplastics-logo-solr.png","micro:bit":"aw_shopbybrand\/solrimage\/\/m\/i\/microbit-logo-solr.png","Siglent":"aw_shopbybrand\/solrimage\/\/s\/i\/siglent-logo-solr.png","Kitronik":"aw_shopbybrand\/solrimage\/\/k\/i\/kitronik-logo-solr.png","Bee-Bot":"aw_shopbybrand\/solrimage\/\/b\/e\/beebot-logo-solr.png","Picaxe":"aw_shopbybrand\/solrimage\/\/p\/i\/picaxe-logo-solr.png","Onion Omega":"aw_shopbybrand\/solrimage\/\/o\/n\/onion-logo-solr.png","Proto-PIC":"aw_shopbybrand\/solrimage\/\/p\/r\/protopic-logo-solr.png","Pycom":"aw_shopbybrand\/solrimage\/\/p\/y\/pycom-logo-solr.png","colorFabb":"aw_shopbybrand\/solrimage\/\/c\/o\/colorfabb-logo-solr.png","Arckit":"aw_shopbybrand\/solrimage\/\/a\/r\/arckit-logo-solr.png","Bantam Tools":"aw_shopbybrand\/solrimage\/\/b\/a\/bantam-logo-solr.png","Primo Toys":"aw_shopbybrand\/solrimage\/\/p\/r\/primo-logo-solr.png","Zometool":"aw_shopbybrand\/solrimage\/\/z\/o\/zome-logo-solr.png","BeagleBone":"aw_shopbybrand\/solrimage\/\/b\/e\/beaglebone-logo-solr.png","Labcenter Electronics":"aw_shopbybrand\/solrimage\/\/p\/r\/proteus-solr.jpg","MikroElektronika":"aw_shopbybrand\/solrimage\/\/m\/i\/mikroelectronika-solr.jpg","Hologram":"aw_shopbybrand\/solrimage\/\/h\/o\/hologram-logo-solr.png","Kano":"aw_shopbybrand\/solrimage\/\/k\/a\/kano-logo-solr.png","4tronix":"aw_shopbybrand\/solrimage\/\/4\/t\/4tronix-logo-solr.png","ModMyPi":"aw_shopbybrand\/solrimage\/\/m\/o\/modmypi-logo-solr.png","Bare Conductive":"aw_shopbybrand\/solrimage\/\/b\/a\/bareconductive-logo-solr.png","Pi Supply":"aw_shopbybrand\/solrimage\/\/p\/i\/pisupply-logo-solr.png","Makedo":"aw_shopbybrand\/solrimage\/\/m\/a\/makedo-logo-solr.png","Robobloq":"aw_shopbybrand\/solrimage\/\/r\/o\/robobloq-logo-solr.png","Monk Makes":"aw_shopbybrand\/solrimage\/\/m\/o\/monkmakes-logo-solr.png","MG Chemicals":"aw_shopbybrand\/solrimage\/\/l\/o\/logo-mgchemicals-solr.png","Polyalchemy":"aw_shopbybrand\/solrimage\/\/p\/o\/polyalchemy-logo-solr.png","Edison":"aw_shopbybrand\/solrimage\/\/e\/d\/edison-logo-solr.png","Anki":"aw_shopbybrand\/solrimage\/\/a\/n\/anki-logo-solr.png","Qoitech":"aw_shopbybrand\/solrimage\/q\/o\/qoitech-logo-solr.png","DJI":"aw_shopbybrand\/solrimage\/d\/j\/dji-logo-solr.png","Ultimaker":"aw_shopbybrand\/solrimage\/u\/l\/ultimake-logo-solr.png","Dremel":"aw_shopbybrand\/solrimage\/d\/r\/dremel-logo-solr.png"};
+var searchurllinks={"links":"<div class='searchinconceptdiv'><\/div><span class='searchinconceptspan'>Products<\/span><a class='searchinconceptspan' href='http:\/\/forum.core-electronics.com.au\/search?q=%s'>Forum<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/tutorials\/search\/query\/%s\/'>Tutorials<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/projects\/search\/?text=%s'>Projects<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/videos\/search\/query\/%s\/'>Videos<\/a>"};
+//]]>
+</script>
+</fieldset>
+</form>
+</amfpc_ajax></div>
+</div>
+</div>
+</div>
+</div>
+<div class="page-header-container">
+<div>
+</div>
+<div id="header-nav" class="skip-content"> </div>
+</div>
+<div class="headerr_nav">
+<div id="menu-wrapper">
+<ul class="nav">
+<li class="home">
+<a href="https://core-electronics.com.au/"></a>
+</li>
+<li> <a href="https://core-electronics.com.au/categories/">shop</a>
+<div>
+<div class="nav-column" style="width: 100%; border-left:none;">
+<h3 class="menutitle"><a href="https://core-electronics.com.au/categories">Product categories</a></h3>
+<div class="yesfavdiv">
+<p>Maker Favourites</p>
+<ul class="favouriteyes">
+<li> <a href="https://core-electronics.com.au/raspberry-pi.html">
+Raspberry Pi (319)</a></li>
+<li> <a href="https://core-electronics.com.au/arduino.html">
+Arduino (163)</a></li>
+<li> <a href="https://core-electronics.com.au/onion-omega.html">
+Onion (16)</a></li>
+<li> <a href="https://core-electronics.com.au/educational.html">
+School Education (46)</a></li>
+<li> <a href="https://core-electronics.com.au/homeschool-stem-educational-kits.html">
+Home Education (26)</a></li>
+<li> <a href="https://core-electronics.com.au/makerspace.html">
+Makerspace (37)</a></li>
+<li> <a href="https://core-electronics.com.au/adafruit-circuit-playground.html">
+Circuit Playground (13)</a></li>
+<li> <a href="https://core-electronics.com.au/littlebits.html">
+littleBits (91)</a></li>
+<li> <a href="https://core-electronics.com.au/makey-makey-australia.html">
+Makey Makey (6)</a></li>
+<li> <a href="https://core-electronics.com.au/micro-bit-australia.html">
+micro:bit (52)</a></li>
+<li> <a href="https://core-electronics.com.au/particle.html">
+Particle (14)</a></li>
+<li> <a href="https://core-electronics.com.au/pycom.html">
+Pycom (16)</a></li>
+<li> <a href="https://core-electronics.com.au/f.html">
+Other Favourites (123)</a></li>
+</ul>
+</div>
+<div class="nofavdiv">
+<p>Our Range</p>
+<ul class="favouriteno">
+<li> <a href="https://core-electronics.com.au/gift-ideas.html">
+Gift Ideas (58)</a></li>
+<li> <a href="https://core-electronics.com.au/3d-printers-australia.html">
+3D Printing (296)</a></li>
+<li> <a href="https://core-electronics.com.au/electronics-books.html">
+Books (10)</a></li>
+<li> <a href="https://core-electronics.com.au/breakout-boards-and-modules.html">
+Breakouts &amp; Modules (109)</a></li>
+<li> <a href="https://core-electronics.com.au/cables.html">
+Cables (126)</a></li>
+<li> <a href="https://core-electronics.com.au/components.html">
+Components &amp; Parts (437)</a></li>
+<li> <a href="https://core-electronics.com.au/connectors-sockets.html">
+Connectors &amp; Sockets (133)</a></li>
+<li> <a href="https://core-electronics.com.au/development-boards.html">
+Development Boards (11)</a></li>
+<li> <a href="https://core-electronics.com.au/displays-screens.html">
+Displays &amp; Screens (38)</a></li>
+<li> <a href="https://core-electronics.com.au/drones.html">
+Drones (64)</a></li>
+<li> <a href="https://core-electronics.com.au/edison-australia.html">
+Edison (12)</a></li>
+<li> <a href="https://core-electronics.com.au/gizmos-gadgets.html">
+Gizmos &amp; Gadgets (13)</a></li>
+<li> <a href="https://core-electronics.com.au/hardware.html">
+Hardware (121)</a></li>
+<li> <a href="https://core-electronics.com.au/kits.html">
+Kits (34)</a></li>
+<li> <a href="https://core-electronics.com.au/merchandise.html">
+Merchandise (4)</a></li>
+<li> <a href="https://core-electronics.com.au/photography.html">
+Photography (23)</a></li>
+<li> <a href="https://core-electronics.com.au/power-batteries.html">
+Power &amp; Batteries (161)</a></li>
+<li> <a href="https://core-electronics.com.au/programmers.html">
+Programmers (13)</a></li>
+<li> <a href="https://core-electronics.com.au/prototyping.html">
+Prototyping (60)</a></li>
+<li> <a href="https://core-electronics.com.au/robotics.html">
+Robotics (21)</a></li>
+<li> <a href="https://core-electronics.com.au/services.html">
+Services (5)</a></li>
+<li> <a href="https://core-electronics.com.au/sensors.html">
+Sensors (185)</a></li>
+<li> <a href="https://core-electronics.com.au/software.html">
+Software (2)</a></li>
+<li> <a href="https://core-electronics.com.au/test-equipment.html">
+Test Equipment (52)</a></li>
+<li> <a href="https://core-electronics.com.au/tools.html">
+Tools (165)</a></li>
+<li> <a href="https://core-electronics.com.au/wearables.html">
+Wearables (42)</a></li>
+<li> <a href="https://core-electronics.com.au/wire.html">
+Wire (17)</a></li>
+<li> <a href="https://core-electronics.com.au/wireless.html">
+Wireless (168)</a></li>
+<li> <a href="https://core-electronics.com.au/workshops.html">
+Workshops (12)</a></li>
+<li> <a href="https://core-electronics.com.au/retired.html">
+Retired (3263)</a></li>
+<li> <a href="https://core-electronics.com.au/clearance.html">
+Clearance (6)</a></li>
+</ul>
+</div>
+</div>
+<div>
+<div class="nav-column"> <div>
+<h3 class="menutitle"><a href="https://core-electronics.com.au/new-products/">New Products</a></h3>
+<div class="carousel">
+<div class="slider">
+<div class="slide">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft">
+<div class="image">
+<a href="https://core-electronics.com.au/ultimaker-s5-3d-printer.html" title="Ultimaker S5 3D Printer">
+<img src="./Pycom and Adafruit IO - Tutorial Australia_files/ultimaker-s5-1.jpg" alt="Ultimaker S5 3D Printer">
+</a>
+</div>
+</div>
+<div class="newleft">
+<h3 class="product-name"><a href="https://core-electronics.com.au/ultimaker-s5-3d-printer.html" title="Ultimaker S5 3D Printer">Ultimaker S5 3D Printer </a></h3>
+<div class="price">Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44571-new">
+<span class="price">$10,595.00</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+<div style="clear:both;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="slide">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft">
+<div class="image">
+<a href="https://core-electronics.com.au/retroflag-megapi-case-for-raspberry-pi-3-model-b.html" title="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">
+<img src="./Pycom and Adafruit IO - Tutorial Australia_files/retroflag-megapi-case-for-raspberry-pi-3-model-b_-1_1.jpg" alt="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">
+</a>
+</div>
+</div>
+<div class="newleft">
+<h3 class="product-name"><a href="https://core-electronics.com.au/retroflag-megapi-case-for-raspberry-pi-3-model-b.html" title="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">Retroflag MEGAPi Case for Raspberry Pi 3 Model B+ </a></h3>
+<div class="price">Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44238-new">
+<span class="price">$34.95</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+<div style="clear:both;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> </div>
+<div class="nav_column_feature"><div>
+<h3 class="menutitle"><a href="https://core-electronics.com.au/featured-products/">Featured products</a></h3>
+<div class="carousel">
+<div class="slider">
+<div class="slide frslide1">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft newleft_img">
+<div class="image"> <a href="https://core-electronics.com.au/ugateway-for-lorawan-ttn.html">
+<img alt="uGateway for LoRaWAN &amp; TTN" src="./Pycom and Adafruit IO - Tutorial Australia_files/lorawan-ugateway-1.jpg"> </a> </div>
+</div>
+<div class="newleft">
+<h3 class="product-name">
+<a href="https://core-electronics.com.au/ugateway-for-lorawan-ttn.html" title="uGateway for LoRaWAN &amp; TTN">uGateway for LoRaWAN &amp; TTN</a> </h3>
+<div class="price"> Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44274">
+<span class="price">$225.00</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="slide frslide2">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft newleft_img">
+<div class="image"> <a href="https://core-electronics.com.au/raspberry-pi-3-model-a-plus.html">
+<img alt="Raspberry Pi 3 Model A+ (Plus) 2018 Release" src="./Pycom and Adafruit IO - Tutorial Australia_files/raspberry-a_-4-test.jpg"> </a> </div>
+</div>
+<div class="newleft">
+<h3 class="product-name">
+<a href="https://core-electronics.com.au/raspberry-pi-3-model-a-plus.html" title="Raspberry Pi 3 Model A+">Raspberry Pi 3 Model A+</a> </h3>
+<div class="price"> Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-43910">
+<span class="price">$38.23</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> </div>
+</div>
+</div>
+</li>
+<li><a href="JavaScript:void(0)">Learn</a>
+<div class="learn-total">
+<div class="nav-column-learn learn-menu-main" style="width: 100%; border-left:none;">
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/tutorials"><img alt="Tutorials" src="./Pycom and Adafruit IO - Tutorial Australia_files/tutorials.png" title="Tutorials"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/courses"><img alt="Courses" src="./Pycom and Adafruit IO - Tutorial Australia_files/courses.png" title="Courses"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/workshops.html"><img alt="Workshops" src="./Pycom and Adafruit IO - Tutorial Australia_files/workshops.png" title="Workshops"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/projects"><img src="./Pycom and Adafruit IO - Tutorial Australia_files/projects.png" alt="Projects" title="Projects"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/videos"><img alt="Videos" src="./Pycom and Adafruit IO - Tutorial Australia_files/videos.png" title="Videos"></a></div>
+<div class="learn-menu">
+<a href="http://makerspacenewcastle.com.au/" target="_blank"><img alt="Makerspace Newcastle" src="./Pycom and Adafruit IO - Tutorial Australia_files/makerspace-newcastle.png" title="Makerspace Newcastle"></a></div>
+</div>
+</div>
+</li>
+<li> <a href="JavaScript:void(0)">Support</a>
+<div class="support-total">
+<div class="nav-column-support support-menu-main" style="width: 100%; border-left:none;">
+<div class="support-menu">
+<a href="https://forum.core-electronics.com.au/"><img src="./Pycom and Adafruit IO - Tutorial Australia_files/forum.png" alt="Forum" title="Forum"></a></div>
+<div class="support-menu">
+<a href="https://core-electronics.com.au/customer-service/"><img src="./Pycom and Adafruit IO - Tutorial Australia_files/faq.png" alt="FAQ" title="FAQ"></a></div>
+<div class="support-menu">
+<a href="https://www.education.core-electronics.com.au/" target="_blank"><img alt="Teachers &amp; Educators" src="./Pycom and Adafruit IO - Tutorial Australia_files/teachers-educators.png" title="Teachers &amp; Educators"></a></div>
+</div>
+</div>
+</li>
+<li class="blog_nav"> <a href="https://core-electronics.com.au/electronics-blog">Blog</a>
+</li>
+<li class="last"> <a href="https://core-electronics.com.au/contacts/">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="ddd" style=" width:100%;">
+</div>
+</header>
+		        <div class="main-container col1-layout">
+            <div class="main">
+                
+                <div class="col-main">
+                    <div id="amfpc-global_messages"></div>                    <script>(function () {
+  var sourceBaseUrl = /[&?]distrib/.test(location.search)
+      ? "../distrib/google-code-prettify/" : "https://core-electronics.com.au/shared/code-prettify-master/src/";
+  var sources = [
+      "prettify.js",
+      "lang-css.js",
+      "lang-erlang.js",
+      "lang-go.js",
+      "lang-hs.js",
+      "lang-lisp.js",
+      "lang-lua.js",
+      "lang-ml.js",
+      "lang-proto.js",
+      "lang-rust.js",
+      "lang-scala.js",
+      "lang-sql.js",
+      "lang-wiki.js",
+      "lang-vhdl.js",
+      "lang-vb.js",
+      "lang-yaml.js",
+  ];
+  var styles = [
+       "prettify.css"
+  ];
+  if (window.console) {
+  //  console.log("sourceBaseUrl=" + sourceBaseUrl);
+  }
+  for (var i = 0; i < sources.length; ++i) {
+    document.write(
+        "<script src=\"" + sourceBaseUrl + sources[i] + "\"><\/script>");
+  }
+  document.write(
+       "<script src=\"https://core-electronics.com.au/shared/code-prettify-master/test_base.js\" type=\"text/javascript\"><\/script>");
+  /*for (var i = 0; i < styles.length; ++i) {
+    document.write(
+        "<link rel=\"stylesheet\" href=\"" + sourceBaseUrl + styles[i] + "\">");
+  }*/
+})();
+
+window.onload = (function() {
+  var attempt = function() {
+    var go = window["go"];
+    var prettyPrint = window["prettyPrint"];
+    var goldens = window["goldens"];
+    if(go && prettyPrint && goldens) {
+      go(goldens);
+    } else {
+      setTimeout(attempt, 20);
+    }
+  };
+  return attempt;
+})();
+</script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/prettify.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-css.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-erlang.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-go.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-hs.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-lisp.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-lua.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-ml.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-proto.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-rust.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-scala.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-sql.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-wiki.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-vhdl.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-vb.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/lang-yaml.js"></script><script src="./Pycom and Adafruit IO - Tutorial Australia_files/test_base.js" type="text/javascript"></script>
+<script type="text/javascript">
+/**
+ * maps ids of rewritten code to the expected output.
+ * For brevity, <span class="foo"> has been changed to `FOO and </span>
+ * has been changed to `END.
+ */
+var goldens = {
+ python: (
+      '`COM#!/usr/bin/python2.4`END`PLN\n' +
+      '\n' +
+      '`END`KWDdef`END`PLN fib`END`PUN():`END`PLN\n' +
+      '  `END`STR\'\'\'\n' +
+      '  a generator that produces the elements of the fibonacci series' +
+          '\n' +
+      '  \'\'\'`END`PLN\n' +
+      '\n' +
+      '  a `END`PUN=`END`PLN `END`LIT1`END`PLN\n' +
+      '  b `END`PUN=`END`PLN `END`LIT1`END`PLN\n' +
+      '  `END`KWDwhile`END`PLN `END`KWDTrue`END`PUN:`END`PLN\n' +
+      '    a`END`PUN,`END`PLN b `END`PUN=`END`PLN a `END`PUN+`END' +
+          '`PLN b`END`PUN,`END`PLN a\n' +
+      '    `END`KWDyield`END`PLN a\n' +
+      '\n' +
+      '`END`KWDdef`END`PLN nth`END`PUN(`END`PLNseries`END`PUN,`END`PLN n`END' +
+          '`PUN):`END`PLN\n' +
+      '  `END`STR\'\'\'\n' +
+      '  returns the nth element of a series,\n' +
+      '  consuming the earlier elements of the series\n' +
+      '  \'\'\'`END`PLN\n' +
+      '\n' +
+      '  `END`KWDfor`END`PLN x `END`KWDin`END`PLN series`END`PUN:`END' +
+          '`PLN\n' +
+      '    n `END`PUN=`END`PLN n `END`PUN-`END`PLN `END`LIT1`END' +
+          '`PLN\n' +
+      '    `END`KWDif`END`PLN n `END`PUN&lt;=`END`PLN `END' +
+          '`LIT0`END`PUN:`END`PLN `END`KWDreturn`END`PLN x\n' +
+      '\n' +
+      '`END`KWDprint`END`PLN nth`END`PUN(`END`PLNfib`END`PUN(),`END`PLN `END' +
+          '`LIT10`END`PUN)`END'),
+		  };
+</script>
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/test_styles.css">
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/prettify.css">
+
+        
+<div class="kbase kbase-article" itemscope="" itemtype="http://schema.org/Article">
+  <meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html">
+        <div class="home_add">
+<div class="kbase-block kbase-main-search">
+	<div class="title">
+    <h3 class="kbase-block-title">Search Tutorials</h3></div>
+    <div class="kbase-block-content">
+        <form action="https://core-electronics.com.au/tutorials/search/">
+           <!-- <label for="kbase_search_input"></label>-->
+            <input type="text" autocomplete="off" id="kbase_search_input" name="query" value="">
+			<div id="suggesstion-box" style="display:none;"></div>
+            <button type="submit" title="Search" class="button form-button"><span><span>Search</span></span></button>
+        </form>
+    </div>
+</div>
+<div>
+</div>
+</div>
+<input type="hidden" id="searchurl" value="https://core-electronics.com.au/kbase/article/searchresults/">
+<script type="text/javascript">
+        jQuery(document).ready(function(){
+		function sendsearchrequest()
+			{
+			jQuery.ajax({
+            type:'POST',
+            url:jQuery("#searchurl").val(),
+            data:'keyword='+jQuery("#kbase_search_input").val(),
+            encode          : true,
+        }) .success(function(data) {
+			if(data != '')
+			{
+			jQuery("#suggesstion-box").show();
+			jQuery("#suggesstion-box").html(data);
+		    }
+			else
+			{
+			jQuery("#suggesstion-box").hide();	
+			}
+		});
+			}
+		var timeout;
+        jQuery("#kbase_search_input").keyup(function(e){
+			 if (e.keyCode == 27) {
+   			jQuery("#suggesstion-box").hide();	
+             }
+			 else{
+	    if(timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+        }
+        timeout = setTimeout(sendsearchrequest, 300);
+			 }
+	});
+});
+</script>    	<div id="amfpc-messages"></div>
+    <h1 itemprop="headline">Internet of Things with Pycom and Adafruit IO - From Zero to Hero</h1>
+    <p class="kbase-article-author" style="font-size: 12px;">
+	By 
+	<span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span itemprop="name">Chris</span></span>, updated on 	<span itemprop="datePublished" content="2018-04-03">
+	03 April 2018</span>
+	  <meta itemprop="dateModified" content="2018-04-03">
+	  	 
+	</p>
+   <!-- Source starts here-->
+
+        <!-- Source ends here-->
+	<div class="kbase-article-text">
+<h2><div class="youtube-container"><div class="youtube-player" style="float:right;margin-left:5px;margin-bottom:10px;" data-id="CnCpC55_ILg"><div><img class="youtube-thumb" src="./Pycom and Adafruit IO - Tutorial Australia_files/sddefault.jpg"><div class="play-button"></div></div></div></div>Introduction</h2>
+<p>We’re going from zero to hero. Starting from nothing we’ll get a <a href="https://core-electronics.com.au/catalog/product/view/sku/CE04925" title="WiPy" target="_self">WiPy</a> communicating with Adafruit IO, an IoT service out on the Internet. We’ll be able to send data from the device to the cloud and control the device from the website at Adafruit IO. While this is a long guide it’s the fastest path to <a href="https://core-electronics.com.au/pycom.html" title="Pycom" target="_self">Pycom</a> satisfaction. From here you can do anything!</p>
+<p>UPDATE! <a href="https://github.com/CoreElectronics/pycom-wipy-iot-example">Project code</a> now available on Github.</p>
+<h2>Requirements</h2>
+<p>We'll need:</p>
+<ul>
+<li>Windows PC with WiFi</li>
+<li>A wireless access point with Internet access</li>
+<li>Any Pycom board (<a href="https://core-electronics.com.au/catalog/product/view/sku/CE04925">WiPy 3.0</a>, SiPy, LoPy, GPy or FiPy)</li>
+<li>Any Pycom expansion board <a href="https://core-electronics.com.au/catalog/product/view/sku/CE04925">(Expansion Board 2.0</a>, PySense or PyTrack)</li>
+<li>USB 2.0 Micro-B cable</li>
+<li>Single jumper wire (male-male)</li>
+</ul>
+<p>When using a Pycom board with one of the available expansion boards; orient them with the LED to the USB socket.</p>
+<p><strong>WARNING: </strong>External aerials must be attached before attaching power to LoRa, Sigfox or cellular LTE devices! That’s LoPy, SiPy, GPy or FiPy.</p>
+<h2>Driver Setup</h2>
+<p>I’ll cover only the basics with getting the hardware working. The Pycom documentation is excellent, head to <a href="https://docs.pycom.io/" target="_blank">docs.pycom.io</a> for help if you get stuck. After connecting the expansion board to the PC with a micro-USB cable, open Device Manager to see if the Pycom board is set up.</p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="device manager showing fully installed WiPy" src="./Pycom and Adafruit IO - Tutorial Australia_files/device-manager-usb-serial-port-installed.png" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">Device Manager showing WiPy installed</p>
+</figure>
+<p style="clear: both;"></p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="device manager showing WiPy not installed" src="./Pycom and Adafruit IO - Tutorial Australia_files/device-manager-not-installed.png" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">Device Manager showing WiPy not installed</p>
+</figure>
+<p style="clear: both;">Installing the Pycom WiPy manually:</p>
+<ol>
+<li>Even in Windows 10 I found the board is not set up automatically. No problem, we can get a link to the correct driver from the Pycom documentation (1.3.1 Updating Firmware).</li>
+<li>Scrolling down the page shows all the available drivers. I have a 64-bit Windows system, so I’ll pick that driver.</li>
+<li>Once downloaded, extract the file.</li>
+<li>Go back to Device Manager and right click on the FT230X Basic UART under Other Devices, pick Update Driver</li>
+<li>Choose the option to Browse my computer for driver software …&nbsp;</li>
+<li>Click the Browse button and navigate to the folder where you extracted the download file. Click OK.</li>
+<li>Click Next. The driver should be installed. The device is now identified as a USB Serial Converter.</li>
+<li>Click Close. The new USB Serial Converter is located under Universal Serial Bus Controllers</li>
+<li>If you look under Other devices, you’ll see another device that’s not installed. It’s called USB Serial Port.</li>
+<li>Right click on the USB Serial Port under Other Devices, pick Update Driver</li>
+<li>Choose the option to Browse my computer for driver software …</li>
+<li>The correct folder should already be selected. Click Next.</li>
+<li>After installing the device it’s now called USB Serial Port. Click Close</li>
+<li>Now in Device Manager you can see the USB Serial Port is now listed under Ports (COM &amp; LPT)</li>
+<li>15. Take a note of the COM number associated with the port. Mine is COM3.</li>
+</ol>
+<p>The WiPy is now fully installed.</p>
+<h2>Firmware Upgrade</h2>
+<p>It’s quite probable that any issues you might have getting started with a device have already been fixed. So always update your firmware.</p>
+<ol>
+<li>Download and install the Pycom Firmware Updater from the Firmware Update Tools page. Allow the app to start at the end of installation but stop on the Welcome screen.</li>
+<li>Unplug the USB cable from the WiPy. Add a jumper from G23 to GND. Plug the USB back in.</li>
+<li>Work through the Pycom Upgrade wizard. Read everything. This process will not work if don’t follow it fully. But don’t worry about breaking your Pycom device. If it’s not unplugged during the update, it’ll be fine!</li>
+</ol>
+<p>After the update is complete you should find your WiPy is broadcasting its own WiFi network called (something like) wipy-wlan-238c. We’ll use this in a minute.</p>
+<h2>Communicating with the WiPy</h2>
+<p>Your WiPy is ready to communicate! It can “talk” Telnet and FTP right out of the box. Because MicroPython doesn’t need to be compiled first then uploaded, we can write code and run it immediately. Python calls this Read-Evaluate-Print-Loop, or REPL for short. You need a Telnet application (like <a href="https://www.putty.org/" title="PuTTY" target="_blank">PuTTY</a>) to do this. Here’s what it looks like:</p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="using putty" src="./Pycom and Adafruit IO - Tutorial Australia_files/40_Telnet_on_PuTTY.PNG" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">Using PuTTY to Telnet directly to the WiPy</p>
+</figure>
+<p style="clear: both;">Check the documentation for more: 2.3.2 Telnet and 2.4 FTP.</p>
+<h2>Software Setup</h2>
+<p>So that we can have a nice place to write code for our Pycom devices, we need an Integrated Development Environment (IDE). This will give use a REPL prompt, like Telnet, as well as the ability to create multiple code files, run these directly on the device and upload/download features. <a href="https://ide.atom.io/" target="_blank">Atom</a> is good, so we’ll install that.</p>
+<h2>The Atom IDE</h2>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="atom ide" src="./Pycom and Adafruit IO - Tutorial Australia_files/Atom_IDE.PNG" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">The Atom IDE</p>
+</figure>
+<p style="clear: both;"></p>
+<ol>
+<li>Go to <a href="https://github.com/atom/atom" title="Atom on Github">Atom on Github</a> and scroll down the page to find the Windows heading. Find the Atom installer link and click that to go to the download page for the latest version of Atom.</li>
+<li>There are all kinds of downloads available. If you’re using 64-bit Windows version, download the AtomSetup-x64.exe file, otherwise get AtomSetup.exe.</li>
+<li>After downloading, run the file to install the Atom IDE. It’s fully automatic. When Atom is installed it will open by itself.</li>
+<li>A dialog will be asking to Register as default atom:// URI handler?. Click Yes, Always.</li>
+<li>Below that question, find Install a Package and click it. Then click Open Installer.</li>
+<li>The left side of Atom now shows the Install Packages heading.</li>
+<li>Search for pymakr. When the latest pymakr package is found, install it. It might take a minute or two.</li>
+</ol>
+<p>Atom is now installed and pymakr is ready to communicate with the WiPy. At this point Atom should have opened an empty panel across the bottom of the application. It should be Connecting on 192.168.4.1… but failing. We mentioned the WiPy will broadcast its own WiFi network. We need to join it now. When I look at the list of networks near my computer, one is called wipy-wlan-238c. That’s the one I will use. Join this WiFi network using the username micro and password python.</p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="wifi networks list" src="./Pycom and Adafruit IO - Tutorial Australia_files/22_WiFi.png" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">WiFi networks list</p>
+</figure>
+<p style="clear: both;">Having joined to the network created by the WiPy we can now go back to Atom and click in the bottom panel to connect. When connected, you’ll see a triple “greater than” which is the command prompt for MicroPython.</p>
+<h2>Trying It Out</h2>
+<p>Tradition dictates our first program should print out “Hello World”. Boring. Let’s print something else!</p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="pycom rocks" src="./Pycom and Adafruit IO - Tutorial Australia_files/23_Pycom_Rocks.png" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">Pycom ROCKS!</p>
+</figure>
+<p style="clear: both;">You may have noticed the WiPy gives a blue flash “heartbeat” ever 4 seconds. That LED is something we can play with. Have a look at the RGB LED page in the Tutorials &amp; Examples section of the Pycom documentation. When I enter this code, I get a bright green on the LED:</p>
+<pre class="prettyprint prettyprinted" id="python" style=""><span class="pun">&gt;&gt;&gt;</span><span class="pln"> </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Pycom ROCKS!"</span><span class="pun">)</span><span class="pln">
+</span><span class="typ">Pycom</span><span class="pln"> ROCKS</span><span class="pun">!</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span><span class="pln"> </span><span class="kwd">import</span><span class="pln"> pycom
+</span><span class="pun">&gt;&gt;&gt;</span><span class="pln"> pycom</span><span class="pun">.</span><span class="pln">heartbeat</span><span class="pun">(</span><span class="kwd">False</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span><span class="pln"> pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0x00FF00</span><span class="pun">)</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span></pre>
+<p>This ability to write code directly on the microcontroller isn’t available on some other device. If you know Arduino, then you’ll know you need to Verify (compile) and Upload (transfer) your entire project every time you want to run it. But MicroPython can Read, Evaluate, Print and Loop (REPL) without any compile or upload process. Fantastic!</p>
+<h2>Switching to Serial</h2>
+<p>Because we want to connect our WiPy to the Internet to do cool things, we need to change over to communicating with it by serial. We can do this simply in the Atom IDE. One of the tabs open should be called Settings. You can close the rest. If we scroll down in Settings, we can find the Device Address box. Let’s replace Default 192.168.4.1 with COM3 (Use the COM number you saw in Device Manager earlier). You should be able to Disconnect and Connect using the buttons above the REPL prompt.</p>
+<h2>Adafruit IO Configuration</h2>
+<p>Now we need to configure our “IoT cloud service” so the WiPy has something to communicate with.</p>
+<ol>
+<li>Go to <a href="https://io.adafruit.com/" target="_blank">Adafruit IO</a></li>
+<li>Click Get Started for Free at the top of the page</li>
+<li>Fill in the form, you only need an email address. Click Create Account at the bottom.</li>
+<li>Jump back to <a href="https://io.adafruit.com/" target="_blank">Adafruit IO</a>, the top of the page should show you’re signed in.</li>
+<li>Hit the Learn link in the menu to find out how it works!</li>
+</ol>
+<p>The project I’ve contrived is one where the WiPy creates random numbers and sends them to Adafruit IO every 5 seconds. We want Adafruit IO to make a nice graph from them. We also want the WiPy to be controllable from Adafruit IO, so we’ll use a Toggle Button on the website to send messages back to the WiPy. It shouldn’t be too hard to make both things work at the same time.</p>
+<figure style="margin-left: 25px; margin-bottom: 25px;"><img alt="adafruit io dash" src="./Pycom and Adafruit IO - Tutorial Australia_files/Adafruit_IO_Dash.PNG" style="margin-left: auto; margin-right: auto;">
+<p style="text-align: center; font-size: 10px;">Adafruit IO Dashboard</p>
+</figure>
+<p style="clear: both;">Adafruit IO uses ‘feeds’ to describe separate sets of data. We’ll create a feed called ‘randoms’ and one called ‘lights’. We’ll also create a dashboard with a graph of the random numbers and a toggle to send an ON/OFF command to the WiPy via the ‘lights’ feed.</p>
+<p>As per Adafruit IO Basics tutorial:</p>
+<ol>
+<li>In Adafruit IO, click Feeds in the navigation</li>
+<li>Scroll to the bottom of the page. From the Actions menu, select Create a New Feed.</li>
+<li>Name this feed <em>randoms</em>. Click Create.</li>
+<li>Add a second feed called <em>lights</em></li>
+</ol>
+<p>We’ll add a line chart as well:</p>
+<ol>
+<li>Click Dashboards on the navigation.</li>
+<li>Scroll to the bottom of the page. From Actions menu, select Create a New Dashboard. Name your dashboard. Click Create.</li>
+<li>When you get back to the dashboard list, click the name of the dashboard you just created.</li>
+<li>Click the blue + button to Create a New Block. Pick Line Chart.</li>
+<li>We now have to link it to a feed so there’s data for the chart. Select randoms then click Next step</li>
+<li>We can just use the default values for the chart. Click Create Block.</li>
+<li>Click the blue + button again and add a Toggle</li>
+<li>Connect it to the lights feed</li>
+<li>Accept the default configuration for the toggle</li>
+</ol>
+<p>Done. When the Python code is done the WiPy can respond to changes to the Lights toggle. We now have an Internet “cloud” service ready to talk to our WiPy. We also have the WiPy set up so we can develop software on it. Great!</p>
+<h2>Atom Project</h2>
+<p>To more easily manage our files, we should create an Atom project. This is just a folder.</p>
+<ol>
+<li>From the File menu, click Open Folder...</li>
+<li>Navigate to where you’d like to put your project folder.</li>
+<li>While still inside the Open Folder dialog, create a new folder by right-clicking in the file list area</li>
+<li>Give your new folder a descriptive name</li>
+<li>A new Atom window opens and a Project pane is shown on the left. We can close the previous Atom window now.</li>
+</ol>
+<p>If your WiPy is squeaky clean and new it will only have the files boot.py and main.py on it. If not, you can reset it.</p>
+<ol>
+<li>Click in the lower pane to connect to the WiPy. Ensure you’re connected on a COMx port, not on IP address (192.168.4.1)</li>
+<li>Click the Download button to pull back a copy of the files on the WiPy. You should get boot.py and main.py. If the download fails, press the reset switch on the WiPy, then try again.</li>
+</ol>
+<p>Let’s create a new code file that we can experiment with. From the File menu, pick New File then save it straight away. I’m going to call mine AdafruitIO.py. As this tutorial is already very long, I’ll skip a full walkthrough on the code. I have documented the code and that should be sufficient to give you an understanding of what it does and why. Here is the WiPy code file: [github link]. Paste this code into your new code file; I’m putting mine into AdafruitIO.py.</p>
+<pre class="prettyprint prettyprinted" id="python" style="width: auto; overflow: auto; max-height: 400px;"><span class="com"># https://github.com/micropython/micropython-lib/blob/master/umqtt.simple/example_sub_led.py</span><span class="pln">
+
+</span><span class="kwd">from</span><span class="pln"> network </span><span class="kwd">import</span><span class="pln"> WLAN      </span><span class="com"># For operation of WiFi network</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> time                   </span><span class="com"># Allows use of time.sleep() for delays</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> pycom                  </span><span class="com"># Base library for Pycom devices</span><span class="pln">
+</span><span class="kwd">from</span><span class="pln"> umqtt </span><span class="kwd">import</span><span class="pln"> </span><span class="typ">MQTTClient</span><span class="pln">  </span><span class="com"># For use of MQTT protocol to talk to Adafruit IO</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> ubinascii              </span><span class="com"># Needed to run any MicroPython code</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> machine                </span><span class="com"># Interfaces with hardware components</span><span class="pln">
+</span><span class="kwd">import</span><span class="pln"> micropython            </span><span class="com"># Needed to run any MicroPython code</span><span class="pln">
+
+</span><span class="com"># BEGIN SETTINGS</span><span class="pln">
+</span><span class="com"># These need to be change to suit your environment</span><span class="pln">
+RANDOMS_INTERVAL </span><span class="pun">=</span><span class="pln"> </span><span class="lit">5000</span><span class="pln"> </span><span class="com"># milliseconds</span><span class="pln">
+last_random_sent_ticks </span><span class="pun">=</span><span class="pln"> </span><span class="lit">0</span><span class="pln">  </span><span class="com"># milliseconds</span><span class="pln">
+
+</span><span class="com"># Wireless network</span><span class="pln">
+WIFI_SSID </span><span class="pun">=</span><span class="pln"> </span><span class="str">"IoT"</span><span class="pln">
+WIFI_PASS </span><span class="pun">=</span><span class="pln"> </span><span class="str">"password77#"</span><span class="pln"> </span><span class="com"># No this is not our regular password. :)</span><span class="pln">
+
+</span><span class="com"># Adafruit IO (AIO) configuration</span><span class="pln">
+AIO_SERVER </span><span class="pun">=</span><span class="pln"> </span><span class="str">"io.adafruit.com"</span><span class="pln">
+AIO_PORT </span><span class="pun">=</span><span class="pln"> </span><span class="lit">1883</span><span class="pln">
+AIO_USER </span><span class="pun">=</span><span class="pln"> </span><span class="str">"CoreChris"</span><span class="pln">
+AIO_KEY </span><span class="pun">=</span><span class="pln"> </span><span class="str">"83e6218dc6ad47d698ab1747566f3561"</span><span class="pln">
+AIO_CLIENT_ID </span><span class="pun">=</span><span class="pln"> ubinascii</span><span class="pun">.</span><span class="pln">hexlify</span><span class="pun">(</span><span class="pln">machine</span><span class="pun">.</span><span class="pln">unique_id</span><span class="pun">())</span><span class="pln">  </span><span class="com"># Can be anything</span><span class="pln">
+AIO_CONTROL_FEED </span><span class="pun">=</span><span class="pln"> </span><span class="str">"CoreChris/feeds/lights"</span><span class="pln">
+AIO_RANDOMS_FEED </span><span class="pun">=</span><span class="pln"> </span><span class="str">"CoreChris/feeds/randoms"</span><span class="pln">
+
+</span><span class="com"># END SETTINGS</span><span class="pln">
+
+</span><span class="com"># RGBLED</span><span class="pln">
+</span><span class="com"># Disable the on-board heartbeat (blue flash every 4 seconds)</span><span class="pln">
+</span><span class="com"># We'll use the LED to respond to messages from Adafruit IO</span><span class="pln">
+pycom</span><span class="pun">.</span><span class="pln">heartbeat</span><span class="pun">(</span><span class="kwd">False</span><span class="pun">)</span><span class="pln">
+time</span><span class="pun">.</span><span class="pln">sleep</span><span class="pun">(</span><span class="lit">0.1</span><span class="pun">)</span><span class="pln"> </span><span class="com"># Workaround for a bug.</span><span class="pln">
+                </span><span class="com"># Above line is not actioned if another</span><span class="pln">
+                </span><span class="com"># process occurs immediately afterwards</span><span class="pln">
+pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0xff0000</span><span class="pun">)</span><span class="pln">  </span><span class="com"># Status red = not working</span><span class="pln">
+
+</span><span class="com"># WIFI</span><span class="pln">
+</span><span class="com"># We need to have a connection to WiFi for Internet access</span><span class="pln">
+</span><span class="com"># Code source: https://docs.pycom.io/chapter/tutorials/all/wlan.html</span><span class="pln">
+
+wlan </span><span class="pun">=</span><span class="pln"> WLAN</span><span class="pun">(</span><span class="pln">mode</span><span class="pun">=</span><span class="pln">WLAN</span><span class="pun">.</span><span class="pln">STA</span><span class="pun">)</span><span class="pln">
+wlan</span><span class="pun">.</span><span class="pln">connect</span><span class="pun">(</span><span class="pln">WIFI_SSID</span><span class="pun">,</span><span class="pln"> auth</span><span class="pun">=(</span><span class="pln">WLAN</span><span class="pun">.</span><span class="pln">WPA2</span><span class="pun">,</span><span class="pln"> WIFI_PASS</span><span class="pun">),</span><span class="pln"> timeout</span><span class="pun">=</span><span class="lit">5000</span><span class="pun">)</span><span class="pln">
+
+</span><span class="kwd">while</span><span class="pln"> </span><span class="kwd">not</span><span class="pln"> wlan</span><span class="pun">.</span><span class="pln">isconnected</span><span class="pun">():</span><span class="pln">    </span><span class="com"># Code waits here until WiFi connects</span><span class="pln">
+    machine</span><span class="pun">.</span><span class="pln">idle</span><span class="pun">()</span><span class="pln">
+
+</span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Connected to Wifi"</span><span class="pun">)</span><span class="pln">
+pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0xffd7000</span><span class="pun">)</span><span class="pln"> </span><span class="com"># Status orange: partially working</span><span class="pln">
+
+</span><span class="com"># FUNCTIONS</span><span class="pln">
+
+</span><span class="com"># Function to respond to messages from Adafruit IO</span><span class="pln">
+</span><span class="kwd">def</span><span class="pln"> sub_cb</span><span class="pun">(</span><span class="pln">topic</span><span class="pun">,</span><span class="pln"> msg</span><span class="pun">):</span><span class="pln">          </span><span class="com"># sub_cb means "callback subroutine"</span><span class="pln">
+    </span><span class="kwd">print</span><span class="pun">((</span><span class="pln">topic</span><span class="pun">,</span><span class="pln"> msg</span><span class="pun">))</span><span class="pln">          </span><span class="com"># Outputs the message that was received. Debugging use.</span><span class="pln">
+    </span><span class="kwd">if</span><span class="pln"> msg </span><span class="pun">==</span><span class="pln"> b</span><span class="str">"ON"</span><span class="pun">:</span><span class="pln">             </span><span class="com"># If message says "ON" ...</span><span class="pln">
+        pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0xffffff</span><span class="pun">)</span><span class="pln">   </span><span class="com"># ... then LED on</span><span class="pln">
+    </span><span class="kwd">elif</span><span class="pln"> msg </span><span class="pun">==</span><span class="pln"> b</span><span class="str">"OFF"</span><span class="pun">:</span><span class="pln">          </span><span class="com"># If message says "OFF" ...</span><span class="pln">
+        pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0x000000</span><span class="pun">)</span><span class="pln">   </span><span class="com"># ... then LED off</span><span class="pln">
+    </span><span class="kwd">else</span><span class="pun">:</span><span class="pln">                        </span><span class="com"># If any other message is received ...</span><span class="pln">
+        </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Unknown message"</span><span class="pun">)</span><span class="pln"> </span><span class="com"># ... do nothing but output that it happened.</span><span class="pln">
+
+</span><span class="kwd">def</span><span class="pln"> random_integer</span><span class="pun">(</span><span class="pln">upper_bound</span><span class="pun">):</span><span class="pln">
+    </span><span class="kwd">return</span><span class="pln"> machine</span><span class="pun">.</span><span class="pln">rng</span><span class="pun">()</span><span class="pln"> </span><span class="pun">%</span><span class="pln"> upper_bound
+
+</span><span class="kwd">def</span><span class="pln"> send_random</span><span class="pun">():</span><span class="pln">
+    </span><span class="kwd">global</span><span class="pln"> last_random_sent_ticks
+    </span><span class="kwd">global</span><span class="pln"> RANDOMS_INTERVAL
+
+    </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">((</span><span class="pln">time</span><span class="pun">.</span><span class="pln">ticks_ms</span><span class="pun">()</span><span class="pln"> </span><span class="pun">-</span><span class="pln"> last_random_sent_ticks</span><span class="pun">)</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> RANDOMS_INTERVAL</span><span class="pun">):</span><span class="pln">
+        </span><span class="kwd">return</span><span class="pun">;</span><span class="pln"> </span><span class="com"># Too soon since last one sent.</span><span class="pln">
+
+    some_number </span><span class="pun">=</span><span class="pln"> random_integer</span><span class="pun">(</span><span class="lit">100</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Publishing: {0} to {1} ... "</span><span class="pun">.</span><span class="pln">format</span><span class="pun">(</span><span class="pln">some_number</span><span class="pun">,</span><span class="pln"> AIO_RANDOMS_FEED</span><span class="pun">),</span><span class="pln"> </span><span class="kwd">end</span><span class="pun">=</span><span class="str">''</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">try</span><span class="pun">:</span><span class="pln">
+        client</span><span class="pun">.</span><span class="pln">publish</span><span class="pun">(</span><span class="pln">topic</span><span class="pun">=</span><span class="pln">AIO_RANDOMS_FEED</span><span class="pun">,</span><span class="pln"> msg</span><span class="pun">=</span><span class="pln">str</span><span class="pun">(</span><span class="pln">some_number</span><span class="pun">))</span><span class="pln">
+        </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"DONE"</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">except</span><span class="pln"> </span><span class="typ">Exception</span><span class="pln"> </span><span class="kwd">as</span><span class="pln"> e</span><span class="pun">:</span><span class="pln">
+        </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"FAILED"</span><span class="pun">)</span><span class="pln">
+    </span><span class="kwd">finally</span><span class="pun">:</span><span class="pln">
+        last_random_sent_ticks </span><span class="pun">=</span><span class="pln"> time</span><span class="pun">.</span><span class="pln">ticks_ms</span><span class="pun">()</span><span class="pln">
+
+</span><span class="com"># Use the MQTT protocol to connect to Adafruit IO</span><span class="pln">
+client </span><span class="pun">=</span><span class="pln"> </span><span class="typ">MQTTClient</span><span class="pun">(</span><span class="pln">AIO_CLIENT_ID</span><span class="pun">,</span><span class="pln"> AIO_SERVER</span><span class="pun">,</span><span class="pln"> AIO_PORT</span><span class="pun">,</span><span class="pln"> AIO_USER</span><span class="pun">,</span><span class="pln"> AIO_KEY</span><span class="pun">)</span><span class="pln">
+
+</span><span class="com"># Subscribed messages will be delivered to this callback</span><span class="pln">
+client</span><span class="pun">.</span><span class="pln">set_callback</span><span class="pun">(</span><span class="pln">sub_cb</span><span class="pun">)</span><span class="pln">
+client</span><span class="pun">.</span><span class="pln">connect</span><span class="pun">()</span><span class="pln">
+client</span><span class="pun">.</span><span class="pln">subscribe</span><span class="pun">(</span><span class="pln">AIO_CONTROL_FEED</span><span class="pun">)</span><span class="pln">
+</span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Connected to %s, subscribed to %s topic"</span><span class="pln"> </span><span class="pun">%</span><span class="pln"> </span><span class="pun">(</span><span class="pln">AIO_SERVER</span><span class="pun">,</span><span class="pln"> AIO_CONTROL_FEED</span><span class="pun">))</span><span class="pln">
+
+pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0x00ff00</span><span class="pun">)</span><span class="pln"> </span><span class="com"># Status green: online to Adafruit IO</span><span class="pln">
+
+</span><span class="kwd">try</span><span class="pun">:</span><span class="pln">                      </span><span class="com"># Code between try: and finally: may cause an error</span><span class="pln">
+                          </span><span class="com"># so ensure the client disconnects the server if</span><span class="pln">
+                          </span><span class="com"># that happens.</span><span class="pln">
+    </span><span class="kwd">while</span><span class="pln"> </span><span class="lit">1</span><span class="pun">:</span><span class="pln">              </span><span class="com"># Repeat this loop forever</span><span class="pln">
+        client</span><span class="pun">.</span><span class="pln">check_msg</span><span class="pun">()#</span><span class="pln"> </span><span class="typ">Action</span><span class="pln"> a message </span><span class="kwd">if</span><span class="pln"> one </span><span class="kwd">is</span><span class="pln"> received</span><span class="pun">.</span><span class="pln"> </span><span class="typ">Non</span><span class="pun">-</span><span class="pln">blocking</span><span class="pun">.</span><span class="pln">
+        send_random</span><span class="pun">()</span><span class="pln">     </span><span class="com"># Send a random number to Adafruit IO if it's time.</span><span class="pln">
+</span><span class="kwd">finally</span><span class="pun">:</span><span class="pln">                  </span><span class="com"># If an exception is thrown ...</span><span class="pln">
+    client</span><span class="pun">.</span><span class="pln">disconnect</span><span class="pun">()</span><span class="pln">   </span><span class="com"># ... disconnect the client and clean up.</span><span class="pln">
+    client </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">None</span><span class="pln">
+    wlan</span><span class="pun">.</span><span class="pln">disconnect</span><span class="pun">()</span><span class="pln">
+    wlan </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">None</span><span class="pln">
+    pycom</span><span class="pun">.</span><span class="pln">rgbled</span><span class="pun">(</span><span class="lit">0x000022</span><span class="pun">)#</span><span class="pln"> </span><span class="typ">Status</span><span class="pln"> blue</span><span class="pun">:</span><span class="pln"> stopped
+    </span><span class="kwd">print</span><span class="pun">(</span><span class="str">"Disconnected from Adafruit IO."</span><span class="pun">)</span></pre>
+<p>Hit the Run button below the code in Atom. You should get an error:</p>
+<pre class="prettyprint prettyprinted" id="python" style=""><span class="pun">&gt;&gt;&gt;</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span><span class="pln"> </span><span class="typ">Traceback</span><span class="pln"> </span><span class="pun">(</span><span class="pln">most recent call </span><span class="kwd">last</span><span class="pun">):</span><span class="pln">
+  </span><span class="typ">File</span><span class="pln"> </span><span class="str">""</span><span class="pun">,</span><span class="pln"> line </span><span class="lit">10</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">in</span><span class="pln"> 
+</span><span class="typ">ImportError</span><span class="pun">:</span><span class="pln"> </span><span class="kwd">no</span><span class="pln"> </span><span class="kwd">module</span><span class="pln"> named </span><span class="str">'umqtt'</span><span class="pln">
+</span><span class="pun">&gt;</span><span class="pln">
+</span><span class="typ">MicroPython</span><span class="pln"> v1</span><span class="pun">.</span><span class="lit">8.6</span><span class="pun">-</span><span class="lit">849</span><span class="pun">-</span><span class="pln">d0dc708 on </span><span class="lit">2018</span><span class="pun">-</span><span class="lit">02</span><span class="pun">-</span><span class="lit">27</span><span class="pun">;</span><span class="pln"> </span><span class="typ">WiPy</span><span class="pln"> </span><span class="kwd">with</span><span class="pln"> ESP32
+</span><span class="typ">Type</span><span class="pln"> </span><span class="str">"help()"</span><span class="pln"> </span><span class="kwd">for</span><span class="pln"> more information</span><span class="pun">.</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span><span class="pln">
+</span><span class="pun">&gt;&gt;&gt;</span></pre>
+<p>The top of our code file contains the line <em>from </em>umqtt<em> import MQTTClient</em>. But the error says <em>ImportError: no module named '</em>umqtt<em>'</em>. This is because umqtt is not built-in to MicroPython. It’s a code file we need to add to our project. So:</p>
+<ol>
+<li>Add a new file to the project, call it umqtt.py</li>
+<li>Open <a href="https://raw.githubusercontent.com/micropython/micropython-lib/master/umqtt.simple/umqtt/simple.py" target="_blank">this code file</a> from github. It’s called simple.py, but we’ll paste this code into our umqtt.py file.</li>
+<li>Copy and paste the code from simple.py into your umqtt.py file.</li>
+<li>Save umqtt.py.</li>
+</ol>
+<p>Now click the Run button again. What happened? We got the same error again. Why? Well, although we’ve added umqtt.py to our project, we don’t have a copy of it yet on our WiPy. We need to Upload it first. So hit the Upload button. Wait for the prompt to return, then hit Run again.</p>
+<p>This time you should see the WiFi is connected and, if the connection to Adafruit IO succeeds, the RGB LED on the WiPy turns green. If you open the dashboard on Adafruit IO you can see a new number being graphed every 5 seconds. When you operate the toggle switch you should see the RGBLED on the WiPy turning on (white) and turning off.</p>
+<h2>Making the WiPy Run at Start</h2>
+<p>To make our WiPy run the AdafruitIO.py code at startup we can just copy the code into main.py and upload it. Now when the WiPy is powered it will immediately run main.py and connect to Adafruit IO. Now you can see that the RGB LED is very useful for displaying the internal status of the program. As per the notes in the code: red = not connected, orange = WiFi connected, and green = Adafruit IO connected. When we cancel the program, it turns blue.</p>
+<p>We now need to remember that when the WiPy is powered it immediately runs the application we uploaded. You can’t connect to it on 192.168.4.1 anymore because the internal WiFi is requesting and receiving an IP address from the local network. Remember that you can use the built in COM port to gain access. If you want to run in “hands off” mode, you should set up your boot.py to configure the WiFi to use a fixed IP address.</p>
+<p>That’s it then! I hope this helps you to prototype your big IoT idea.</p></div>
+
+	
+    
+    
+        <p class="kbase-article-category">
+            <span>Category:</span>
+                                                                <a href="https://core-electronics.com.au/tutorials/pycom/">
+					<span itemprop="articleSection">Pycom</span></a>
+                                   </p>
+
+        <p class="kbase-article-tag">
+            <span>Tags:</span>
+                            <a href="https://core-electronics.com.au/tutorials/tag/adafruit%20io/">adafruit io</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/internet%20of%20things/">internet of things</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/iot/">iot</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/pycom/">pycom</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/wipi/">wipi</a>
+                   </p>
+		<input type="hidden" id="topicid" value="2306">
+<div id="discourse-comments"><iframe src="./Pycom and Adafruit IO - Tutorial Australia_files/comments.html" id="discourse-embed-frame" width="100%" frameborder="0" scrolling="no" height="1080px"></iframe></div>
+
+<script type="text/javascript">
+  DiscourseEmbed = { discourseUrl: 'https://forum.core-electronics.com.au/',
+                     topicId: document.getElementById('topicid').value };
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+    d.src = DiscourseEmbed.discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+		
+    	
+    <div itemprop="articleBody" style="display:none;">
+        Introduction
+We’re going from zero to hero. Starting from nothing we’ll get a WiPy communicating with Adafruit I...         </div>			
+	<div style="display:none;" itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject">
+    <img src="./Pycom and Adafruit IO - Tutorial Australia_files/iot-with-wipy-and-adafruit-io.jpg">
+    <meta itemprop="url" content="https://core-electronics.com.au/media/kbase/iot-with-wipy-and-adafruit-io.jpg">
+    <meta itemprop="width" content="300">
+    <meta itemprop="height" content="300">
+    </div>
+    <meta itemprop="url" content="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html">
+  <div style="display:none;" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization">
+    <div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject">
+      <img src="./Pycom and Adafruit IO - Tutorial Australia_files/logo.png">
+      <meta itemprop="url" content="https://core-electronics.com.au/skin/frontend/white/default/images/logo.png">
+      <meta itemprop="width" content="267">
+      <meta itemprop="height" content="80">
+    </div>
+    <meta itemprop="name" content="Core Electronics">
+  </div>
+</div>
+ 		
+<script>
+/*jQuery(document).ready( function() {
+ jQuery("iframe").each(
+     function(index, elem) {
+         elem.setAttribute("allowFullScreen",'');
+     }
+ );
+});*/
+</script>
+<script type="text/javascript">
+(function(jQuery) {
+  jQuery.fn.iframe_to_div = function(options) {
+    var $context = jQuery(this);
+    if (!$context.is('iframe')) {
+      $context = $context.find('iframe:not(.youtube-player)')
+    }
+    else if ($context.hasClass('youtube-player')) {
+     // return $(this);
+    }
+    $context.each(function() {
+     var $iframe = jQuery(this);
+	 var iframesrc = $iframe.attr('src');
+	 var iframeurlpath=iframesrc.replace(/#.*$/, '').replace(/\?.*$/, '');
+	 var iframeurl=iframeurlpath.split("embed/");
+	  var style = $iframe.attr('style').replace(/\s/g,'');
+      var $loading = false;
+      $loading = jQuery("<div><div class='youtube-player' style=" + style + " data-id="+iframeurl[1]+"></div></div>");
+      $iframe.after($loading.addClass('youtube-container'));
+      $iframe.remove();
+    });
+    return jQuery(this);
+  };
+})(jQuery);jQuery('.kbase-article-text').iframe_to_div();
+</script>
+<script type="text/javascript">
+  (function() {
+    var v = document.getElementsByClassName("youtube-player");
+    for (var n = 0; n < v.length; n++) {
+        var p = document.createElement("div");
+        p.innerHTML = labnolThumb(v[n].dataset.id);
+        p.onclick = labnolIframe;
+        v[n].appendChild(p);
+    }
+})();
+function labnolThumb(id) {
+    return '<img class="youtube-thumb" src="//i.ytimg.com/vi/' + id + '/sddefault.jpg"><div class="play-button"></div>';
+}
+function labnolIframe() {
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("src", "//www.youtube.com/embed/" + this.parentNode.dataset.id + "?autoplay=1&autohide=2&border=0&wmode=opaque&enablejsapi=1&controls=1&showinfo=1");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute('allowFullScreen', '');
+    iframe.setAttribute("id", "youtube-iframe");
+    this.parentNode.replaceChild(iframe, this);
+}
+</script>
+<script src="./Pycom and Adafruit IO - Tutorial Australia_files/jquery.popupoverlay.js"></script>
+<div class="dynamicfootertext"> <p>Have a question? <a class="dynamicfooterunderline">Ask the Author</a> of this guide today!</p> </div>
+
+<script type="text/javascript">
+    //< ![CDATA[
+        var customForm = new VarienForm('forum-comments-form');
+    //]]>
+</script>
+<script>
+function CheckLength() {
+    if (document.getElementById("postcommentbox").value.length < 20) {
+document.getElementById("showmsg").style.display="block";
+        return false;
+
+    } else {
+    document.getElementById("showmsg").style.display="none";
+    document.getElementById("forum-comments-form").submit();
+  
+  }
+}
+$j = jQuery.noConflict();
+$j(document).ready(function () {
+  $j('#basic').popup({
+        pagecontainer: '.container',
+        transition: 'all 0.3s'
+    });
+jQuery(".dynamicfooterunderline").click(function() {
+jQuery.ajax({
+            type: "POST",
+			 async: false,
+            url: 'https://core-electronics.com.au/addtocart/forum/login/',
+                  data: '',
+            success: function (response) {
+				  if (response == 'active') {
+	 jQuery(".dynamicfooterunderline").addClass('initialism basic_open btn btn-success');
+	        }
+		 if (response == 'inactive') {
+    window.location.href ='https://core-electronics.com.au/addtocart/login/login/article_id/255/';
+		} 
+	}
+});
+});
+});
+</script>
+<script>
+$j(document).ready(function(){
+    $j(".dynamicfooterunderline").click(function(event){
+        event.preventDefault();
+    });
+});
+</script>
+
+<script>
+jQuery(window).scroll(function(){
+jQuery(".dynamicfootertext").animate({ scrollTop: $(document).height() + $(window).height() }, 1200);
+});
+</script>
+					
+					  					
+                </div>
+				
+            </div>
+				<div class="clear"></div>
+
+        </div>
+        
+    </div>
+</div>
+<div class="footer_bg">
+        <div class="footer-container">
+    <div class="footer">
+    <script src="./Pycom and Adafruit IO - Tutorial Australia_files/lightwidget.js"></script><iframe id="footerinsta" src="./Pycom and Adafruit IO - Tutorial Australia_files/c0173d654eb451c28e454fd3e9ae3c35.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0px; overflow: hidden; padding-bottom: 10px; height: 128px;"></iframe>     
+        <div class="links newlinks">
+<ul>
+<li><a href="https://core-electronics.com.au/customer-service/">Customer Service</a></li>
+<li><a href="https://core-electronics.com.au/privacy-policy">Privacy Policy</a></li>
+<li><a href="https://core-electronics.com.au/about-us">About Us</a></li>
+<li><a href="https://core-electronics.com.au/employment">Jobs</a></li>
+</ul>
+</div>    
+      
+     <div class="links links_middle">
+<div class="ce-social-icons">
+	<ul class="ce-social-icons-ul">
+<li><a href="https://www.facebook.com/CoreElectronics/" title="facebook" target="_blank" class="footer-fb">
+</a></li>
+<li><a href="https://www.youtube.com/channel/UCp5ShPYJvi2EA4hLUERa86w?sub_confirmation=1" title="youtube" target="_blank" class="footer-youtube"></a></li>
+<li><a href="http://coreelec.io/instagram" title="instagram" target="_blank" class="footer-instagram"></a></li>
+<li><a href="https://twitter.com/coreelecau" title="twitter" target="_blank" class="footer-twitter"></a></li>
+<li><a href="http://coreelec.io/github" title="github" target="_blank" class="footer-googleplus"></a></li>
+<li><a href="https://www.linkedin.com/company/core-electronics-pty-ltd" title="linkedin" target="_blank" class="footer-linkedin"></a></li>
+<li><a href="http://eepurl.com/cqlMJr" title="newsletter" target="_blank" class="footer-newsletter"></a></li>
+<li><a href="http://coreelec.io/meetup" title="meetup" target="_blank" class="d-hubs"></a></li>
+</ul>
+</div>
+<div class="news-top makermailnew">
+<a href="https://core-electronics.com.au/newsletter">sign up for maker mail!</a>
+</div>
+
+<div class="news-bottom">
+<img alt="bottom-banner" src="./Pycom and Adafruit IO - Tutorial Australia_files/bottom-banner.png" height="37" width="373">
+</div>
+</div>     <div id="footer-quote"><span class="quotes-medium">Empowering<br>Creative<br>People<br></span></div> 
+     
+      
+  		<!--<div class="footer_bottom_right">
+			<p><img src="" /></p>
+			<p><img src="" /></p>	
+		</div>-->
+                <!--<address class="copyright"></address>-->
+            <div id="back-top" style="display: none;">
+                <a href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html#top"><span></span></a>
+             </div>
+    </div>
+</div>
+<script>
+var $btt= jQuery.noConflict();
+$btt(document).ready(function(){
+
+    // hide #back-top first
+    $btt("#back-top").hide();
+    
+    // fade in #back-top
+    $btt(function () {
+        $btt(window).scroll(function () {
+            if ($btt(this).scrollTop() > 100) {
+                $btt('#back-top').fadeIn();
+            } else {
+                $btt('#back-top').fadeOut();
+            }
+        });
+
+        // scroll body to 0px on click
+        $btt('#back-top a').click(function () {
+            $btt('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+
+});
+</script>
+                
+
+</div></section>
+
+
+<script type="text/javascript">
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+"event": "fireRemarketingTag",
+"google_tag_params":
+{
+"ecomm_pagetype": "other",
+"ecomm_prodid": "",
+"ecomm_totalvalue": "0",
+}
+});
+</script>
+
+<script type="text/javascript">
+ //<![CDATA[
+var google_conversion_id = 960799998;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+//]]>
+</script>
+<script type="text/javascript" src="./Pycom and Adafruit IO - Tutorial Australia_files/f.txt" style="display: none !important;">
+</script>
+<noscript>
+<div style="display:none;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/960799998/?value=0&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+
+<link rel="stylesheet" type="text/css" href="./Pycom and Adafruit IO - Tutorial Australia_files/fonts.css"><style type="text/css">
+#notification-bar a.democlose{display:none;}
+#notification-bar { border-bottom: 1px solid #006188!important; }
+</style><style type="text/css">
+  #basic {
+    -webkit-transform: scale(0.8);
+       -moz-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+            transform: scale(0.8);
+}
+.popup_visible #basic {
+    -webkit-transform: scale(1);
+       -moz-transform: scale(1);
+        -ms-transform: scale(1);
+            transform: scale(1);
+}
+</style><style>
+.kbase-article .advanced_tutorials .advanced_tutorials_image {margin-right: 10px;}
+@media (min-width: 1356px)
+.kbase-article .advanced_tutorials {
+   margin-left: 0px;
+}
+</style><style>
+     @media only screen and (max-width: 1000px) {
+      #footerinsta{display:none;}
+     } 
+     @media (min-width:1000px){
+      #footerinsta{display:block;}
+     .footer_bg{height:310px;}
+     .footer{padding-top:15px;}
+     .wrapper{padding-bottom:310px;}
+      }
+    </style>
+<script type="text/javascript">
+new Ajax.Request('/tutorials/internet-of-things-with-pycom-and-adafruit-io.html', {
+    parameters: {amfpc_ajax_blocks: 'kbase_header'},
+    onSuccess: function(response) {
+        var blocks = response.responseText.evalJSON();
+        for (var name in blocks)
+        {
+            $$('div[id="amfpc-'+name+'"]').each(function(element){
+                element.replace(blocks[name]);
+            });
+        }
+
+        var event = new CustomEvent("amfpc-ajax-loaded", { detail: {blocks: Object.keys(blocks)} });
+        document.dispatchEvent(event);
+    }
+});
+</script>
+
+
+
+<div id="itoris-wishlist-popup-box" class="" style="display: none;">
+<div id="itoris-wishlist-popup-mask"></div>
+<div id="itoris-wishlist-popup" class="window">
+<div id="itoris-wishlist-popup-loading" style="display: none;"></div>
+<h4>Please select a wishlist you wish to add selected product(s) to:</h4>
+<div id="itoris-wishlist-radiostack">
+<div>
+<input type="radio" class="itoris-wishlist-radio" name="itoris-wishlist-radio" value="main" id="itoris-wishlist-radio-main" checked="checked" alt="Main">
+<label for="itoris-wishlist-radio-main">Main</label>
+</div>
+<div>
+<input type="radio" class="itoris-wishlist-radio" name="itoris-wishlist-radio" value="new">
+or create a new wishlist: <input type="text" id="itoris-wishlist-new-name" width="50%">
+</div>
+</div>
+<div id="itoris-wishlist-popup-buttons">
+<button type="button" title="Select" class="itoris-wishlist-button-select">
+<span><span>Select</span></span>
+</button>
+<button type="button" title="Cancel" class="itoris-wishlist-button-cancel">
+<span><span>Cancel</span></span>
+</button>
+</div>
+</div>
+<script type="text/javascript">
+itorisWishlistPopup = new Itoris.WishlistPopup({"stay_on_page":false,"check_wishlist_url":"https:\/\/core-electronics.com.au\/wishlist\/index\/ajax\/","add_product_ajax_url":"https:\/\/core-electronics.com.au\/wishlist\/ajax\/addProduct\/","wishlist_url":"https:\/\/core-electronics.com.au\/wishlist\/","update_wishlist_link_url":"https:\/\/core-electronics.com.au\/wishlist\/index\/itemCount\/","message_empty_name":"Enter the name of new wishlist","message_name_exists":"Wishlist with such a name already exists. Please choose a different name.","route_name":"wishlist"});
+Event.observe(document, 'dom:loaded', function(){
+var body = $$('body')[0];
+if (body) {
+body.appendChild($('itoris-wishlist-popup-box'));
+}
+itorisWishlistPopup.mainWishlist = 'main';
+var protectedItems = [];
+$$('#wishlist-sidebar a.btn-remove').each(function(a){
+for(var i=0; i<protectedItems.length; i++) {
+if (a.href.indexOf('/wishlist/index/remove/item/'+protectedItems[i]+'/') > -1 ) {
+a.setStyle({visibility: 'hidden'});
+break;
+}
+}
+});
+});
+</script>
+</div><div style="position: absolute; display: none; z-index: 99999; top: 0px; left: -469px;" id="anonymous_element_1"><div id="sbs_searchmob_autocomplete_box" class="sbs_autocomplete_inner" style="width: 469px; padding: 0px;"><div id="sbs_searchmob_autocomplete_right" class="sbs_autocomplete_inner_right"></div><div id="sbs_searchmob_autocomplete_left" class="sbs_autocomplete_inner_left"></div><div id="sbs_searchmob_closed_button" class="sbs_autocomplete_close_button" style="top: 5px; left: 444px;">&nbsp;</div></div></div><div style="position: absolute; display: none; z-index: 99999; top: 90px; left: 1114px;" id="anonymous_element_2"><div id="sbs_search_autocomplete_box" class="sbs_autocomplete_inner" style="width: 469px; padding: 0px;"><div id="sbs_search_autocomplete_right" class="sbs_autocomplete_inner_right"></div><div id="sbs_search_autocomplete_left" class="sbs_autocomplete_inner_left"></div><div id="sbs_search_closed_button" class="sbs_autocomplete_close_button" style="top: 5px; left: 444px;">&nbsp;</div></div></div><div id="basic_background" class="popup_background" style="opacity: 0; visibility: hidden; background-color: black; position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 100000; transition: all 0.3s ease 0s;"></div><div id="basic_wrapper" class="popup_wrapper" style="opacity: 0; visibility: hidden; position: fixed; overflow: auto; z-index: 100001; transition: all 0.3s ease 0s; width: 100%; height: 100%; top: 0px; left: 0px; text-align: center; display: none;"><div id="basic" class="well popup_content" style="display: inline-block; opacity: 0; visibility: hidden; outline: none; transition: all 0.3s ease 0s; text-align: left; position: relative; vertical-align: middle;" data-popup-initialized="true" aria-hidden="true" role="dialog">
+    <h4>Your comment/question: </h4>
+    <button class="basic_close btn btn-default">X</button>
+    <form onsubmit="return CheckLength()" id="forum-comments-form" method="post" action="https://core-electronics.com.au/addtocart/forum/postarticlecomments/">
+      <input name="form_key" type="hidden" value="hM4lbYTmycHXQ8jl">
+	  <input type="hidden" name="article_id" value="255">
+      <textarea minlength="20" id="postcommentbox" name="postcommentbox" class="popuptextarea input-text required-entry"></textarea>
+      <p class="hide" id="showmsg" style="display:none;color:red;">Please enter minimum 20 characters</p>
+       <p style="width: 400px;padding-top: 10px;">Your comment will be posted (automatically) on our Support Forum which is publicly accessible. Don't enter private information, such as your phone number.
+</p>
+<p style="width: 400px;padding-top: 10px;">Expect a quick reply during business hours, many of us check-in over the weekend as well.</p>
+    <input id="commentsubmit" type="submit" value="Submit">
+   </form>
+</div><div class="popup_align" style="display: inline-block; vertical-align: middle; height: 100%;"></div></div><iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Pycom and Adafruit IO - Tutorial Australia_files/saved_resource(1).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><script>
+    (function(d,s){var z=$zopim,$=z.s= d.createElement(s),e=d.getElementsByTagName(s)[0];
+    $.async=!0;$.setAttribute('charset','utf-8');
+    $.src='https://v2.zopim.com/?wyjIuwrG0MrJf3P3eSD6jtQ9SOeuyh3c';
+    z.t=+new Date;$. type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+  </script><div><iframe title="Opens a widget where you can find more information" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 1; width: 114px; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; left: 0px; bottom: 0px;" src="./Pycom and Adafruit IO - Tutorial Australia_files/saved_resource(2).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px;" src="./Pycom and Adafruit IO - Tutorial Australia_files/saved_resource(3).html"></iframe></div><div class="zopim" __jx__id="___$_1" style="position: absolute; visibility: hidden; margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px;"></div><style></style><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Pycom and Adafruit IO - Tutorial Australia_files/d_vbiawPdxB.html" style="border: none;"></iframe></div><div></div></div></div></body></html>

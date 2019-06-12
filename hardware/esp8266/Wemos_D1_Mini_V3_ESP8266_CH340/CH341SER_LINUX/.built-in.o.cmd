@@ -1,0 +1,1 @@
+cmd_/home/hestbv/Projecten/IoT/hardware/esp8266/Wemos_D1_Mini_V3_ESP8266_CH340/CH341SER_LINUX/built-in.o :=  rm -f /home/hestbv/Projecten/IoT/hardware/esp8266/Wemos_D1_Mini_V3_ESP8266_CH340/CH341SER_LINUX/built-in.o; ar rcsD /home/hestbv/Projecten/IoT/hardware/esp8266/Wemos_D1_Mini_V3_ESP8266_CH340/CH341SER_LINUX/built-in.o

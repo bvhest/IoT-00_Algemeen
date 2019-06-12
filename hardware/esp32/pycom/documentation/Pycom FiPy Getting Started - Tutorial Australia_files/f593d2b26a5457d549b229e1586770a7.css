@@ -1,0 +1,1438 @@
+/** ==================BASE===================*/
+.aw-ln-clear-all{
+    float: right;
+    font-size: 11px;
+    padding: 3px 2px 0 0;
+}
+#aw-ln-filters-container {
+    clear: both;
+}
+#aw-ln-filters-container dd ol{
+    font-size:0;
+}
+#aw-ln-filters-container dd ol li{
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    white-space: nowrap;
+    font-size:11px;
+    padding:2px 0 2px 0;
+}
+#aw-ln-filters-container dd ol li.aw-ln-filters-container-1column-layout{
+    width: 100%;
+}
+#aw-ln-filters-container dd ol li.aw-ln-filters-container-2column-layout{
+    width: 49%;
+}
+#aw-ln-filters-container dd ol li.aw-ln-filters-container-3column-layout{
+    width: 33%;
+}
+#aw-ln-filters-container dd ol li.aw-ln-filters-container-4column-layout{
+    width: 23%;
+}
+#aw-ln-filters-container dd ol li label{
+    cursor: pointer;
+    color: #006188;
+}
+#aw-ln-filters-container dd ol li>a{
+    cursor: default;
+    text-decoration: none;
+}
+#aw-ln-filters-container dd ol li label img{
+    vertical-align: middle;
+}
+
+#aw-ln-filters-container dd ol li span {
+    padding: 0;
+    display: inline-block;
+}
+
+#aw-ln-filters-container dt{
+    padding-right: 3px;
+}
+.aw-ln-filter-clear{
+    float: right;
+    font-size: 11px;
+    padding: 0;
+    text-transform: none;
+    font-weight: normal;
+}
+
+/** ==================HELP TOOLTIP===================*/
+.aw-ln-filter-help{
+    clear: both;
+    float: right;
+    font-size: 11px;
+    padding: 0;
+    text-transform: none;
+    font-weight: normal;
+    cursor: help;
+    height: 15px;
+}
+.aw-ln-filter-help.help-icon{
+    width: 15px;
+    height: 15px;
+    background: url(https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/help-icon.png) no-repeat 0 0;
+}
+.aw-ln-filter-help>a{
+    cursor: help;
+}
+
+.aw-ln-help-tooltip-wrapper {
+    position: relative;
+    z-index: 100;
+    cursor: help;
+    font-size: 11px;
+    text-transform: none;
+    font-weight: normal;
+}
+
+.aw-ln-help-tooltip {
+    width: 191px;
+    position: absolute;
+    z-index: 1000;
+    right: -15px;
+
+    padding: 5px 12px;
+    color: #464d50;
+
+    background-color: #ffffff;
+    border: thin solid #cccccc;
+    border-radius: 3px;
+    box-shadow: 0 3px 6px rgba(0,0,0,.25);
+}
+.aw-ln-help-tooltip__top {
+    bottom: 29px;
+}
+.aw-ln-help-tooltip__bottom {
+    top: 10px;
+}
+
+.aw-ln-help-arrow {
+    position: absolute;
+    z-index: 1000;
+    right: 0px;
+}
+.aw-ln-help-arrow:before {
+    border-color: #cccccc transparent;
+    border-style: solid;
+    content: "";
+    right: -2px;
+    position: absolute;
+}
+.aw-ln-help-arrow:after{
+    border-color: #fff transparent;
+    border-style: solid;
+    content: "";
+    right: -2px;
+    position: absolute;
+}
+
+.aw-ln-help-arrow__top{
+    bottom: 30px;
+}
+.aw-ln-help-arrow__top:before{
+    border-width: 10px 10px 0;
+    top: 1px;
+}
+.aw-ln-help-arrow__top:after{
+    border-width: 10px 10px 0;
+    top: 0px;
+}
+.aw-ln-help-arrow__bottom{
+    top: 0px;
+}
+
+.aw-ln-help-arrow__bottom:before{
+    border-width: 0 10px 10px;
+    top: 0px;
+}
+.aw-ln-help-arrow__bottom:after{
+    border-width: 0 10px 10px;
+    top: 1px;
+}
+
+/** ============COLLAPSE===============*/
+.aw-ln-filter-collapse-show, .aw-ln-filter-collapse-hide{
+    cursor: pointer;
+}
+/** =========== CATEGORY TREE =========== */
+.aw-ln-filter-category-tree-action{
+    width: 15px;
+    height: 15px;
+    display: block;
+    float: left;
+}
+.aw-ln-filter-category-tree-action-plus{
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/category-tree-plus.gif');
+    cursor: pointer;
+}
+.aw-ln-filter-category-tree-action-minus{
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/category-tree-minus.gif');
+    cursor: pointer;
+}
+/** =============RANGE=================*/
+.aw-ln-filter-options-range-slider{
+    z-index: 10;
+}
+.aw-ln-filter-options-range-slider-wrapper{
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/bar-bkg.png') repeat-x center 4px;
+    height: 16px;
+}
+.aw-ln-filter-options-range-slider-wrapper-left{
+    margin: 0 0 0 -6px;
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/bar-left.png") left 4px no-repeat;
+    height: 16px;
+}
+.aw-ln-filter-options-range-slider-wrapper-right{
+    margin: 0 -7px 0 1px;
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/bar-right.png") right 4px no-repeat;
+    height: 16px;
+}
+.aw-ln-filter-options-range-slider-min, .aw-ln-filter-options-range-slider-max{
+    width: 9px;
+    height: 18px;
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/handle.png') center 1px no-repeat;
+    cursor: move;
+    float: left;
+    z-index: 90;
+}
+.aw-ln-filter-options-range-slider-min{
+    position: relative!important;
+}
+.aw-ln-filter-options-range-slider-max{
+    position: static!important;
+}
+.aw-ln-filter-options-range-slider-active{
+    float: left;
+    width: 0;
+    height: 13px;
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/orange-bkg.png') repeat-x center 7px;
+    position: relative;
+    z-index: 20;
+}
+.aw-ln-filter-options-range-status{
+    height: 20px;
+    width: 100%;
+}
+.aw-ln-filter-options-range-status-from{
+    float: left;
+    margin: 0 0 0 -4px;
+}
+.aw-ln-filter-options-range-status-to{
+    float: right;
+    margin: 0 -3px 0 0;
+}
+/** ==================FROM-TO===================*/
+.aw-ln-filter-options-fromto{
+
+}
+.aw-ln-filter-options-fromto input{
+    width: 50px;
+    height: 17px;
+}
+
+/** ===============OVERLAY======================*/
+.aw-ln-overlay{
+    background: no-repeat center center;
+    position: absolute;
+    z-index: 9999;
+}
+
+/** ===============RWD THEME======================*/
+div#aw-ln-filters li label img,  div#aw-ln-filters li span {
+    display: inline-block;
+    padding: 0;
+}
+
+div#aw-ln-filters li label img, div#aw-ln-filters li label input[type="radio"] {
+    vertical-align: middle;
+}
+
+/** ==================EXPAND/COLLAPSE FILTERS===================*/
+div#aw-ln-filters dt .aw-ln-arrow {
+    float: right;
+    clear: both;
+    width: 15px;
+    height: 15px;
+    margin-left: 3px;
+}
+
+div#aw-ln-filters dt .aw-ln-arrow:hover {
+    cursor: pointer;
+}
+
+div#aw-ln-filters dt.active .aw-ln-arrow {
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/up.png') no-repeat center 5px;
+    background-size: 12px;
+}
+
+div#aw-ln-filters dd.active {
+    display: block;
+}
+
+div#aw-ln-filters dd {
+    display: none;
+}
+
+div#aw-ln-filters dt .aw-ln-arrow {
+    background: url('https://core-electronics.com.au/skin/frontend/white/default/aw_layerednavigation/img/down.png') no-repeat center 5px;
+    background-size: 12px;
+}
+/* Product Detail sidebar */
+.aw-mini-related-items .head h4 { /*background:url(https://core-electronics.com.au/skin/frontend/white/default/aw_alsoviewed/images/icon_clip.gif) left 5px no-repeat;*/ }
+.aw-mini-related-items .product-images { width:72px; }
+.aw-mini-related-items .product-images a { display:block;}
+.aw-mini-related-items .product-images input { float:left; /*margin-right:4px; margin-left:-6px;*/ }
+.aw-mini-related-items .product-images .checkbox-container { float:left; width:15px; }
+.aw-mini-related-items .product-details { margin-left:80px; padding-left:25px; }
+.aw-mini-related-items ol li { padding-left:0 ; padding-right:0; }
+
+/* Base Mini */
+.aw-base-mini { /*border:1px solid #c4c1bc;*/ background:#fff; line-height:1.3em;  font-size:.95em;  }
+.aw-base-mini .head { margin:0 1px; border-bottom:1px solid #ddd; /*background:url(https://core-electronics.com.au/skin/frontend/white/default/aw_alsoviewed/images/base_mini_head_bg.gif) repeat-x #fff;*/ padding:2px 8px 2px 0px; }
+.aw-base-mini .head h4 { min-height:16px; color:#e26703; background-repeat:no-repeat; background-position:0 0; padding:1px 0 1px 0px; text-transform:uppercase; }
+.aw-base-mini .head h4 .count { text-transform:none; color:#2f2f2f; white-space:nowrap; font-weight:normal; font-size:.95em; }
+.aw-base-mini h5 { font-size:1em; }
+/*.aw-base-mini .aw-content, .aw-base-mini ol { background:#f8f7f5; }*/
+.aw-base-mini ol li { }
+.aw-base-mini ol li.odd {/* background:#f4f3f3;*/ }
+.aw-base-mini ol li.even { /*background:#fafafa;*/ }
+.aw-base-mini .actions {/* background:url(https://core-electronics.com.au/skin/frontend/white/default/aw_alsoviewed/images/base_mini_actions_bg.gif) repeat-x #dee5e8; */padding:6px; }
+.aw-base-mini .product-images { float:left; width:75px;}
+.aw-base-mini .product-images a img { border:1px solid #a9a9a9; vertical-align:top; }
+.aw-base-mini .product-checkbox { float:left; width:10px; }
+.aw-base-mini .product-names { margin-left:18px; }
+.aw-base-mini .product-details { margin:0 0 0 60px; height:50px; }
+.aw-base-mini .product-details[class] { height:auto; min-height:50px; }
+.aw-base-mini .regular-price { font-size:11px; }
+.aw-base-mini .regular-price .price { color:#2f2f2f; }
+.aw-base-mini .special-price { font-size:11px; }
+.aw-base-mini .minimal-price { font-size:11px; }
+.aw-base-mini .price-box { margin:1px 0; }
+
+.aw-link-cart { color:#DC6809 !important; font-weight:bold !important; }
+.aw-content { color:#1b2d3b;} /* Sets default padding */
+.aw-content#after1400 { } /* Sets default padding for Magento 1.4.* */
+
+.side-col .aw-box { margin-bottom:1.3em; }
+.side-col .aw-content { padding:5px 10px; }
+
+.shopping-cart-collaterals .aw-box {
+    margin-bottom:18px;
+    padding:12px 15px;
+    border:1px solid #D0CBC1;
+    background:url(https://core-electronics.com.au/skin/frontend/white/default/aw_alsoviewed/images/base_mini_head_bg.gif) repeat-x #fff;
+    }
+.shopping-cart-collaterals .aw-box .form-button  {  margin-left:5px; }
+
+.also-enterprise li.item {
+    height: 200px;
+}
+.aw-box {
+    width: 1300px !important;
+    padding-left:0px;
+    margin:auto;
+}
+
+.aw-mini-related-items .product-images {
+   /* width: 72px;*/
+}
+
+.aw-mini-related-cart .product-images a {
+    display: block;
+    margin-left: 0 !important;
+    margin-top:10px;
+}
+
+.aw-mini-related-items .product-images a {
+    display: block;
+    /*margin-left: 20px;*/
+}
+
+.aw-mini-related-items .product-images input {
+    float: left; /*margin-right:4px; margin-left:-6px;*/
+}
+
+.aw-mini-related-items .product-images .checkbox-container {
+    float: left;
+    /*width: 15px;*/
+}
+.product-view {
+    padding-bottom: 40px;
+}
+
+#product_tabs_description_tabbed_contents,#product_tabs_cms_contents,#product_tabs_review_tabbed_contents{margin:0;}
+
+.aw-mini-related-items .product-details {  
+    float: left;
+    margin-left: 0px; 
+     width: 87.7%;
+}
+
+.aw-mini-related-items ol li {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.aw-base-mini ol li {
+     float: left;width: 100%; padding: 7px 4px 7px 0;
+}
+
+.aw-base-mini .product-images {
+    float: left;margin:8px 0 0 0;
+   
+}
+
+
+.aw-base-mini .product-images a img {
+    border: 1px solid #a9a9a9;
+    vertical-align: top;
+}
+
+.aw-base-mini .product-checkbox {
+    float: left;
+    width: 10px;
+}
+
+.aw-base-mini .product-names {
+    margin-left: 18px;
+}
+
+.aw-mini-related-cart .product-details {
+    margin: 0 0 0 40px !important;
+    height: 50px;
+}
+
+.aw-base-mini .product-details {
+    /*margin: 0 0 0 60px;*/
+    height: 50px;
+}
+.product-details .product-details-cart .btn-cart {
+    padding: 8px 32px !important;
+}
+.product-details .product-details-cart .btn-cart span{ font-size: 16px;}
+.aw-base-mini .product-details .product-details-descr{  float: left; margin-right: 20px;text-align:justify;   width: 82%;}
+.aw-base-mini .product-details .product-details-cart{float:left;width:16%;text-align: center;}
+.aw-base-mini .product-details h1 {font-size: 16px;margin :0;}
+
+.aw-base-mini .product-details[class] {
+    height: auto;
+    min-height: 50px;
+}
+
+.aw-base-mini .special-price {
+    font-size: 11px;
+}
+
+.aw-base-mini .minimal-price {
+    font-size: 11px;
+}
+
+.aw-base-mini .price-box {
+    margin: 1px 0;
+    padding:0 0 5px!important;
+}
+
+.side-col .aw-box {
+    margin-bottom: 1.3em;
+}
+
+.side-col .aw-content {
+    padding: 5px 10px;
+}
+
+.shopping-cart-collaterals .aw-box .form-button {
+    margin-left: 5px;
+}
+
+.aw-box.aw-base-mini.aw-mini-related-items.block .head {
+
+}
+
+.cart .aw-box.aw-base-mini.aw-mini-related-items.block .head {
+    border-top: 0;
+}
+
+.aw-base-mini .head h4{ font-size:28px !important; color:#999 !important; font-weight:400 !important; margin-top:13px; margin-bottom:3px;}
+
+@media only screen and (min-width: 800px) and (max-width:1200px){ 
+.aw-mini-related-items .product-details{width:86%;}
+.aw-base-mini .product-details .product-details-descr {    width: 68.5%;}
+}
+@media only screen and (min-width:320px) and (max-width:480px){ 
+.aw-base-mini .product-details .product-details-cart{width:auto;}
+}
+@media only screen and (min-width:480px) and (max-width:640px){ 
+.aw-base-mini .product-details .product-details-cart{width:auto;}
+}
+
+/* Block hints */
+
+.amfpc-block-info
+{
+    position:relative;
+    border:1px dotted #008080;
+    margin:6px 2px;
+    padding:18px 2px 2px 2px;
+    zoom: 1;
+}
+
+.amfpc-block-info:hover
+{
+    border-color: orange !important;
+}
+
+.amfpc-block-info>.amfpc-block-handle,
+.amfpc-block-info>.amfpc-template-info
+{
+    position:absolute;
+    top:0;
+    padding:2px 5px;
+    background:#008080;
+    color:white;
+    font:normal 11px Arial;
+    text-align:left !important;
+    z-index:998;
+    text-transform: none;
+}
+
+.amfpc-block-info>.amfpc-block-handle:hover,
+.amfpc-block-info>.amfpc-template-info:hover
+{
+    z-index:999;
+}
+
+.amfpc-block-info>.amfpc-block-handle
+{
+    cursor: default;
+    left:0;
+    white-space: nowrap;
+}
+
+.amfpc-block-info>.amfpc-template-info
+{
+    right:0;
+}
+
+.amfpc-block-info>.amfpc-block-handle:hover
+{
+    background-color: orange !important;
+}
+
+.amfpc-block-info.active
+{
+    -webkit-animation: amfpc-blocks 1s linear .5s infinite alternate;
+    animation: amfpc-blocks 1s linear .5s infinite alternate;
+}
+
+@-webkit-keyframes amfpc-blocks {
+    from {opacity: 1;}
+    to {opacity: .1;}
+}
+
+@keyframes amfpc-blocks {
+    from {opacity: 1;}
+    to {opacity: .1;}
+}
+
+/* Updated blocks */
+
+.amfpc-block-info.updated
+{
+    border-color: red;
+}
+
+.amfpc-block-info.updated>.amfpc-block-handle
+{
+    top:0;
+    background:red;
+}
+
+/* Status popup */
+
+.amfpc-info
+{
+    width: 350px;
+    min-height: 95px;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: #008080;
+    color: #fff;
+    z-index: 99999;
+    font-size: 32px;
+}
+
+.amfpc-info h1
+{
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 2px 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.amfpc-info h2
+{
+    margin-top: 12px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.amfpc-info .amfpc-content
+{
+    line-height: 48px;
+}
+ul.newblog-container{position:relative;min-height: 400px;}
+ul.newblog-container li {position: absolute;    width: 32%;padding:0px ;margin:0 0 0 1%;    display: inline-block;}
+li .sprocket-mosaic-item {    background: rgba(247, 247, 247, 0.57) none repeat scroll 0 0;    border: 1px solid #c0c0c0;    border-radius: 2px;    box-shadow: 0 0 10px #ddd inset;    margin-bottom: 10px;    padding: 10px;}
+.sprocket-mosaic-image-container {    display: block;    margin-bottom: 15px;    position: relative;}
+.sprocket-mosaic .sprocket-mosaic-item .sprocket-mosaic-text {    margin-bottom: 5px;    margin-top: 0;    opacity: 0.8;}
+.sprocket-mosaic-item .sprocket-mosaic-image {    width: 100%;}
+.sprocket-mosaic-image-container {    overflow: hidden;}
+.sprocket-mosaic-hover {    background: rgba(0, 0, 0, 0.5) none repeat scroll 0 0;    opacity: 0;    visibility: hidden; bottom: 0;    left: 0;    position: absolute;    top: 0;    width: 100%;}
+.sprocket-mosaic-image-container:hover .sprocket-mosaic-hover {    opacity: 1;    visibility: visible;}
+.sprocket-mosaic-item .sprocket-mosaic-image-container:hover .sprocket-mosaic-image {    transform: scale(1.3) rotate(8deg); }
+.sprocket-mosaic-item .sprocket-mosaic-image-container .sprocket-mosaic-image {    transform: scale(1) rotate(0deg);    transition: all 0.3s ease-in-out 0s;}
+.sprocket-mosaic-hovercontent span {    display: none;}
+.sprocket-mosaic-hover, .sprocket-mosaic-hovercontent {    transition: all 0.2s ease-in 0s;}
+.sprocket-mosaic-hovercontent {    color: #ffffff;    opacity: 1;    visibility: hidden;}
+.sprocket-mosaic-image-container:hover .sprocket-mosaic-hovercontent {    opacity: 1;    visibility: visible;}
+.sprocket-mosaic-hovercontent {    display: block;    position: absolute;    text-align: center;    top: 50%;    width: 100%;}
+.newblog-container li .sprocket-padding .sprocket-readmore {    margin: 15px auto !important; display: table;}
+.sprocket-readmore {    display: table;    margin: 15px 0;    white-space: nowrap; background-color: #006188;    background-image: none;    border-color: -moz-use-text-color -moz-use-text-color #006188;    border-radius: 3px;    border-style: none none solid;    border-width: 0 0 2px;    color: #ffffff;    cursor: pointer;    display: inline-block;    font-size: 14px;    line-height: normal;    padding: 12px 20px;    text-align: center;    text-shadow: none;    text-transform: uppercase;    transition: all 0.2s ease-in 0s;    vertical-align: middle;    }
+.sprocket-readmore:hover { background-color: #2e8ab8 ;  color: #ffffff; border-color: #2e8ab8 ;}
+.blog-post-view{clear:both;}
+.product-cases{clear:both; padding-bottom: 5px;}
+.product-cases span{font-weight: bold;}
+.post-img{margin-left:10px;float:right;max-width: 400px;max-height: 400px;}
+.description{text-align: justify;}
+.breadcrumbs {    width: 1290px !important;  padding: 10px 0 0 18px;margin: auto !important;}
+.breadcrumbs li {    font-size: 20px!important;}
+.breadcrumbs ul li a {    color: #006188 !important;}
+.project_create .fields h4 label{font-weight: bold; text-transform: capitalize;}
+.project_create .fields h4{margin:5px 0px;}
+.project_create .fields #termsandc{vertical-align: middle;}
+.project_create .buttons-set button.button,
+.profile-edit .buttons-set button.button,
+.report-create .buttons-set button.button{    float: left;    margin-left: 0px;}
+.project_create .buttons-set,
+.profile-edit .buttons-set,
+.report-create .buttons-set{padding: 0px;}
+.project_create h2.title,
+.profile-edit h2.title,
+.projects-profile-view h2,
+.report-create h2{margin-top: 0px;}
+.blog-post-view h2.title, .blog-post-view h3.title, .blog-post-view h4.title{text-transform: capitalize;}
+.public-profile{display: table;width:100%;}
+.public-profile .form-left-list{float:left;width:20%;}
+.public-profile .form-right-list{float:left;width:60%;}
+.public-profile .form-right-list .field label{float:left;  padding-top: 7px;    width: 80px;}
+.public-profile .form-right-list .field .input-box {    float: left;}
+.public-profile .form-right-list .field{clear: both; display: table;}
+.nickname{padding: 10px 0px;}
+.report-create ul li{margin-left: 0px!important;list-style: none;}
+.report-create .fieldset .input-box .input-text {    width: 315px;}
+.projects-comment-area label{padding-left: 0px!important;}
+.projects-comment-area  .input-box textarea {    width: 460px!important;padding-left: 5px;padding-right: 5px;}
+.projects-post-view li .comment-list {    border-left: 1px dotted #999;    margin-left: 15px;    padding: 0 0 0 15px;}
+.projects-post-view .comment-list {    clear: both;    list-style-type: none; }
+.labels{font-weight:bold;}
+.comment-block .avatar {      float: left;       height: 40px;    line-height: 40px;    margin-right: 8px;    width: 40px;}
+.comment-info .actions a{font-size: 12px;}
+.replyform textarea{width:60%;}
+.formatting-help,
+.comment-help{padding:10px 0px;}
+.formatting-help .table > thead > tr > th ,
+.comment-help .table > thead > tr > th{    border-top: 1px solid #ddd;}
+.formatting-help  .table > tbody > tr > td,
+.comment-help .table > tbody > tr > td {    border-top: 1px solid #ddd;    line-height: 1.42857;    padding: 5px;    vertical-align: top;}
+a.help {cursor: pointer;}
+.project_create .validation-advice{display: table;padding-left: 0px;padding-top: 5px;}
+span.totle
+.space {    background-color: #ddd !important;    margin-right: 1px;}
+.comment-text blockquote {    border-left: 2px solid #cbcbcb;    margin: 10px 5px;    padding-left: 5px;}
+.comment-text pre {    background-color: #f5f5f5;    border: 1px solid #dadada;    border-radius: 4px;   color: #333;    display: block;    font-size: 13px;    line-height: 1.42857;    margin: 0 0 10px;    padding: 9.5px;    word-break: break-all;    word-wrap: break-word;}
+.comment-text ul {list-style-type:circle;margin-left: 15px;}
+.fave_widget.verbose {    background: #fff ;    color: #777;    display: inline-block;    font-size: 12px;    font-weight: 700;    letter-spacing: 0.05em;    line-height: 20px;    text-transform: uppercase;}
+.fave_widget.verbose a {    border: 1px solid #dadada;    border-bottom-left-radius: 3px;    border-top-left-radius: 3px;    color: inherit;    float: left;    padding: 0 5px;}
+.fave_widget.verbose .fave_count {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	border-bottom-right-radius: 3px;
+	border-color: #dadada #dadada #dadada -moz-use-text-color;
+	border-image: none;
+	border-top-right-radius: 3px;
+	border-width: 1px 1px 1px 0;
+	float: left;
+	padding: 0 5px;
+	border:1px solid #ccc;border-left: none;
+}
+.fave_btn_logout .glyphicon ,
+.no .fave_yes .glyphicon{   background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/inactive.png") no-repeat scroll 0 0;       margin-right: 3px;    padding: 0 8px;}
+.yes .fave_yes .glyphicon { background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/active.png") no-repeat scroll 0 0;       margin-right: 3px;    padding: 0 8px;}
+#tabs-container .tabs-menu{  border-bottom: 1px solid #496778; margin: 10px 0;    overflow: hidden;}
+#tabs-container .tabs-menu li {    background: #f2f2f2 ;    border-left: 1px solid #fff;    border-right: 1px solid #fff;    float: left;    font-size: 1.1em;    line-height: 1em;}
+#tabs-container .tabs-menu li.current {    background: #006188 ;     font-weight: bold;}
+#tabs-container .tabs-menu li a {    color: #444;    display: block;    padding: 13px 18px;    text-decoration: none;}
+#tabs-container .tabs-menu li.current a{   color: #fff; }
+.tab .table > thead > tr > th { border-top: 1px solid #ddd; font-weight: bold;}
+.tab .table > tbody > tr > td ,
+.tab .table > thead > tr > th {border-right: 1px solid #ddd;    border-bottom: 1px solid #ddd;    line-height: 1.42857;    padding: 5px;    vertical-align: top;}
+.tab .table > tbody > tr,
+.tab .table > thead > tr {border-left:1px solid #ddd;}
+.fbShare , .google-like, .commont-ponts, .twshare{    float: left;margin-right: 5px;}
+.fbShare{position: relative;top: 3px;}
+.commont-ponts{position: relative; top: 4px;}
+.twshare{position: relative;top: 4px;}
+
+.google-like{width:65px;}
+.clear{clear:both;}
+.social-buttons{padding-top:5px;}
+h2.comments-title{margin-top:23px;}
+.input-box .input-lable{float:left;padding-top: 2px;margin-right: 5px;width:60px;}
+.input-box .input-field{float:left;width:270px;}
+#project_search_form .input-box{margin: 5px 0px;}
+#project_search_form {margin-bottom: 10px;}
+.search-result{clear: both; margin: 5px 0 10px;    overflow: hidden;}
+.search-result-image{float: left;margin-right: 10px;}
+.projects-post-view .breadcrumbs ul li.home,
+.projects-index-list .breadcrumbs ul li.home,
+.projects-search-index .breadcrumbs ul li.home{display: none;}
+.reports_content{ opacity: .35;background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/reports-inactive.png") no-repeat scroll 0 0; padding: 5px 14px;}
+.reports_content:hover{opacity: 1; background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/reports-active.png") no-repeat scroll 0 0;}
+a.reports_content {outline:none; }
+a.reports_content:hover{text-decoration:none;} 
+a.reports_content span {    display: none;    line-height: 16px;    margin-left: -70px;    margin-top: 20px;    padding: 10px;    width:auto;    z-index: 10;}
+a.reports_content:hover span {    display:inline; position:absolute;     border:2px solid #FFF;  color:#EEE;    background:#006188;}
+
+
+.edit_text{ opacity: .35;background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/edit_inactive.png") no-repeat scroll 0 -1px; padding: 5px 14px;}
+.edit_text:hover{opacity: 1; background: rgba(0, 0, 0, 0) url("https://core-electronics.com.au/skin/frontend/white/default/ewall_projects/images/edit_active.png") no-repeat scroll 0 0;}
+a.edit_text {outline:none; margin-left: 5px;}
+a.edit_text:hover {text-decoration:none;} 
+a.edit_text span  {    display: none;    line-height: 16px;    margin-left: -70px;    margin-top: 20px;    padding: 10px;    width:auto;    z-index: 10;}
+a.edit_text:hover span {    display:inline; position:absolute;     border:2px solid #FFF;  color:#EEE;    background:#006188;}
+a.tag_text span{margin-left: -35px;}
+a.title_text span{margin-left: -40px;}
+a.introduction_text span{margin-left: -80px;}
+a.product_text span{margin-left: -90px;}
+.tagnames{background-color: #006188 ;    border-radius: 3px;    margin: 0 2px;    padding: 2px 5px;color:#fff;font-size: 12px;}
+
+
+.form-left-list .field{width:350px;}
+.public-profile .form-right-list {float: left;width: 200px;}
+a.reports_content span{margin-left:-70px;margin-top:24px; }
+
+a.reports_content:hover span { display:inline; position:relative;
+border:2px solid #FFF; color:#EEE; background:#006188;top:33px;}
+
+
+
+
+.public-profile .form-right-list {
+float: left;
+width: 200px!important;
+}
+
+.form-left-list .field {
+
+width: 280px;
+}
+
+.public-profile .form-left-list {
+float: left;
+width: 305px!important;
+}
+
+.project_create{margin-bottom: 60px;}
+.project_create label{display: block;}
+
+.projects-profile-view .projectedit{color: #7e7e7e;}
+.projects-profile-view .projectedit:hover{color: #3f3f3f;}
+
+.projects-post-view .projectitledit{width: 100%;height: 55px;}
+.projects-post-view .projectitledit h2{float: left;width: 80%;}
+.projects-post-view .projectitledit a{float: right; width: 5%;margin-bottom: 10px;margin-top: 20px;}
+
+
+
+
+
+
+
+
+@media only screen and (min-width: 240px) and (max-width: 540px){
+ul.newblog-container{height: auto!important;}
+ul.newblog-container li{left:0px!important;top:0px!important;clear:both;position:relative;width:100%; margin: 0;}
+}
+@media only screen and (min-width: 0px) and (max-width: 639px){
+.col-main img.post-img{width:100%;height: 100%;}
+.post-img{margin-left:0px;float:none;  margin-bottom: 10px;}
+.description iframe{width:100%;}
+
+}
+@media only screen and (min-width: 0px) and (max-width: 479px){
+.projects-post-view .main-container, .projects-create-index .main-container,
+.projects-view-edit .main-container, .projects-profile-edit .main-container,
+.projects-index-list .main-container{    padding: 0 5px;}
+.public-profile .form-left-list,
+.public-profile .form-right-list{float:none;width:100%;}
+.search-result-title{clear:both;}
+}
+@media only screen and (min-width: 0px) and (max-width: 767px){
+.cke_chrome{   width: 99% !important;}
+.breadcrumbs {    width: 98% !important;   padding: 10px 0 0 0px;}
+h2.sprocket-mosaic-title{font-size:14px;}
+.public-profile .form-right-list{width:auto;}
+.fbShare , .google-like, .commont-ponts, .twshare{ float:none;margin-right: 0px;margin-bottom: 5px;}
+.projects-search-index .col1-layout .col-main{padding:0px 5px;}
+.projects-index-list .toolbar .sorter{width: 50%;float: left;position: absolute;}
+.projects-index-list .toolbar .pager{width: 50%;float: right;}
+.projects-index-list .toolbar .sort-by-switcher--asc{position: absolute;float: right;}
+}
+@media only screen and (min-width: 480px) and (max-width: 767px){
+.public-profile .form-left-list{width:250px;}
+.public-profile .form-right-list{padding-left: 5px;}
+.blog-post-view .post-img{float: none;margin-left: 0px;}
+
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px){
+.fbShare , .google-like, .commont-ponts, .twshare{ float:none;margin-right: 0px;margin-bottom: 5px;}
+.breadcrumbs {    width:768px !important; padding:10px 0 0 5px; }
+.cke_chrome{ width: 95% !important;}
+.public-profile .form-left-list{float:left;width:32%;}
+.public-profile .form-right-list{float:left;width:68%;}
+.projects-index-list .newblogs-itmes3{top: 628px !important;}
+.projects-index-list .newblogs-itmes4{top: 485px !important;}
+.projects-index-list .newblogs-itmes5{top: 765px !important;}
+.projects-index-list .newblogs-itmes6{top: 1116px !important;}
+.projects-index-list .newblogs-itmes7{top: 1235px !important;}
+.projects-index-list .newblogs-itmes8{top: 1380px !important;}
+.projects-index-list .newblogs-itmes7 .sprocket-mosaic-title a{text-transform: none;}
+.projects-index-list .newblog-container{height: 2005px;}
+.projects-index-list .toolbar .sorter{position: absolute;float: left;width: 50%;}
+.projects-index-list .toolbar .pager{float: right;display: inline;width: 49%;clear: none;}
+.projects-index-list .pager > .count-container{float: right;}
+.projects-index-list .wrapper{ padding-bottom: 250px !important; }
+.projects-index-list h2.sprocket-mosaic-title{ word-wrap:break-word;}
+
+}
+@media only screen and (min-width: 1024px) and (max-width: 1355px){
+.breadcrumbs {    width:1024px !important; padding:10px 0 0 5px; }
+.cke_chrome{ width: 70% !important;}
+.public-profile .form-left-list{float:left;width:24%;}
+.public-profile .form-right-list{float:left;width:200px;}
+.projects-post-view .projectitledit a{text-align: right;}
+	}
+
+.projects-post-view .blog-post-view ol {list-style-type: decimal;margin: 10px 35px;}
+.projects-post-view #postComment{margin-bottom: 25px;}
+.projects-post-view .comment-list a{color: #2e8ab8 !important;}
+.projects-post-view .comment-list a:hover{color: #006188 !important;}
+
+
+@media only screen and (min-width : 320px) and (max-width : 568px) and (orientation : portrait){
+.projects-index-list .wrapper{ padding-bottom: 435px !important; }
+}
+@media only screen and (min-width : 320px) and (max-width : 568px) and (orientation : landscape){
+.projects-index-list .wrapper{ padding-bottom: 400px !important; }
+}
+@media only screen and (min-width : 569px) and (max-width : 767px){
+.projects-index-list .wrapper{ padding-bottom: 300px !important; }
+}
+
+.sprocket-mosaic-text ul li {position: initial;width: auto;}
+.sprocket-mosaic-text ol li {position: initial;width: auto;margin: 0;}
+.projects-post-view .no-border{border:none !important;}
+#magestore-bannerslider-popup{
+	padding: 2px;
+    position: fixed;
+    z-index: 19990;
+	background: #fff;
+	border: 2px;
+}
+#magestore-bannerslider-popup-close{
+	cursor: pointer;
+    height: 22px;
+	width:22px;
+    position: absolute;
+    right: 0px;
+    top: -25px;   
+    z-index: 19999;
+	background:url(https://core-electronics.com.au/skin/frontend/white/default/css/magestore/bannerslider/image/close-tiny.png) no-repeat center;
+}
+#bg_fade {
+    background-color: #000000;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    visibility: hidden;
+    width: 100%;
+    z-index: 1000;
+	opacity: 0.7;
+}
+#solr_search_facets li a.facet-item {
+	background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/checkboxes.png") no-repeat scroll -3px 4px transparent;
+    clear: both;
+    font-size: 1em;
+    line-height: 1.1em;
+    padding-left: 16px;
+    padding-top: 2px !important;
+    display: unset;
+}
+
+#solr_search_facets .sf-menu li a.facet-item,
+#solr_search_facets .sf-menu li a.empty, #solr_search_facets .sf-menu li a.empty:hover
+{
+	background: none;
+	padding: 0;
+}
+
+#solr_search_facets li a.empty {
+	color: #000;
+	text-decoration: none;	
+}
+
+#solr_search_facets ol li{
+	padding: 2px 0;
+}
+
+/*
+#solr_search_facets dt {
+   background: url("/skin/frontend/default/default/images/bkg_block-layered-dt.gif") no-repeat scroll 9px 5px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    font-weight: bold;
+    padding: 1px 10px 0 25px;
+    text-transform: uppercase;
+}*/
+
+#solr_search_facets dt.collapsed{
+	
+}
+
+#solr_search_facets li a.active, #solr_search_facets dl li a:hover {
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/checkboxes.png") no-repeat scroll -3px -14px transparent;
+    color: #000000;
+}
+
+#solr_search_facets li a.empty, #solr_search_facets dl li a.empty:hover {
+	background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/checkboxes.png") no-repeat scroll -3px -29px transparent;
+    color: #000000;
+    cursor: default;
+}
+
+#solr_search_price_slider {
+    /*
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/slider-images-track-right.png") no-repeat scroll right top transparent;
+	height: 9px;
+	*/
+	width: 100%;
+}
+#solr_search_price_slider_handle1,  #solr_search_price_slider_handle2{
+	
+}
+
+#content_holder_prize .refine-results-price-slider {
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/basicSprite.png") no-repeat scroll -143px -87px transparent;
+    height: 22px;
+    padding: 0;
+    position: relative;
+}
+#content_holder_prize .ui-slider {
+    cursor: pointer;
+    height: 24px;
+    margin-bottom: -7px;
+    position: relative;
+    text-align: left;
+    width: 100%;
+}
+#content_holder_prize .ui-slider .ui-slider-range {
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/basicSprite.png") no-repeat scroll -144px -55px transparent;
+    cursor: pointer;
+    display: block;
+    font-size: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
+}
+#content_holder_prize .ui-slider .ui-slider-handle {
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/basicSprite.png") no-repeat scroll -144px -122px #fff;
+    cursor: pointer;
+    height: 25px;
+    /*margin-left: -8px;*/
+    position: absolute;
+    top: -2px;
+    width: 16px;
+    z-index: 2;
+}
+#content_holder_prize #refine-results-price-values input{
+	font-size: 15px;
+    font-weight: bold;
+    padding: 2px;
+    width: 60px;
+}
+#content_holder_prize #refine-results-price-values {
+	margin: 5px 0;
+}
+
+#content_holder_category_path li li{
+	margin-left: 7px;
+}
+#solr_search_facets li a.facet-item span{
+	color: #000000;
+    font-style: italic;
+}
+
+div.block-layered-nav div.solrbridge-slider {
+	 position:relative; margin:10px auto 5px auto; z-index:9; height:18px;  background: url(https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/solrbridge-slider-bg.gif) no-repeat 50% 50%; cursor:pointer;
+}
+div.block-layered-nav div.solrbridge-slider div.handle {width:14px; top:-1px; height:22px; background: transparent url(https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/solrbridge-hadle.png) no-repeat; position: absolute; cursor:move; z-index: 2;}
+
+/*
+ * Slider labels
+ */
+.solrbridge-slider-price {
+	color: #798794;
+}
+.solrbridge-slider-price-from {
+	float: left;
+    
+}
+.solrbridge-slider-price-to {
+	float: right;
+}
+
+.solrbridge-slider-handle-right {
+	position: absolute;
+	top: 14px;
+	right: 0px;
+}
+
+.solrbridge-slider-handle-left {
+	position: absolute;
+	top: 14px;
+	left: 0px;
+}
+.solrbridge-slider-price-range 
+{
+	text-align: center;
+	font-size: 0.9em;
+}
+/*
+ * Slider Bar
+ */
+.solrbridge-slider-bar {
+	position:absolute; 
+	background: #999; 
+	height: 6px; 
+	top: 6px; 
+	z-index: 1;  
+}
+#solrbridge-price-btn{
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-color: #CCCCCC #CCCCCC #B3B3B3;
+    border-image: none;
+    border-radius: 4px 4px 4px 4px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 2px 4px;
+    text-align: center;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+#solrbridge-price-btn span {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    color: #000000;
+    display: block;
+    padding: 0 8px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+div.solrbridge-overlay {
+    background-color: #FFFFFF;
+    height: 100%;
+    left: 0;
+    opacity: 0.5;
+    filter: alpha(opacity = 50);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 555;
+}
+div.solrbridge-overlay img {
+    top: 100px;
+    left: 45%;
+    display: block;
+    position: absolute;
+}
+
+div.solrbridge-overlay div {
+    margin: 0 auto;
+    display: block;
+	width: 300px;
+	height: 200px;
+	background:  url('https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/solrbridge-overlay.gif') 50% 50% no-repeat;
+}
+#solr_search_facets .arrow {
+    background: url("https://core-electronics.com.au/skin/frontend/white/default/solrsearch/images/arrows.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    display: block;
+    float: left;
+    margin: 3px 3px 0;
+}
+.solrsearch-index-index .breadcrumbs ul {
+    margin: auto;
+    padding-left: 20px;
+    width: 1300px;
+}
+
+/********************** Tabs */
+.product-view .tabs { margin: 15px 0px; overflow:hidden; border-bottom:1px solid #496778;  zoom: 1;clear:both;}
+.product-view .tabs li                { float:left; border-right:1px solid #ffffff; border-left:1px solid #fff; font-size:1.1em; line-height:1em;  background: #f2f2f2; }
+.product-view .tabs li.first          { border-left:0; }
+.product-view .tabs li.last           { border-right:0; }
+.product-view .tabs a                 { display:block; padding:13px 18px; color:#444; text-decoration: none;}
+.product-view .tabs a:hover           { background-color:#2e8ab8; text-decoration:none; color:#fff; ; text-decoration: none;}
+.product-view .tabs li.active a,
+.product-view .tabs li.active { background:none repeat scroll 0 0 #006188;  font-weight:bold; color:#fff; }
+
+
+#product_tabs_tags_tabbed_contents.input-box input	{ width: 300px; }
+#product_tabs_tags_tabbed_contents .input-box	{ width: 300px; float:left; margin-right: 10px;}
+#product_tabs_related_tabbed_contents li	{ float:left; margin-right: 10px;}
+#product_tabs_related_tabbed_contents ol	{ clear: both;}
+.product-collateral:after { content:"."; display:block; clear:both; font-size:0; line-height:0; height:0; overflow:hidden; zoom: 1}
+@media only screen and (max-width: 319px) {
+.product-view .tabs li {
+width:100%;
+}
+}
+@media only screen and (min-width: 320px) and (max-width: 479px){
+.product-view .tabs li {
+width:100%;
+}
+.product-view .tabs li a{
+padding: 12px 14px;}
+}
+
+.rating-box{width:69px;}
+.ratings-list .rating-box .rating { width:69px; background: url("https://core-electronics.com.au/skin/frontend/white/default/images/icon_sprite.png") repeat-x scroll 0 -600px rgba(0, 0, 0, 0);margin: 1px 0 0 14px;text-indent:-999px;height: 13px;}
+
+#product_tabs_review_tabbed_contents .loginto-review {text-align: center;width: 680px;font-size: 21px;}
+
+.kbase {
+    display: block;
+}
+.kbase-block {
+    display: block;
+    /*padding: 20px;
+    margin: 20px 0;
+    border: solid 1px #C4C1BC;*/
+}
+.kbase-block-main {
+    display: block;
+}
+.kbase-block-search {
+    display: block;
+}
+.kbase-block-title {text-transform: capitalize;}
+.kbase-main-search {
+}
+.kbase-main-search input {
+    width: 500px;
+    padding: 1px;
+}
+.kbase-main-search label {
+    display: none;
+}
+.kbase-main-category {}
+/*.kbase-main-category .kbase-list ul li {
+    margin-left: 20px;
+}*/
+.kbase-main-top {}
+.kbase-main-latest {}
+.kbase-main-tag {}
+.kbase-main-tag .kbase-list li {
+    display: inline;
+}
+.kbase .kbase-sorter {
+   /* background: url("https://core-electronics.com.au/skin/frontend/white/default/aw_kbase/images/bkg_toolbar.gif") repeat-x scroll 0 100% #FFFFFF;   height: 19px; border-top: 1px solid #E2E2E2;*/
+   
+    font-size: 11px;
+    padding: 4px 0px;
+    text-align: left;
+ 
+}
+.kbase .kbase-sorter .amount {
+    float: left;
+    margin: 0;
+}
+.kbase .kbase-sorter .sort-by {
+    float: right;
+    padding-right: 0px;
+}
+.kbase .kbase-sorter .sort-by label {
+    vertical-align: middle;
+}
+.kbase .kbase-sorter .sort-by select {
+    margin: 0 0 1px;
+   /* padding: 0;*/
+   padding:2px 4px;
+    vertical-align: middle;
+}
+.kbase .kbase-sorter .sort-by img {
+    vertical-align: middle;
+}
+.kbase .kbase-sorter label {
+    font-weight: normal;
+    color: inherit;
+}
+.kbase .kbase-sorter:after {
+    display: block;
+    content: ".";
+    clear: both;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+    overflow: hidden;
+    zoom: 1;
+}
+.kbase-listing {
+    border: 1px solid #C4C1BC;
+}
+.kbase-listing p {
+    margin: 0;
+}
+tr.kbase-listing:hover {
+   /* background-color: #FCF5DD;
+    cursor: pointer;*/
+}
+.kbase-listing-full {}
+.kbase-listing-description {}
+.kbase-listing-tag {
+    font-size: 80%;
+}
+.kbase-listing-rating {}
+.kbase-listing-date-updated {}
+table .kbase-listing {
+    border: 1px solid #BEBCB7;
+    width: 100%;
+    border-spacing: 0;
+    empty-cells: show;
+    font-size: 100%;
+}
+.kbase-listing thead th {
+    border-bottom: 0 none !important;
+    /*background: url("https://core-electronics.com.au/skin/frontend/white/default/images/bkg_th.gif") repeat-x scroll 0 100% #D9E5EE;*/
+    border-right: 1px solid #C2D3E0;
+    color: #0A263C;
+    font-weight: bold;
+    padding: 2px 8px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.kbase-listing tbody td {
+    border-bottom: 1px solid #D9DDE3;
+}
+.kbase-listing tbody td.kbase-listing-general {
+    border-right: 1px solid #D9DDE3;
+}
+.kbase-listing tbody td.kbase-listing-rating {
+    text-align: center;
+    border-right: 1px solid #D9DDE3;
+}
+.kbase-listing tbody td.kbase-listing-date-updated {
+    text-align: center;
+}
+.kbase-listing td {
+    padding: 10px;
+}
+.kbase-even {
+    /*background: none repeat scroll 0 0 #EEEDED;*/
+}
+.kbase-odd {
+   /* background: none repeat scroll 0 0 #F8F7F5;*/
+}
+.kbase-article-date {
+    font-size: 85%;
+}
+.kbase-article-author {
+    font-style: italic;
+}
+.kbase-article-text UL.products-grid,
+.kbase-article-text UL.products-grid UL,
+.kbase-article-text  OL.products-list {
+    list-style: none outside none !important;
+}
+.kbase-listing-general UL.products-grid {
+    width: 100%!important;
+}
+/*
+.kbase-article-text ol {
+    list-style-position: inside;
+    list-style-type: decimal;
+}*/
+.kbase-article-text ul {
+    list-style-position: inside;
+    list-style-type: disc;margin: 15px;
+}
+.kbase-article-text ol {
+    list-style-position: inside;
+    list-style-type: decimal;margin: 15px;
+}
+.kbase-article-attachment {}
+.kbase-article-category {}
+.kbase-article-article .fave_widget.verbose{margin-bottom: 10px;}
+.fave_widget.verbose{margin-bottom: 50px;}
+.fave_widget.verbosetop{margin-bottom: 0px;}
+.kbase-article-tag {}
+.kbase-article-rating {}
+.kbase-article-rating:after {
+    display: block;
+    content: ".";
+    clear: both;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+    overflow: hidden;
+}
+.kbase-article-rating .button  span {
+    margin-right: 0px;
+    }
+.kbase-article-rating span {
+    float: left;
+    margin-right: 10px;
+}
+.kbase-article-rating .rating-box {
+    float: left;
+    margin-top: 3px;
+
+}
+.kbase-article-rating select {
+    min-width: 40px;
+    padding: 1px;
+    margin-right: 2px;
+}
+.kbase-article-rating form {
+    float: right;
+}
+.kbase-article-index .home_add_section .home_page_right_new{
+    margin: auto 0px 20px;
+}
+
+.kbase-article-index .home_add_section .home_page_right_new h3{
+    font-weight: 600;font-size: 25px;color: #006188;padding:5px;margin:0;border-bottom: 1px solid #c4c1bc;
+    text-transform: capitalize;
+}
+.kbase-article-index .home_add .home_page_right_new{
+    width: 100%;border: 1px solid #c4c1bc;border-radius: 0;clear: both;border-bottom: none;
+}
+.kdescription{float: left;padding: 12px;width: 90%;}
+.kbasearticle_image{ float: left;padding-right: 10px;width: 9%;}
+.karticlesloop{width:100%;float: left;clear: both;border-bottom: 1px solid #c4c1bc;padding: 5px;}
+.kbase-listing-title a,.karticlesloop a,.kbase-article-category a{font-weight: bold;}
+.kbase-article-article .main-container a{font-weight: bold;}
+.kviewspan{font-size: 13px;font-weight: normal;}
+.searchbelowblock{margin: 15px 0;}
+.kbase-article-article  li .comment-list{border-left: 1px dotted #999;    margin-left: 15px;    padding: 0 0 0 15px;}
+.kbase-article-article .comment-list{clear: both;    list-style-type: none;}
+@media only screen and (min-width:320px) and (max-width:480px){
+    .kbasearticle_image{width: 100%;padding: 0;}
+    .kbasearticle_image img{margin: 0 auto;}
+    .kdescription{width: 100%;padding: 10px;}
+    .kbase-main-category .kbase-list ul li{margin: 0;}
+    .kbase-article-index .kbase{margin: 0 0 100px;}
+    .kbase-article-text p img{margin-left: 0 !important;max-width: 100%;width: auto !important;}
+}
+@media only screen and (min-width:360px) and (max-width:640px){
+    .kbasearticle_image{width: 100%;padding: 0;}
+    .kbasearticle_image img{margin: 0 auto;}
+    .kdescription{width: 100%;padding: 10px;}
+    .kbase-main-category .kbase-list ul li{margin: 0;}
+    .kbase-article-index .kbase{margin: 0 0 135px;}
+    .kbase-article-text p img{margin-left: 0 !important;max-width: 100%;width: auto !important;}
+}
+@media only screen and (min-width:768px) and (max-width:1024px){
+    .kbasearticle_image{width: 100%;padding: 0;}
+    .kbasearticle_image img{margin: 0 auto;}
+    .kdescription{width: 100%;padding: 10px;}
+    .kbase-main-category .kbase-list ul li{margin: 0;}
+    .kbase-article-index .kbase{margin: 0 0 135px;}
+    .kbase-article-text p img{margin-left: 0 !important;max-width: 100%;width: auto !important;}
+}
+/*.kbase-article-text ol li p{display: inline;}*/
+
+.kbase-article-text ol {
+    counter-reset: foo;
+    display: table;
+    padding-left: 0.8em;
+}
+.kbase-article-text ol li::before {
+    padding-right: 0.3em;
+    content: counter(foo, decimal) ".";
+    display: table-cell;
+}
+.kbase-article-text ol li {
+    counter-increment: foo;
+    display: table-row;
+    list-style: outside none none;
+}
+#suggesstion-box {
+    background: #fff none repeat scroll 0 0;
+    border: 3px solid #006188;
+    display: table;
+    position: absolute;
+    width: 80%;
+    z-index: 1;
+}
+.coreguidekbase{clear: both;color: #006188;font-size: 20px;padding: 5px 0;}
+#suggesstion-box .home_page_right_new_latest {
+    border-top: 0 none;margin: 0;
+}
+#suggesstion-box .klooplast {
+    border-bottom: 0 none;
+}
+#suggesstion-box .kdescription{float: right;}
+#suggesstion-box .kimage {padding-top: 5px;}
+#suggesstion-box .home_page_right_new_latest{width: 100%;}
+
+.authorlivegotit, .authorgotit {background: #006188 none repeat scroll 0 0;border: 0 none;border-radius: 10px;color: #fff;padding: 10px;font-size: 18px;}
+
+.kbasepopup, .kbasepopuplivepopup {background: rgba(100, 100, 100, 0.6);  position: fixed;display: none;z-index: 5000;height: 100%;width: 100%;left: 0;top: 0;}
+.kbasepopup > div, .kbasepopuplivepopup > div {color: #006188;font-size: 18px;border-radius: 10px;position: fixed;background: #FFFFFF;box-shadow: 0px 0px 15px 0px rgba(#000000, 0.3);padding: 20px 10px;width: 70%;max-width: 600px;z-index: 5001;left: 50%;top: 50%;text-align: center;transform: translate(-50%, -50%);}
+.mainkbasepopupnew .mainclose, .kbasepopupnew .close{background: #fff none repeat scroll 0 0;border: 0 none;float: right;font-size: 18px;padding: 0 15px;}
+
+.kbase-article-text img {max-width: 100%;}
+
+.kbase-article-article .kbase-article-text figure{margin-bottom: 25px;text-align: center;display: inline-block;}
+.kbase-article-article .kbase-article-text figcaption{font-size: 10px;font-style: italic;display: block;}
+.kbase-article .advanced_tutorials .advanced_tutorials_image {margin-right: 10px;}
+@media (min-width: 1356px)
+.kbase-article .advanced_tutorials {
+   margin-left: 0px;
+}

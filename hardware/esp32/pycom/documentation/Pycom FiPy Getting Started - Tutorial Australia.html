@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html -->
+<html lang="en" id="top" class=" js no-touch localstorage no-ios" style=""><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Pycom FiPy Getting Started - Tutorial Australia</title>
+<meta name="description" content="Say you want to build a sun-tracking solar panel. You could add a tiny computer, like an Arduino, to control it. That might be all you need. But what if you need to connect to it to control it from somewhere else? Connecting it into your home Wi-Fi would work.
+Now that it can connect to the Internet, a whole world of new possibilities open up! Want the solar panels to " park"="" if="" the="" weather="" forecast="" mentions="" hail?="" what="" about="" graphing="" power="" output="" from="" day="" to="" so="" you="" can="" see="" why="" batteries="" aren't="" at="" full="" charge?="" we've="" now="" entered="" world="" of="" internet="" things,="" or="" iot="" for="" short.="" pycom="" devices="" are="" built="" things.="" they="" all="" connect="" internet.="" five="" main="" connection="" technologies="" available="" today="" in="" range.="" want="" try="" them="" out,="" not="" get="" one="" device="" that="" do="" (almost)="" everything?="" fipy="" includes="" capabilities="" except="" one:="" it="" doesn't="" lora="" 433mhz.="" that's="" no="" impediment="" you,="" then="" get:="" wi-fi,="" lora,="" sigfox,="" cellular="" lte="" data="" using="" either="" cat-m1="" nb-iot,="" as="" well="" bluetooth.="" i="" recommend="" your="" with="" any="" expansion="" boards="" (see="" range)="" this="" immediately="" adds="" a="" microsd="" card="" socket,="" battery="" connector="" charge="" controller="" and="" micro="" usb="" socket="" programming.="" add="" jumper="" wires="" attach="" own="" circuit,="" board="" 3.0="" is="" one.="" important!="" use="" on="" wi-fi="" bluetooth="" without="" having="" install="" external="" antenna.="" reason="" there's="" an="" on-board="" antenna="" selected="" by="" default.="" other="" radio="" technologies:="" sigfox="" lte,="" there="" must="" be="" attached="" before="" device.="" permanently="" damage="" radios="" started="" since="" share="" antenna,="" least="" need:="" 1="" x="" &amp;="" kit="" lte-m="" those="" four="" items="" you're="" equipped="" experiment="" important="" things="" (iot)="" today.="" once="" taste="" you'll="" likely="" more.="" thankfully="" cheaper="" than="" fipy!="" resources="" when="" brand="" new="" pycom,="" go="" documentation="" start="" reading="" top="" page.="" quickly="" grounding="" possible="" how="" it.="" often="" there'll="" reference="" github="" where="" code="" stored.="" don't="" need="" learn="" github:="" web="" page="" https:="" github.com="" pycom-libraries="" find="" green="" clone="" download="" button,="" click="" zip.="" it,="" have="" sample="" documentation.="" unzip="" put="" folder="" downloading="" libraries="" programming="" worry!="" although="" pile="" learn,="" most="" people="" experimenting="" going="" through="" same="" thing.="" run="" into="" problems,="" tonnes="" places="" information.="" someone="" has="" usually="" struck="" obstacle="" before.="" they've="" asked,="" had="" answered,="" question="" have.="" google,="" advanced="" search.="" finding="" information="" yourself="" will="" always="" fastest="" way="" solution.="" forums="" great="" place="" ask="" relevant="" forum.="" posting="" question,="" ensure="" you've="" searched="" reply="" saying,="" "that's="" already="" been="" answered!"="" core="" electronics="" forum="" communities="" helpful="" people.="" integrated="" development="" environment="" (ide)="" atom="" ide="" ideal="" application="" help="" create="" micropython="" devices.="" io="" file="" downloaded.="" itself="" needing="" questions.="" installation="" done,="" open.="" pymakr.="" course="" shows="" how:="" 2.1.1="" done="" software="" microsoft="" universe="" before,="" used="" visual="" studio,="" simpler="" free="" version="" studio="" code.="" supports="" too="" 2.1.2="" set="" up.="" firmware="" even="" months="" out="" date="" time="" we="" receive="" them.="" it's="" best="" update="" everything="" updated.="" means="" getting="" fix="" problems="" known="" up="" forget="" read="" 1.2.2="" updating="" firmware.="" trying="" everything!="" first="" thing="" experience="" repl.="" read-evaluate-print-loop="" works.="" write="" single="" lines="" "repl="" box"="" immediately.="" repl="" talk="" there,="" creating="" files="" atom.="" save="" extension="" .py="" give="" nicely="" coloured="" aid="" understanding.="" head="" 4.="" tutorials="" examples="" amazing="" features="" capable="" costly="" devices,="" i've="" left="" until="" last="" look="" at.="" fipy,="" which="" added="" later:="" adafruit="" -="" zero="" hero="" building="" lorawan="" nano="" gateway="" network="" node="" lorawan,="" node-red="" gpy="" (more="" "about="" bluetooth"="" how-to)="" more="" finish,="" watch="" our="" video="" hero.="" accompanying="" tutorial="" detail!"="">
+<meta name="keywords" content="">
+<meta name="robots" content="INDEX,FOLLOW">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="https://core-electronics.com.au/media/favicon/default/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://core-electronics.com.au/media/favicon/default/favicon.ico" type="image/x-icon">
+<!--
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' forum.core-electronics.com.au maps.googleapis.com ajax.googleapis.com static.zdassets.com fonts.googleapis.com code.jquery.com www.facebook.com assets.zendesk.com www.googleadservices.com connect.facebook.net secure.ewaypayments.com v2.zopim.com www.google-analytics.com google.com.au googleads.g.doubleclick.net *.imgur.com oh391.infusionsoft.com; object-src 'self' ; frame-src 'self' forum.core-electronics.com.au *.doubleclick.net *.youtube.com oh391.infusionsoft.com *.facebook.com; upgrade-insecure-requests; block-all-mixed-content;">
+-->
+
+	<meta property="og:title" content="Pycom FiPy Getting Started - Tutorial">
+	<meta property="og:type" content="article">
+        <meta property="og:image" content="https://core-electronics.com.au/media/kbase/pycom-fipy-getting-started-social.jpg">
+	<meta property="og:url" content="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html">
+
+	<meta property="og:description" content="Say you want to build a sun-tracking solar panel. You could add a tiny computer, like an Arduino, to control it. That might be all you need. But what if you need to connect to it to control it from somewhere else? Connecting it into your home Wi-Fi would work.
+Now that it can connect to the Internet, a whole world of new possibilities open up! Want the solar panels to " park"="" if="" the="" weather="" forecast="" mentions="" hail?="" what="" about="" graphing="" power="" output="" from="" day="" to="" so="" you="" can="" see="" why="" batteries="" aren't="" at="" full="" charge?="" we've="" now="" entered="" world="" of="" internet="" things,="" or="" iot="" for="" short.="" pycom="" devices="" are="" built="" things.="" they="" all="" connect="" internet.="" five="" main="" connection="" technologies="" available="" today="" in="" range.="" want="" try="" them="" out,="" not="" get="" one="" device="" that="" do="" (almost)="" everything?="" fipy="" includes="" capabilities="" except="" one:="" it="" doesn't="" lora="" 433mhz.="" that's="" no="" impediment="" you,="" then="" get:="" wi-fi,="" lora,="" sigfox,="" cellular="" lte="" data="" using="" either="" cat-m1="" nb-iot,="" as="" well="" bluetooth.="" i="" recommend="" your="" with="" any="" expansion="" boards="" (see="" range)="" this="" immediately="" adds="" a="" microsd="" card="" socket,="" battery="" connector="" charge="" controller="" and="" micro="" usb="" socket="" programming.="" add="" jumper="" wires="" attach="" own="" circuit,="" board="" 3.0="" is="" one.="" important!="" use="" on="" wi-fi="" bluetooth="" without="" having="" install="" external="" antenna.="" reason="" there's="" an="" on-board="" antenna="" selected="" by="" default.="" other="" radio="" technologies:="" sigfox="" lte,="" there="" must="" be="" attached="" before="" device.="" permanently="" damage="" radios="" started="" since="" share="" antenna,="" least="" need:="" 1="" x="" &amp;="" kit="" lte-m="" those="" four="" items="" you're="" equipped="" experiment="" important="" things="" (iot)="" today.="" once="" taste="" you'll="" likely="" more.="" thankfully="" cheaper="" than="" fipy!="" resources="" when="" brand="" new="" pycom,="" go="" documentation="" start="" reading="" top="" page.="" quickly="" grounding="" possible="" how="" it.="" often="" there'll="" reference="" github="" where="" code="" stored.="" don't="" need="" learn="" github:="" web="" page="" https:="" github.com="" pycom-libraries="" find="" green="" clone="" download="" button,="" click="" zip.="" it,="" have="" sample="" documentation.="" unzip="" put="" folder="" downloading="" libraries="" programming="" worry!="" although="" pile="" learn,="" most="" people="" experimenting="" going="" through="" same="" thing.="" run="" into="" problems,="" tonnes="" places="" information.="" someone="" has="" usually="" struck="" obstacle="" before.="" they've="" asked,="" had="" answered,="" question="" have.="" google,="" advanced="" search.="" finding="" information="" yourself="" will="" always="" fastest="" way="" solution.="" forums="" great="" place="" ask="" relevant="" forum.="" posting="" question,="" ensure="" you've="" searched="" reply="" saying,="" "that's="" already="" been="" answered!"="" core="" electronics="" forum="" communities="" helpful="" people.="" integrated="" development="" environment="" (ide)="" atom="" ide="" ideal="" application="" help="" create="" micropython="" devices.="" io="" file="" downloaded.="" itself="" needing="" questions.="" installation="" done,="" open.="" pymakr.="" course="" shows="" how:="" 2.1.1="" done="" software="" microsoft="" universe="" before,="" used="" visual="" studio,="" simpler="" free="" version="" studio="" code.="" supports="" too="" 2.1.2="" set="" up.="" firmware="" even="" months="" out="" date="" time="" we="" receive="" them.="" it's="" best="" update="" everything="" updated.="" means="" getting="" fix="" problems="" known="" up="" forget="" read="" 1.2.2="" updating="" firmware.="" trying="" everything!="" first="" thing="" experience="" repl.="" read-evaluate-print-loop="" works.="" write="" single="" lines="" "repl="" box"="" immediately.="" repl="" talk="" there,="" creating="" files="" atom.="" save="" extension="" .py="" give="" nicely="" coloured="" aid="" understanding.="" head="" 4.="" tutorials="" examples="" amazing="" features="" capable="" costly="" devices,="" i've="" left="" until="" last="" look="" at.="" fipy,="" which="" added="" later:="" adafruit="" -="" zero="" hero="" building="" lorawan="" nano="" gateway="" network="" node="" lorawan,="" node-red="" gpy="" (more="" "about="" bluetooth"="" how-to)="" more="" finish,="" watch="" our="" video="" hero.="" accompanying="" tutorial="" detail!"="">
+	<meta property="og:site_name" content="Core Electronics">
+	
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@CoreElecAU">
+	<meta name="twitter:title" content="Pycom FiPy Getting Started - Tutorial">
+	<meta name="twitter:image" content="https://core-electronics.com.au/media/kbase/pycom-fipy-getting-started-social.jpg">
+	
+		<meta property="twitter:description" content="Say you want to build a sun-tracking solar panel. You could add a tiny computer, like an Arduino, to control it. That might be all you need. But what if you need to connect to it to control it from somewhere else? Connecting it into your home Wi-Fi would work.
+Now that it can connect to the Internet, a whole world of new possibilities open up! Want the solar panels to " park"="" if="" the="" weather="" forecast="" mentions="" hail?="" what="" about="" graphing="" power="" output="" from="" day="" to="" so="" you="" can="" see="" why="" batteries="" aren't="" at="" full="" charge?="" we've="" now="" entered="" world="" of="" internet="" things,="" or="" iot="" for="" short.="" pycom="" devices="" are="" built="" things.="" they="" all="" connect="" internet.="" five="" main="" connection="" technologies="" available="" today="" in="" range.="" want="" try="" them="" out,="" not="" get="" one="" device="" that="" do="" (almost)="" everything?="" fipy="" includes="" capabilities="" except="" one:="" it="" doesn't="" lora="" 433mhz.="" that's="" no="" impediment="" you,="" then="" get:="" wi-fi,="" lora,="" sigfox,="" cellular="" lte="" data="" using="" either="" cat-m1="" nb-iot,="" as="" well="" bluetooth.="" i="" recommend="" your="" with="" any="" expansion="" boards="" (see="" range)="" this="" immediately="" adds="" a="" microsd="" card="" socket,="" battery="" connector="" charge="" controller="" and="" micro="" usb="" socket="" programming.="" add="" jumper="" wires="" attach="" own="" circuit,="" board="" 3.0="" is="" one.="" important!="" use="" on="" wi-fi="" bluetooth="" without="" having="" install="" external="" antenna.="" reason="" there's="" an="" on-board="" antenna="" selected="" by="" default.="" other="" radio="" technologies:="" sigfox="" lte,="" there="" must="" be="" attached="" before="" device.="" permanently="" damage="" radios="" started="" since="" share="" antenna,="" least="" need:="" 1="" x="" &amp;="" kit="" lte-m="" those="" four="" items="" you're="" equipped="" experiment="" important="" things="" (iot)="" today.="" once="" taste="" you'll="" likely="" more.="" thankfully="" cheaper="" than="" fipy!="" resources="" when="" brand="" new="" pycom,="" go="" documentation="" start="" reading="" top="" page.="" quickly="" grounding="" possible="" how="" it.="" often="" there'll="" reference="" github="" where="" code="" stored.="" don't="" need="" learn="" github:="" web="" page="" https:="" github.com="" pycom-libraries="" find="" green="" clone="" download="" button,="" click="" zip.="" it,="" have="" sample="" documentation.="" unzip="" put="" folder="" downloading="" libraries="" programming="" worry!="" although="" pile="" learn,="" most="" people="" experimenting="" going="" through="" same="" thing.="" run="" into="" problems,="" tonnes="" places="" information.="" someone="" has="" usually="" struck="" obstacle="" before.="" they've="" asked,="" had="" answered,="" question="" have.="" google,="" advanced="" search.="" finding="" information="" yourself="" will="" always="" fastest="" way="" solution.="" forums="" great="" place="" ask="" relevant="" forum.="" posting="" question,="" ensure="" you've="" searched="" reply="" saying,="" "that's="" already="" been="" answered!"="" core="" electronics="" forum="" communities="" helpful="" people.="" integrated="" development="" environment="" (ide)="" atom="" ide="" ideal="" application="" help="" create="" micropython="" devices.="" io="" file="" downloaded.="" itself="" needing="" questions.="" installation="" done,="" open.="" pymakr.="" course="" shows="" how:="" 2.1.1="" done="" software="" microsoft="" universe="" before,="" used="" visual="" studio,="" simpler="" free="" version="" studio="" code.="" supports="" too="" 2.1.2="" set="" up.="" firmware="" even="" months="" out="" date="" time="" we="" receive="" them.="" it's="" best="" update="" everything="" updated.="" means="" getting="" fix="" problems="" known="" up="" forget="" read="" 1.2.2="" updating="" firmware.="" trying="" everything!="" first="" thing="" experience="" repl.="" read-evaluate-print-loop="" works.="" write="" single="" lines="" "repl="" box"="" immediately.="" repl="" talk="" there,="" creating="" files="" atom.="" save="" extension="" .py="" give="" nicely="" coloured="" aid="" understanding.="" head="" 4.="" tutorials="" examples="" amazing="" features="" capable="" costly="" devices,="" i've="" left="" until="" last="" look="" at.="" fipy,="" which="" added="" later:="" adafruit="" -="" zero="" hero="" building="" lorawan="" nano="" gateway="" network="" node="" lorawan,="" node-red="" gpy="" (more="" "about="" bluetooth"="" how-to)="" more="" finish,="" watch="" our="" video="" hero.="" accompanying="" tutorial="" detail!"="">
+	
+
+
+
+
+
+
+<!--[if lt IE 7]>
+<script type="text/javascript">
+//<![CDATA[
+    var BLANK_URL = 'https://core-electronics.com.au/js/blank.html';
+    var BLANK_IMG = 'https://core-electronics.com.au/js/spacer.gif';
+//]]>
+</script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/24741df5c7f9d60d49402ed0b8e428f4.css">
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/f593d2b26a5457d549b229e1586770a7.css" media="all">
+<script async="" charset="utf-8" src="./Pycom FiPy Getting Started - Tutorial Australia_files/saved_resource" type="text/javascript"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/sdk.js" async="" crossorigin="anonymous"></script><script async="" src="./Pycom FiPy Getting Started - Tutorial Australia_files/fbds.js"></script><script async="" src="./Pycom FiPy Getting Started - Tutorial Australia_files/analytics.js"></script><script id="facebook-jssdk" src="./Pycom FiPy Getting Started - Tutorial Australia_files/sdk(1).js"></script><script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/prototype.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery-1.12.1.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/noconflict.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/ccard.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/validation.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/builder.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/effects.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/dragdrop.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/controls.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/slider.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/js.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/form.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/translate.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/cookies.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/iwd-jquery-2.1.3.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/modal.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/popup.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/lightbox.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/autocomplete.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/modernizr.custom.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/selectivizr.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/matchMedia.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/matchMedia.addListener.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/enquire.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/app.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery.cycle2.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery.cycle2.swipe.min.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/slideshow.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/imagesloaded.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/minicart.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery_002.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/jcarousel.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/core.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/abstract.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/input.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/fromto.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/range.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/custom.js"></script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/projects.js"></script>
+<link href="https://core-electronics.com.au/projects/rss/index/store_id/1/" title="Projects" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html">
+<!--[if  (lte IE 8) & (!IEMobile)]>
+<link rel="stylesheet" type="text/css" href="https://core-electronics.com.au/media/css_secure/37cb1b07f197c42b76ee4da1acf2ac99.css" media="all" />
+<![endif]-->
+<!--[if (gte IE 9) | (IEMobile)]><!-->
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/d5f0696fad5add9b7e56b0eb16c05af3.css" media="all">
+<!--<![endif]-->
+
+
+<script type="text/javascript">
+//<![CDATA[
+Mage.Cookies.path     = '/';
+Mage.Cookies.domain   = '.core-electronics.com.au';
+//]]>
+</script>
+<meta name="viewport" content="initial-scale=1.0, width=device-width">
+
+<script type="text/javascript">
+//<![CDATA[
+optionalZipCountries = ["HK","IE","MO","PA"];
+//]]>
+</script>
+ <!-- BEGIN GOOGLE UNIVERSAL ANALYTICS CODE -->
+<script type="text/javascript">
+//<![CDATA[
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-44034167-1', 'auto');
+ga('set', 'dimension1', 'guest');
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+ga('send', 'pageview');
+//]]>
+</script>
+<!-- END GOOGLE UNIVERSAL ANALYTICS CODE -->
+<!-- GRAHAM RANDOM TEST -->
+<script type="text/javascript">
+jQuery(document).ready(function() {
+jQuery("#search,#searchmob").focus(function(){
+if(window.$zopim === undefined || window.$zopim.livechat === undefined) {
+return;
+}
+$zopim(function() {
+$zopim.livechat.addTags("searching");
+});
+});
+jQuery("#search,#searchmob").focusout(function(){
+if(window.$zopim === undefined || window.$zopim.livechat === undefined) {
+return;
+}
+$zopim(function() {
+$zopim.livechat.removeTags("searching");
+});
+});
+jQuery("#search").keyup(function(){
+var searchterm = jQuery("#search").val();
+if (searchterm == "Search") {
+jQuery("#search").val("");
+}
+if (searchterm.indexOf("Search") >= 0) {
+var searchterm2 = searchterm.replace("Search", "");
+jQuery("#search").val(searchterm2);
+}
+});
+jQuery("#searchmob").keyup(function(event){
+var key = event.keyCode || event.which;
+if (key === 13) {
+jQuery("#search_mini_form").submit();
+}
+var searchmob = jQuery("#searchmob").val();
+if (searchmob == "Search") {
+jQuery("#searchmob").val("");
+}
+if (searchmob.indexOf("Search") >= 0) {
+var searchmob2 = searchmob.replace("Search", "");
+jQuery("#searchmob").val(searchmob2);
+}
+});
+if(window.location.href.indexOf("/search/") > -1)
+{
+var urlParams = new URLSearchParams(window.location.search);
+OriginalString=urlParams.get('q');
+StrippedString = OriginalString.replace(/(<([^>]+)>)/ig,"");
+jQuery("#search").val(StrippedString);
+jQuery("#searchmob").val(StrippedString);
+if(StrippedString.length > 35) {
+str = StrippedString.substring(0,35);
+jQuery("#search").val(str);
+jQuery("#searchmob").val(str);
+}
+}
+if(window.location.href.indexOf("/catalogsearch/") > -1)
+{
+var urlParams = new URLSearchParams(window.location.search);
+OriginalString=urlParams.get('q');
+StrippedString = OriginalString.replace(/(<([^>]+)>)/ig,"");
+jQuery("#search").val(StrippedString);
+jQuery("#searchmob").val(StrippedString);
+if(StrippedString.length > 35) {
+str = StrippedString.substring(0,35);
+jQuery("#search").val(str);
+jQuery("#searchmob").val(str);
+}
+}
+});
+</script>
+
+
+
+
+
+
+<script type="text/javascript">//<![CDATA[
+        var Translator = new Translate([]);
+        //]]></script>
+
+<!-- Start of coreelectronics Zendesk Widget script -->
+<iframe src="javascript:false" title="" style="display: none;" src="./Pycom FiPy Getting Started - Tutorial Australia_files/saved_resource.html"></iframe><script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="coreelectronics.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+/*]]>*/</script>
+<!-- End of coreelectronics Zendesk Widget script -->
+
+
+<link rel="”publisher”" href="https://core-electronics.com.au/tutorials/%E2%80%9Dhttps://plus.google.com/+CoreElectronicsAU%E2%80%9D">
+
+<script>(function() {
+  var _fbq = window._fbq || (window._fbq = []);
+  if (!_fbq.loaded) {
+    var fbds = document.createElement('script');
+    fbds.async = true;
+    fbds.src = '//connect.facebook.net/en_US/fbds.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(fbds, s);
+    _fbq.loaded = true;
+  }
+  _fbq.push(['addPixelId', '570757683025086']);
+})();
+window._fbq = window._fbq || [];
+window._fbq.push(['track', 'PixelInitialized', {}]);
+</script>
+<noscript>
+<img height="1" width="1" alt="" style="display:none" src="https://www.facebook.com/tr?id=570757683025086&amp;ev=PixelInitialized"/>
+</noscript>
+
+<meta name="p:domain_verify" content="b5cba853412534e403bf7bc961a6aec1"><script type="text/javascript" async="" src="./Pycom FiPy Getting Started - Tutorial Australia_files/embed.js"></script><style type="text/css">:root topadblock, :root td[valign="top"] > .mainmenu[style="padding:10px 0 0 0 !important;"], :root input[onclick^="window.open('http://www.friendlyduck.com/"], :root img[alt^="Fuckbook"], :root iframe[src^="http://cdn1.adexprt.com/"], :root iframe[src^="http://ad.yieldmanager.com/"], :root header#hdr + #main > div[data-hveid], :root div[role="navigation"] + c-wiz > script + div > .kxhcC, :root div[id^="mainads"], :root div[id^="dmRosAdWrapper"], :root div[id^="div-ads-"], :root iframe[id^="google_ads_iframe"], :root div[id^="crt-"][style], :root div[id^="cns_ads_"], :root div[id^="adspot-"], :root div[id^="tms-ad-dfp-"], :root div[id^="ads300_250-widget"], :root div[id^="ads250_250-widget"], :root div[id^="adrotate_widgets-"], :root div[id^="adfox_"], :root div[id^="ad_script_"], :root div[id^="ad_bigbox_"], :root div[id^="ad-server-"], :root div[id^="acm-ad-tag-"], :root div[id^="MarketGid"], :root div[id^="ADV-SLOT-"], :root div[data-native_ad], :root div[class^="proadszone-"], :root div[class^="pane-google-admanager-"], :root div[class^="index_displayAd_"], :root div[class^="index_adBeforeContent_"], :root div[class^="index_adAfterContent_"], :root div[class^="block-openx-"], :root div[class^="ads-partner-"], :root div[class^="ad_position_"], :root div[class^="ad_border_"], :root div[class^="Ad__container"], :root div[id^="div-adtech-ad-"], :root div[class*="_AdInArticle_"], :root div > [class][onclick*=".updateAnalyticsEvents"], :root bottomadblock, :root aside[itemtype="https://schema.org/WPAdBlock"], :root aside[id^="div-gpt-ad"], :root div[id^="ad-cid-"], :root aside[id^="advads_ad_widget-"], :root aside[id^="adrotate_widgets-"], :root a[target="_blank"][href^="http://api.taboola.com/"], :root a[style="display:block;width:300px;min-height:250px"][href^="http://li.cnet.com/click?"], :root a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[onmousedown^="this.href='http://staffpicks.outbrain.com/network/redir?"][target="_blank"], :root a[onmousedown^="this.href='http://paid.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[onmousedown^="this.href='/wp-content/embed-ad-content/"], :root div[class^="Ad__bigBox"], :root a[onclick*="//m.economictimes.com/etmack/click.htm"], :root a[href^="https://www.share-online.biz/affiliate/"], :root a[href^="https://www.moscarossa.biz/"], :root a[href^="https://www.incontri-matura.com/"], :root a[href^="https://www.goldenfrog.com/vyprvpn?offer_id="][href*="&aff_id="], :root a[href^="https://www.firstload.com/affiliate/"], :root a[href^="https://www.camyou.com/?cam="][href*="&track="], :root a[href^="https://www.bebi.com"], :root a[href^="https://www.adskeeper.co.uk/"], :root div[id^="ad-gpt-"], :root a[href^="https://windscribe.com/promo/"], :root a[href^="https://vodexor.us/"], :root a[href^="https://trust.zone/go/r.php?RID="], :root a[href^="https://traffic.bannerator.com/"], :root a[href^="https://tracking.truthfinder.com/?a="], :root a[href^="https://track.healthtrader.com/"], :root a[href^="https://track.clickmoi.xyz/"], :root a[href^="https://track.adform.net/"], :root a[href^="https://track.52zxzh.com/"], :root div[class^="gemini-ad"], :root a[href^="https://torguard.net/aff.php"], :root a[href^="https://t.mobtya.com/"], :root aside[id^="tn_ads_widget-"], :root a[href^="https://syndication.exoclick.com/splash.php?"], :root div[id^="YFBMSN"], :root a[href^="https://secure.eveonline.com/ft/?aid="], :root div[id^="zergnet-widget"], :root a[href^="https://rev.adsession.com/"], :root a[href^="https://redirect.ero-advertising.com/"], :root a[href^="https://www.pornhat.com/"][rel="nofollow"], :root a[href^="https://pubads.g.doubleclick.net/"], :root a[href^="https://prf.hn/click/"][href*="/adref:"], :root a[href^="https://mk-cdn.net/"], :root div[id^="proadszone-"], :root a[href^="https://mk-ads.com/"], :root a[href^="https://members.linkifier.com/public/affiliateLanding?refCode="], :root a[href^="https://medleyads.com/"], :root iframe[src^="http://cdn2.adexprt.com/"], :root div[id^="ads300_100-widget"], :root a[href^="https://lingthatsparleso.info/"], :root a[href^="https://land.rk.com/landing/"], :root a[href^="https://land.brazzersnetwork.com/landing/"], :root a[href^="https://jmp.awempire.com/"], :root a[href^="https://incisivetrk.cvtr.io/click?"], :root a[href^="https://iactrivago.ampxdirect.com/"], :root a[onmousedown^="this.href='http://staffpicks.outbrain.com/network/redir?"][target="_blank"] + .ob_source, :root a[href^="https://googleads.g.doubleclick.net/pcs/click"], :root a[href^="https://gogoman.me/"], :root a[href^="https://go.stripchat.com/"][href*="&campaignId="], :root div[class^="BlockAdvert-"], :root a[href^="https://go.onclasrv.com/"], :root a[href^="https://go.ad2up.com/"], :root a[href^="https://freeadult.games/"], :root a[href^="https://flirtaescopa.com/"], :root a[href^="https://farm.plista.com/pets"], :root a[href^="https://evaporate.pw/"], :root div[class^="local-feed-banner-ads"], :root a[href^="https://djtcollectorclub.org/"][href*="?affiliate_id="], :root a[href^="https://click.plista.com/pets"], :root a[href^="https://chaturbate.xyz/"], :root a[href^="https://chaturbate.jjgirls.com/"][href*="?tour="], :root a[href^="https://chaturbate.com/in/?tour="], :root a[href^="https://chaturbate.com/affiliates/"], :root a[href^="https://www.googleadservices.com/pagead/aclk?"], :root a[href^="https://awentw.com/"], :root a[href^="https://servedbyadbutler.com/"], :root a[href^="https://affiliates.bet-at-home.com/processing/"], :root a[href^="https://adswick.com/"], :root a[href^="https://adserver.adreactor.com/"], :root a[href^="https://refpaano.host/"], :root a[href^="https://adhealers.com/"], :root a[href^="https://ad.atdmt.com/"], :root a[href^="https://aaucwbe.com/"], :root a[href^="https://a.adtng.com/"], :root a[href^="http://xtgem.com/click?"], :root a[href^="https://ads.trafficpoizon.com/"], :root a[href^="http://wxdownloadmanager.com/dl/"], :root a[href^="http://www.zergnet.com/i/"], :root a[href^="http://www.usearchmedia.com/signup?"], :root a[href^="http://www.torntv-downloader.com/"], :root a[href^="http://www.tirerack.com/affiliates/"], :root a[href^="http://www.text-link-ads.com/"], :root div[id^="div_openx_ad_"], :root a[href^="http://www.streamate.com/exports/"], :root a[href^="http://www.sfippa.com/"], :root a[href^="http://www.xmediaserve.com/"], :root a[href^="http://www.sex.com/videos/?utm_"], :root a[href^="http://www.sex.com/?utm_"], :root a[onmousedown^="this.href='http://paid.outbrain.com/network/redir?"][target="_blank"], :root a[href^="http://www.roboform.com/php/land.php"], :root a[href^="http://www.quick-torrent.com/download.html?aff"], :root a[href^="http://www.pinkvisualgames.com/?revid="], :root a[href^="http://www.paddypower.com/?AFF_ID="], :root div[data-spotim-slot], :root a[href^="http://www.mysuperpharm.com/"], :root a[href^="http://www.myfreepaysite.com/sfw_int.php?aid"], :root a[href^="http://www.myfreepaysite.com/sfw.php?aid"], :root a[href^="http://www.myfreecams.com/?co_id="][href*="&track="], :root a[href^="http://www.moneyducks.com/"], :root a[href^="http://www.menaon.com/installs/"], :root a[href^="http://www.securegfm.com/"], :root a[href^="http://www.liversely.net/"], :root a[href^="http://www.linkbucks.com/referral/"], :root a[href^="http://www.ireel.com/signup?ref"], :root a[href^="http://www.incredimail.com/?id="], :root a[href^="http://www.idownloadplay.com/"], :root a[href^="http://www.hitcpm.com/"], :root a[href^="http://www.greenmangaming.com/?tap_a="], :root a[href^="http://www.gamebookers.com/cgi-bin/intro.cgi?"], :root a[href^="http://www.friendlyquacks.com/"], :root a[href^="http://www.friendlyduck.com/AF_"], :root a[href^="http://www.fpcTraffic2.com/blind/in.cgi?"], :root a[href^="http://www.fonts.com/BannerScript/"], :root a[href^="http://www.fleshlight.com/"], :root a[href^="http://www.flashx.tv/downloadthis"], :root a[href^="http://www.firstload.de/affiliate/"], :root a[href^="http://www.fducks.com/"], :root a[href^="http://www.faceporn.net/free?"], :root a[href^="http://www.epicgameads.com/"], :root a[href^="http://www.easydownloadnow.com/"], :root a[href^="http://www.duckssolutions.com/"], :root a[href^="https://go.trkclick2.com/"], :root a[href^="http://www.duckcash.eu/"], :root a[href^="http://www.drowle.com/"], :root a[onmousedown^="this.href='https://paid.outbrain.com/network/redir?"][target="_blank"], :root a[href^="http://www.downloadweb.org/"], :root a[href^="http://www.installads.net/"], :root a[href^="http://www.download-provider.org/"], :root a[href^="http://www.down1oads.com/"], :root iframe[id^="google_ads_frame"], :root a[href^="http://www.dealcent.com/register.php?affid="], :root a[href^="http://www.clkads.com/adServe/"], :root a[href^="http://www.clickansave.net/"], :root a[href^="http://www.cash-duck.com/"], :root a[href^="http://www.bitlord.me/share/"], :root a[href^="http://www.bet365.com/"][href*="?affiliate="], :root a[href^="http://www.bet365.com/"][href*="&affiliate="], :root a[href^="http://www.badoink.com/go.php?"], :root div[id^="yandex_ad"], :root a[href^="http://www.richducks.com/"], :root a[href^="http://www.babylon.com/welcome/index?affID"], :root a[href^="http://www.sexgangsters.com/?pid="], :root a[href^="http://www.amazon.co.uk/exec/obidos/external-search?"], :root a[href^="http://www.socialsex.com/"], :root a[href^="http://www.affbuzzads.com/affiliate/"], :root a[href^="https://www.camsoda.com/enter.php?id="], :root a[href^="http://www.afco2go.com/srv.php?"], :root a[href^="http://www.adxpansion.com"], :root div[id^="advads-"], :root a[href^="http://www.ringtonematcher.com/"], :root a[href^="http://www.adshost2.com/"], :root a[href^="http://www.ragazzeinvendita.com/?rcid="], :root a[href^="http://www.adbrite.com/mb/commerce/purchase_form.php?"], :root a[href^="http://www.TwinPlan.com/AF_"], :root a[href^="https://porndeals.com/?track="], :root a[href^="http://www.1clickmoviedownloader.info/"], :root div[class^="adbanner_"], :root a[href^="http://www.brightwheel.info/"], :root a[href^="http://www.1clickdownloader.com/"], :root a[href^="http://www.123-reg.co.uk/affiliate2.cgi"], :root div[id^="lazyad-"], :root a[href^="http://wopertific.info/"], :root a[href^="http://wgpartner.com/"], :root a[href^="http://webgirlz.online/landing/"], :root div[id^="ads300_600-widget"], :root div[class^="Ad__adContainer"], :root a[href^="http://web.adblade.com/"], :root a[href^="https://www.nutaku.net/signup/landing/"], :root a[href^="http://us.marketgid.com"], :root a[href^="http://www.freefilesdownloader.com/"], :root a[href^="http://ul.to/ref/"], :root a[href^="http://trk.mdrtrck.com/"], :root div[id^="div_ad_stack_"], :root a[href^="http://traffic.tc-clicks.com/"], :root a[href^="http://www.graboid.com/affiliates/"], :root a[href^="http://tracking.toroadvertising.com/"], :root a[href^="http://www.liutilities.com/"], :root a[href^="http://www.dl-provider.com/search/"], :root a[href^="http://tracking.deltamediallc.com/"], :root a[href^="https://www.popads.net/users/"], :root a[href^="https://sexdatingz.live/"], :root a[href^="https://adultfriendfinder.com/go/page/landing"], :root a[href^="http://tracking.crazylead.com/"], :root div[role="navigation"] + c-wiz > div > .kxhcC, :root a[href^="http://tracker.mybroadband.co.za/"], :root a[href^="http://track.adform.net/"], :root a[href^="http://tour.affbuzzads.com/"], :root a[href^="https://iac.ampxdirect.com/"], :root a[href^="http://t.mdn2015x3.com/"], :root a[href^="http://steel.starflavor.bid/"], :root a[href^="http://stateresolver.link/"], :root a[href^="http://sharesuper.info/"], :root a[href^="http://getlinksinaseconds.com/"], :root a[href^="http://secure.signup-way.com/"], :root a[href*=".clkcln.com/"], :root a[href^="http://secure.signup-page.com/"], :root [onclick^="window.open('http://adultfriendfinder.com/search/"], :root a[href^="http://secure.hostgator.com/~affiliat/"], :root a[href^="http://uploaded.net/ref/"], :root a[href^="http://s9kkremkr0.com/"], :root a[href*="/cmd.php?ad="], :root a[href^="http://refpaano.host/"], :root a[href^="http://record.commissionking.com/"], :root div[class*="-storyBodyAd-"], :root a[href^="http://record.betsafe.com/"], :root a[href^="http://websitedhoome.com/"], :root a[href^="http://see-work.info/"], :root a[href^="http://prousa.work/"], :root a[href^="http://gca.sh/user/register?ref="], :root a[href^="http://promos.bwin.com/"], :root a[href^="http://prochina.link/"], :root a[href^="http://z1.zedo.com/"], :root a[href^="http://pokershibes.com/index.php?ref="], :root a[href^="http://mojofun.info/"], :root a[href^="http://mmo123.co/"], :root a[href^="http://media.paddypower.com/redirect.aspx?"], :root a[href*=".qertewrt.com/"], :root a[href^="http://lp.ncdownloader.com/"], :root #rhs_block .xpdopen > ._OKe > div > .mod > ._yYf, :root a[href^="http://lp.ezdownloadpro.info/"], :root a[href^="https://track.trkinator.com/"], :root a[href^="https://ads.ad4game.com/"], :root a[href*="/adServe/banners?"], :root a[href^="http://liversely.com/"], :root a[href^="http://feeds1.validclick.com/"], :root a[href^="http://latestdownloads.net/download.php?"], :root a[href^="http://keep2share.cc/pr/"], :root div[data-ad-underplayer], :root a[href^="http://k2s.cc/code/"], :root a[href*=".bang.com/"][href*="&aff="], :root a[href^="http://join3.bannedsextapes.com/track/"], :root a[href^="https://secure.bstlnk.com/"], :root a[href^="http://green.trafficinvest.com/"], :root a[href^="http://jobitem.org/"], :root a[href^="//adbit.co/?a=Advertise&"], :root a[href^="http://istri.it/?"], :root a[href^="http://www.fbooksluts.com/"], :root a[href^="http://www.cdjapan.co.jp/aff/click.cgi/"], :root a[href^="http://c.actiondesk.com/"], :root a[href^="http://intent.bingads.com/"], :root a[href^="http://igromir.info/"], :root a[href^="http://cdn.adstract.com/"], :root a[href^="http://hyperlinksecure.com/go/"], :root a[href^="http://45eijvhgj2.com/"], :root a[href^="http://hpn.houzz.com/"], :root a[href^="//look.djfiln.com/"], :root a[href^="http://greensmoke.com/"], :root a[href^="http://farm.plista.com/pets"], :root a[href^="http://mo8mwxi1.com/"], :root div[class^="ResponsiveAd-"], :root a[href^="http://www.revenuehits.com/"], :root a[href^="http://go.seomojo.com/tracking202/"], :root div[id^="block-views-topheader-ad-block-"], :root a[href^="http://go.oclaserver.com/"], :root .__y_elastic .__y_item, :root a[href^="http://go.mobisla.com/"], :root a[href^="//srv.buysellads.com/"], :root a[href^="http://g1.v.fwmrm.net/ad/"], :root a[href^="http://imads.integral-marketing.com/"], :root a[href^="http://freesoftwarelive.com/"], :root a[href^="http://adtrackone.eu/"], :root a[href^="http://finaljuyu.com/"], :root a[href^="http://fileupnow.rocks/"], :root a[href^="http://fileloadr.com/"], :root a[href^="https://dltags.com/"], :root a[href^="http://onclickads.net/"], :root a[href^="http://www.terraclicks.com/"], :root a[href^="http://www.coinducks.com/"], :root a[href^="http://internalredirect.site/"], :root a[href^="http://extra.bet365.com/"][href*="?affiliate="], :root a[href^="http://ethfw0370q.com/"], :root a[href^="http://elitefuckbook.com/"], :root a[href^="https://www.brazzersnetwork.com/landing/"], :root [href*="//xml.revrtb.com/"], :root a[href^="http://elite-sex-finder.com/?"], :root a[href^="http://eclkmpsa.com/"], :root a[href*="//3wr110.xyz/"], :root a[href^="http://earandmarketing.com/"], :root a[href^="http://data.committeemenencyclopedicrepertory.info/"], :root #content > #center > .dose > .dosesingle, :root a[href^="http://campaign.bharatmatrimony.com/track/"], :root a[href^="http://d2.zedo.com/"], :root a[href^="http://contractallsticker.net/"], :root a[href^="http://codec.codecm.com/"], :root div[id^="google_dfp_"], :root a[href^="//5e1fcb75b6d662d.com/"], :root a[href^="http://googleads.g.doubleclick.net/pcs/click"], :root div[id^="ads120_600-widget"], :root a[href^="http://clk.directrev.com/"], :root a[href^="http://refer.webhostingbuzz.com/"], :root a[href^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://clickserv.sitescout.com/"], :root a[href*=".intab.fun/"], :root a[href^="http://clicks.guamwnvgashbkashawhgkhahshmashcas.pw/"], :root a[href^="http://www.downloadplayer1.com/"], :root a[href^="http://clicks.binarypromos.com/"], :root div[class^="largeRectangleAd_"], :root a[href^="https://dediseedbox.com/clients/aff.php?"], :root a[href^="http://www.wantstraffic.com/"], :root .lads[width="100%"][style="background:#FFF8DD"], :root a[href^="http://databass.info/"], :root a[href^="http://www.urmediazone.com/signup"], :root a[href^="http://ads.pheedo.com/"], :root a[href^="http://click.plista.com/pets"], :root a[href^="http://chaturbate.com/affiliates/"], :root a[href^="http://www.friendlyadvertisements.com/"], :root a[href^="http://cdn3.adbrau.com/"], :root a[href^="http://get.slickvpn.com/"], :root a[href^="http://2pxg8bcf.top/"], :root a[href^="http://cpaway.afftrack.com/"], :root a[href^="http://cdn.adsrvmedia.net/"], :root a[href^="http://360ads.go2cloud.org/"], :root a[href^="http://dftrck.com/"], :root a[href^="http://casino-x.com/?partner"], :root div[data-flt-ve="sponsored_search_ads"], :root a[href^="http://campeeks.com/"][href*="&utm_"], :root a[href^="http://ads.expekt.com/affiliates/"], :root a[href^="http://callville.xyz/"], :root div[itemtype="http://schema.org/WPAdBlock"], :root a[href^="http://xads.zedo.com/"], :root a[href^="http://c.jumia.io/"], :root a[href^="https://gamescarousel.com/"], :root a[href^="http://down1oads.com/"], :root a[href^="http://buysellads.com/"], :root a[href^="http://serve.williamhill.com/promoRedirect?"], :root a[href^="https://uncensored.game/"], :root a[href^="http://feedads.g.doubleclick.net/"], :root a[href^="http://bs.serving-sys.com/"], :root a[href^="http://popup.taboola.com/"], :root a[href^="http://betahit.click/"], :root a[href^="http://cinema.friendscout24.de?"], :root [lazy-ad="lefttop_banner"], :root a[href^="http://servicegetbook.net/"], :root a[href^="https://trklvs.com/"], :root a[href^="http://bestorican.com/"], :root a[href^="http://bcp.crwdcntrl.net/"], :root a[href^="http://bc.vc/?r="], :root a[href^="http://banners.victor.com/processing/"], :root a[href^="https://uncensored3d.com/"], :root a[href^="http://dethao.com/"], :root div[class$="dealnews"] > .dealnews, :root a[href^="http://click.payserve.com/"], :root a[href^="http://pubads.g.doubleclick.net/"], :root a[href^="http://azmobilestore.co/"], :root a[href^="http://install.securewebsiteaccess.com/"], :root .inlineNewsletterSubscription + .inlineNewsletterSubscription div[class$="_item"], :root a[href^="http://clkmon.com/adServe/"], :root a[href^="https://www.adultempire.com/"][href*="?partner_id="], :root a[href^="http://www.torntvdl.com/"], :root a[href^="http://at.atwola.com/"], :root a[href^="//88d7b6aa44fb8eb.com/"], :root a[href^="http://api.ringtonematcher.com/"], :root div[id^="ad-position-"], :root a[href^="http://affiliate.glbtracker.com/"], :root a[href^="http://anonymous-net.com/"], :root a[href^="https://www.dsct1.com/"], :root a[href^="http://amzn.to/"] > img[src^="data"], :root .icons-rss-feed + .icons-rss-feed div[class$="_item"], :root a[href^="http://aflrm.com/"], :root a[href^="http://affiliates.pinnaclesports.com/processing/"], :root a[href^="http://affiliate.godaddy.com/"], :root a[href^="http://partner.sbaffiliates.com/"], :root a[href^="http://affiliate.coral.co.uk/processing/"], :root a[href^="http://aff.ironsocket.com/"], :root a[href^="http://zevera.com/afi.html"], :root a[href^="http://adsrv.keycaptcha.com"], :root a[href^="http://play4k.co/"], :root a[href^="http://adserving.liveuniversenetwork.com/"], :root a[href^="http://adserving.unibet.com/"], :root a[href^="https://bs.serving-sys.com"], :root a[href^="https://atomidownload.com/"], :root a[href^="http://adtransfer.net/"], :root a[href^="http://adserver.itsfogo.com/"], :root a[href^="https://secure.adnxs.com/clktrb?"], :root a[href^="http://adserver.adtechus.com/"], :root a[href^="http://adserver.adreactor.com/"], :root a[href^="http://www.yourfuckbook.com/?"], :root .GHOFUQ5BG2 > .GHOFUQ5BF2 > .GHOFUQ5BG5, :root a[href^="http://ads.sprintrade.com/"], :root .__ywvr .__y_item, :root a[href^="http://download-performance.com/"], :root #\5f _mom_ad_12, :root a[href^="http://ads.integral-marketing.com/"], :root a[href^="http://adserver.adtech.de/"], :root a[href*="deliver.trafficfabrik.com"], :root a[href^="http://ads.betfair.com/redirect.aspx?"], :root a[href^="http://ads.affbuzzads.com/"], :root a[href^="http://online.ladbrokes.com/promoRedirect?"], :root a[href^="http://go.trafficshop.com/"], :root a[href^="http://ads.ad-center.com/"], :root div[id^="advt-"], :root a[href^="http://admingame.info/"], :root a[href^="http://adlev.neodatagroup.com/"], :root div[id^="q1-adset-"], :root a[href^="http://adfarm.mediaplex.com/"], :root a[href^="http://ad.doubleclick.net/"], :root a[href^="http://ad.au.doubleclick.net/"], :root a[href^="http://www.adskeeper.co.uk/"], :root a[href^="http://ad-emea.doubleclick.net/"], :root a[href*="/servlet/click/zone?"], :root a[href^="http://ad-apac.doubleclick.net/"], :root a[href^="https://understandsolar.com/signup/?lead_source="][href*="&tracking_code="], :root a[href^="http://hdplugin.flashplayer-updates.com/"], :root a[href^="http://data.ad.yieldmanager.net/"], :root a[href^="http://a63t9o1azf.com/"], :root a[href^="http://NowDownloadAll.com"], :root a[href^="http://www.accuserveadsystem.com/accuserve-go.php?"], :root a[href^="http://c.ketads.com/"], :root a[target="_blank"][onmousedown="this.href^='http://paid.outbrain.com/network/redir?"], :root #tads + div + .c, :root a[href^="http://adtrack123.pl/"], :root a[href^="http://9amq5z4y1y.com/"], :root [id*="MGWrap"], :root a[href^="http://6kup12tgxx.com/"], :root a[href^="http://www.ducksnetwork.com/"], :root a[href^="http://3wr110.net/"], :root a[href^="http://www5.smartadserver.com/call/pubjumpi/"], :root a[href^="//ads.ad-center.com/"], :root a[href^="http://1phads.com/"], :root a[href^="https://chaturbate.com/in/?track="], :root a[href^="http://www1.clickdownloader.com/"], :root a[href^="//tracking.content-recommendation.net/"][href*="/sponsored/click.html?"], :root a[href^="http://adclick.g.doubleclick.net/"], :root #center_col > #resultStats + div[style="border:1px solid #dedede;margin-bottom:11px;padding:5px 7px 5px 6px"], :root a[href^="https://www.secureupload.eu/suprerefid="], :root a[href^="https://track.themadtrcker.com/"], :root a[href^="http://yads.zedo.com/"], :root #mbEnd[cellspacing="0"][cellpadding="0"], :root a[href^="//t.MtagMonetizationA.com/"], :root a[href^="//nlkdom.com/"], :root #MAIN.ShowTopic > .ad, :root a[href^="http://findersocket.com/"], :root a[href^="https://m.do.co/c/"] > img, :root a[href^="http://cdn3.adexprts.com/"], :root a[href^="//jsmptjmp.com/"], :root .ra[width="30%"][align="right"] + table[width="70%"][cellpadding="0"], :root a[href^="http://searchtabnew.com/"], :root a[href^="http://pan.adraccoon.com?"], :root a[href^="//healthaffiliate.center/"], :root a[href^="https://clixtrac.com/"], :root a[href^="//go.onclasrv.com/"], :root a[href^="http://games.ucoz.ru/"][target="_blank"], :root [id*="ScriptRoot"], :root div[id^="advads_"], :root a[href^="//db52cc91beabf7e8.com/"], :root a[href^="http://ads.activtrades.com/"], :root #\5f _mom_ad_2, :root div[id^="drudge-column-ads-"], :root a[href^="//api.ad-goi.com/"], :root a[href^="http://www.afgr2.com/"], :root #mn div[style="position:relative"] > #center_col > ._Ak, :root a[href^="http://bcntrack.com/"], :root a[href^="https://www.oboom.com/ad/"], :root a[href^="//4f6b2af479d337cf.com/"], :root a[href^="http://t.mdn2015x1.com/"], :root a[href^="http://s5prou7ulr.com/"], :root #content > #right > .dose > .dosesingle, :root a[href^="http://9nl.es/"], :root a[href^="https://www.friendlyduck.com/AF_"], :root #center_col > #resultStats + div + #res + #tads, :root a[href^="//40ceexln7929.com/"], :root a[href^="//00ae8b5a9c1d597.com/"], :root div[id^="div-gpt-ad"], :root a[href^="http://fusionads.net"], :root a[href^="https://awejmp.com/"], :root a[href^=" http://www.sex.com/"][href*="&utm_"], :root a[href^="https://keep2share.cc/pr/"], :root [onclick*="content.ad/"], :root div[class^="awpcp-random-ads"], :root a[href^="http://galleries.securewebsiteaccess.com/"], :root a[href^=" http://n47adshostnet.com/"], :root .section-result[data-result-ad-type], :root script[src^="http://free-shoutbox.net/app/webroot/shoutbox/sb.php?shoutbox="] + #freeshoutbox_content, :root a[href^=" http://ads.ad-center.com/"], :root .GPMV2XEDA2 > .GPMV2XEDP1 > .GPMV2XEDJBB, :root a[href*="onclkds."], :root div[id^="dfp-slot-"], :root .l-container > #fishtank, :root a[href^="//go.vedohd.org/"], :root a[href^="https://fileboom.me/pr/"], :root a[href^="http://marketgid.com"], :root a[href*="pussl3.com"], :root div[itemtype="http://www.schema.org/WPAdBlock"], :root .__zinit .__y_item, :root .ch[onclick="ga(this,event)"], :root a[href^="https://ad.doubleclick.net/"], :root a[href*="letsadvertisetogether.com"], :root div[class^="AdhesionAd_"], :root .trc_rbox_div .syndicatedItem, :root #ads > .dose > .dosesingle, :root a[href^="//bwnjijl7w.com/"], :root a[href*="delivery.trafficfabrik.com"], :root a[href^="http://galleries.pinballpublishernetwork.com/"], :root a[href^="http://4c7og3qcob.com/"], :root a[href*="?adlivk="][href*="&refer="], :root a[href^="http://data.linoleictanzaniatitanic.com/"], :root a[href*="=exoclick"], :root div[class^="backfill-taboola-home-slot-"], :root a[href^="https://gghf.mobi/"], :root a[href*="=adscript"], :root a[href^="http://abc2.mobile-10.com/"], :root #mn #center_col > div > h2.spon:first-child, :root a[href*="=Adtracker"], :root FBS-AD, :root .ra[align="right"][width="30%"], :root a[href*="5iclx7wa4q.com"], :root a[href*=".revimedia.com/"], :root a[href*=".irtyc.com/"], :root [lazy-ad="leftbottom_banner"], :root a[href^="http://fsoft4down.com/"], :root a[href*="ad2upapp.com/"], :root .plista_widget_belowArticleRelaunch_item[data-type="pet"], :root div[data-mediatype="advertising"], :root a[href*=".adsrv.eacdn.com/"] > img, :root a[href^="http://lp.ilivid.com/"], :root a[href*=".inclk.com/"], :root a[href^="https://transfer.xe.com/signup/track/redirect?"], :root a[href*=".ichlnk.com/"], :root a[href^="http://api.content.ad/"], :root a[href*=".approvallamp.club/"], :root a[href^="http://spygasm.com/track?"], :root .ob_dual_right > .ob_ads_header ~ .odb_div, :root a[href*=".adk2x.com/"], :root a[href^="http://www.firstload.com/affiliate/"], :root a[href^="http://duckcash.eu/"], :root a[href^="http://www.mobileandinternetadvertising.com/"], :root a[data-widget-outbrain-redirect^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://www.downloadthesefiles.com/"], :root a[href^="http://secure.cbdpure.com/aff/"], :root a[data-url^="http://paid.outbrain.com/network/redir?"] + .author, :root a[href^="http://www.my-dirty-hobby.com/?sub="], :root a[href^="http://liversely.net/"], :root a[href^="http://www.bluehost.com/track/"] > img, :root a[data-url^="http://paid.outbrain.com/network/redir?"], :root a[data-redirect^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://www.twinplan.com/AF_"], :root a[href^="http://n.admagnet.net/"], :root a[href^="http://connectlinking6.com/"], :root a[data-obtrack^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://www.getyourguide.com/?partner_id="], :root [onclick^="window.open('https://www.brazzersnetwork.com/landing/"], :root .plistaList > .itemLinkPET, :root a[href^="http://mgid.com/"], :root a[href^="http://adultfriendfinder.com/p/register.cgi?pid="], :root a[href*="a2g-secure.com"], :root a[href^="http://espn.zlbu.net/"], :root a[data-redirect^="this.href='http://paid.outbrain.com/network/redir?"], :root a[href^="http://k2s.cc/pr/"], :root p[id^="div-gpt-ad-"], :root #assetsListings[style="display: block;"], :root [onclick^="window.open('window.open('//delivery.trafficfabrik.com/"], :root a[href^="https://www.financeads.net/tc.php?"], :root [lazy-ad="top_banner"], :root a[href^="http://www.on2url.com/app/adtrack.asp"], :root #\5f _nq__hh[style="display:block!important"], :root a[href^="http://guideways.info/"], :root a[href^="http://campaign.bharatmatrimony.com/cbstrack/"], :root a[href*="//xml.revrtb.com/"], :root #rhs_block .mod > .gws-local-hotels__booking-module, :root a[href^="http://adrunnr.com/"], :root [lazy-ad="leftthin_banner"], :root a[href^="http://go.ad2up.com/"], :root [id*="MarketGid"], :root [id^="bunyad_ads_"], :root #mn #center_col > div > h2.spon:first-child + ol:last-child, :root .plistaList > .plista_widget_underArticle_item[data-type="pet"], :root a[href^="http://goldmoney.com/?gmrefcode="], :root a[href^="http://adexprt.me/"], :root a[href^="http://papi.mynativeplatform.com:80/pub2/"], :root LEADERBOARD-AD, :root a[href^="https://topoffers.com/"][href*="/?pid="], :root a[href^="http://vinfdv6b4j.com/"], :root a[href^="http://bonusfapturbo.nmvsite.com/"], :root DFP-AD, :root a[href^="//www.mgid.com/"], :root div[id^="ad-div-"], :root #center_col > div[style="font-size:14px;margin-right:0;min-height:5px"] > div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff8e7"], :root a[href^="http://track.affiliatenetwork.co.za/"], :root a[data-redirect^="http://paid.outbrain.com/network/redir?"], :root .jobs-information-call-to-action + .jobs-information-call-to-action div[class$="_item"], :root .__y_inner > .__y_item, :root a[href^="https://secure.cbdpure.com/aff/"], :root a[href^="https://bullads.net/get/"], :root AMP-AD, :root AD-SLOT, :root div[class^="lifeOnwerAd"], :root a[data-oburl^="http://paid.outbrain.com/network/redir?"], :root div[data-subscript="Advertising"], :root .widget-pane-section-result[data-result-ad-type], :root a[href^="http://ffxitrack.com/"], :root #center_col > #main > .dfrd > .mnr-c > .c._oc._zs, :root a[href^="http://t.mdn2015x2.com/"], :root a[href^="http://b.bestcompleteusa.info/"], :root .trc_rbox_div .syndicatedItemUB, :root a[href^="http://www.myvpn.pro/"], :root a[href^="http://hyperies.info/"], :root a[href^="//www.pd-news.com/"], :root .trc_rbox .syndicatedItem, :root a[href^="http://pwrads.net/"], :root div[class^="adpubs-"], :root #mn div[style="position:relative"] > #center_col > div > ._dPg, :root .rhsvw[style="background-color:#fff;margin:0 0 14px;padding-bottom:1px;padding-top:1px;"], :root a[href^="http://www.pinkvisualpad.com/?revid="], :root a[href^="//porngames.adult/?SID="], :root #main-content > [style="padding:10px 0 0 0 !important;"], :root a[href^="http://www.webtrackerplus.com/"], :root .GJJKPX2N1 > .GJJKPX2M1 > .GJJKPX2P4, :root a[href^="http://centertrust.xyz/"], :root .ob_container .item-container-obpd, :root a[href^="https://intrev.co/"], :root a[href^="http://record.sportsbetaffiliates.com.au/"], :root #topstuff > #tads, :root .mw > #rcnt > #center_col > #taw > #tvcap > .c, :root div[id^="google_ads_iframe_"], :root a[href^="http://www.pheedo.com/"], :root a[href^="http://www.affiliates1128.com/processing/"], :root .vi-lb-placeholder[title="ADVERTISEMENT"], :root a[href^="https://bongacams2.com/track?"], :root a[href^="//zenhppyad.com/"], :root .gbfwa > div[class$="_item"], :root a[href^="http://prochina.space/"], :root a[href^="http://www.uniblue.com/cm/"], :root a[data-redirect^="http://click.plista.com/pets"], :root #rhs_block > script + .c._oc._Ve.rhsvw, :root .rscontainer > .ellip, :root a[href^="http://track.incognitovpn.com/"], :root a[href^="http://click.guamwnvgashbkashawhgkhahshmashcas.pw/"], :root .__ywl .__y_item, :root a[href^="http://y1jxiqds7v.com/"], :root a[href^="http://www.afgr3.com/"], :root [ad-id^="googlead"], :root a[href^="https://control.trafficfabrik.com/"], :root a[href^="http://hd-plugins.com/download/"], :root a[href^="//voyeurhit.com/cs/"], :root a[href^="http://track.trkvluum.com/"], :root a[href*="/adrotate-out.php?"], :root [src^="/Redirect.a2b?"], :root a[href*=".clksite.com/"], :root #center_col > #resultStats + #tads, :root .__yinit .__y_item, :root .ra[align="left"][width="30%"], :root a[href^="https://trackjs.com/?utm_source"], :root AFS-AD, :root a[href^="http://server.cpmstar.com/click.aspx?poolid="], :root #cnt #center_col > #res > #topstuff > .ts, :root #cnt #center_col > #taw > #tvcap > .c._oc._Lp, :root .trc_rbox_div a[target="_blank"][href^="http://tab"], :root .GKJYXHBF2 > .GKJYXHBE2 > .GKJYXHBH5, :root a[href*="googleme.eu"], :root .mod > ._jH + .rscontainer, :root .GFYY1SVD2 > .GFYY1SVC2 > .GFYY1SVF5, :root a[href^="https://dcs.adgear.com/clicks/"], :root a[data-oburl^="https://paid.outbrain.com/network/redir?"], :root a[href^="http://affiliates.score-affiliates.com/"], :root ADS-RIGHT, :root a[href^="https://betway.com/"][href*="&a="], :root a[href^="http://rekoverr.com/"], :root #rhswrapper > #rhssection[border="0"][bgcolor="#ffffff"], :root .Mpopup + #Mad > #MadZone, :root a[href^="http://landingpagegenius.com/"], :root a[href^="http://www.streamtunerhd.com/signup?"], :root #ssmiwdiv[jsdisplay], :root a[href^="https://www.adxtro.com/"], :root a[href^="http://paid.outbrain.com/network/redir?"], :root a[href^="http://easydownload4you.com/"], :root #rhs_block > #mbEnd, :root #center_col > #\5f Emc, :root div[id^="dfp-ad-"], :root .GB3L-QEDGY .GB3L-QEDF- > .GB3L-QEDE-, :root #rhs_block .mod > .luhb-div > div[data-async-type="updateHotelBookingModule"], :root a[href^="http://srvpub.com/"], :root a[href^="http://a.adquantix.com/"], :root a[href^="http://ads2.williamhill.com/redirect.aspx?"], :root iframe[src^="http://static.mozo.com.au/strips/"], :root a[href^="https://www.spyoff.com/"], :root AD-TRIPLE-BOX, :root input[onclick^="window.open('http://www.FriendlyDuck.com/"], :root a[href^="//z6naousb.com/"], :root a[href^="http://taboola-"][href*="/redirect.php?app.type="], :root .mw > #rcnt > #center_col > #taw > .c, :root .rc-cta[data-target], :root #rhs_block > .ts[cellspacing="0"][cellpadding="0"][style="padding:0"], :root .GFYY1SVE2 > .GFYY1SVD2 > .GFYY1SVG5, :root #flowplayer > div[style="position: absolute; width: 300px; height: 275px; left: 222.5px; top: 85px; z-index: 999;"], :root a[href^="http://ddownload39.club/"], :root a[href^="http://www.sex.com/pics/?utm_"], :root a[href^="http://vo2.qrlsx.com/"], :root a[href^="http://engine.newsmaxfeednetwork.com/"], :root a[href^="http://ad.yieldmanager.com/"], :root a[href^="http://www.plus500.com/?id="], :root #flowplayer > div[style="z-index: 208; position: absolute; width: 300px; height: 275px; left: 222.5px; top: 85px;"], :root a[href^="http://cwcams.com/landing/click/"], :root a[href^="https://watchmygirlfriend.tv/"], :root .nrelate .nr_partner, :root #center_col > #resultStats + #tads + #res + #tads, :root .trc_related_container div[data-item-syndicated="true"], :root a[href^="//medleyads.com/spot/"], :root a[href*="mfroute.com/"], :root .trc_rbox_border_elm .syndicatedItem, :root a[href^="http://www.firstclass-download.com/"], :root a[href*=".trust.zone"], :root a[href^="http://dwn.pushtraffic.net/"], :root a[href$="/vghd.shtml"], :root a[href^="http://tezfiles.com/pr/"], :root a[href^="http://t.wowtrk.com/"], :root a[href^="http://adprovider.adlure.net/"], :root a[href^="https://porngames.adult/?SID="], :root #\5f _admvnlb_modal_container, :root a[href^="http://adf.ly/?id="], :root #center_col > #taw > #tvcap > .rscontainer, :root #rhs_block > ol > .rhsvw > .kp-blk > .xpdopen > ._OKe > ol > ._DJe > .luhb-div, :root a[href^="http://linksnappy.com/?ref="], :root #main_col > #center_col div[style="font-size:14px;margin:0 4px;padding:1px 5px;background:#fff7ed"], :root a[href^="http://webtrackerplus.com/"], :root a[href^="http://clickandjoinyourgirl.com/"], :root #center_col > #res > #topstuff + #search > div > #ires > #rso > #flun, :root a[href^="http://www.seekbang.com/cs/"], :root a[href^="http://syndication.exoclick.com/"], :root a[href^="http://bluehost.com/track/"], :root a[href^="https://squren.com/rotator/?atomid="], :root #resultspanel > #topads, :root a[href^="http://n217adserv.com/"], :root a[href^="//4c7og3qcob.com/"], :root #header + #content > #left > #rlblock_left, :root a[href*="emprestimo.eu"] { display: none !important; }</style><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_dialog_advanced{border-radius:8px;padding:10px}.fb_dialog_content{background:#fff;color:#373737}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{left:5px;right:auto;top:5px}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{height:100%;left:0;margin:0;overflow:visible;position:absolute;top:-10000px;transform:none;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{background:none;height:auto;min-height:initial;min-width:initial;width:auto}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{clear:both;color:#fff;display:block;font-size:18px;padding-top:20px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .4);bottom:0;left:0;min-height:100%;position:absolute;right:0;top:0;width:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_mobile .fb_dialog_iframe{position:sticky;top:0}.fb_dialog_content .dialog_header{background:linear-gradient(from(#738aba), to(#2c4987));border-bottom:1px solid;border-color:#1d3c78;box-shadow:white 0 1px 1px -1px inset;color:#fff;font:bold 14px Helvetica, sans-serif;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:linear-gradient(from(#4267B2), to(#2a4887));background-clip:padding-box;border:1px solid #29487d;border-radius:3px;display:inline-block;line-height:18px;margin-top:3px;max-width:85px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{background:none;border:none;color:#fff;font:bold 12px Helvetica, sans-serif;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #4a4a4a;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f5f6f7;border:1px solid #4a4a4a;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-position:50% 50%;background-repeat:no-repeat;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}</style><style media="print" class="jx_ui_StyleSheet" __jx__id="___$_2" type="text/css">.zopim { display: none !important }</style></head>
+<body class=" kbase-article-article">
+<section class="mt-container">
+
+
+
+
+
+
+<script type="text/javascript">
+
+var $jk = jQuery.noConflict();
+
+$jk(window).resize(function () {
+if($jk('#notification-bar').is(':visible')) {
+var height=$jk("#notification-bar").height();
+var size =  parseInt($jk('#notification').css('font-size'));
+var margintop=size + height;
+ $jk("body").css("margin-top", margintop);
+}
+});
+
+function notification() {
+if($jk('#notification-bar').is(':visible')) {
+var height=$jk("#notification-bar").height();
+var size =  parseInt($jk('#notification').css('font-size'));
+var margintop=size + height;
+ $jk("body").css("margin-top", margintop);
+var name="clear_notification_bar_tradinghours";
+Mage.Cookies.clear('name');
+Mage.Cookies.set("clear_notification_bar_tradinghours","",new Date((new Date()).getTime() + 365*24*60*60*1000),"/");
+}
+}
+setTimeout(notification, 300);
+
+</script>
+
+
+<div class="menu_left_list" id="mobile_menulist" style="">
+
+	<div class="left_list_search_top">
+<div class="mobile_header_ul_left"><a style="cursor:pointer;" onclick="mobilemenu(&#39;mobile_menulist&#39;)"><span>Menu</span></a></div>
+<div class="mobile_header_ul_right"><a class="close" onclick="mobilemenu(&#39;mobile_menulist&#39;)"></a></div>
+</div>
+	<div class="left_list_search_bottom">
+		<ul>
+			<li><a href="https://core-electronics.com.au/">Home</a></li>
+			<li><a href="https://core-electronics.com.au/categories/">Shop</a></li>
+            <li><a href="JavaScript:void(0)">Learn</a></li>
+
+
+<li class="mobile-side-learn"><a href="https://core-electronics.com.au/tutorials">- Tutorials</a></li>
+
+        
+        <li class="mobile-side-learn">
+    <a href="https://core-electronics.com.au/projects">- Projects</a>
+</li>
+
+<li class="mobile-side-learn"><a href="https://core-electronics.com.au/courses">- Courses</a></li>
+
+
+<li class="mobile-side-learn"> <a href="https://core-electronics.com.au/workshops.html">- Workshops</a></li>
+
+
+                <li class="mobile-side-learn"><a href="https://core-electronics.com.au/videos">- Videos</a></li>
+     
+
+
+
+<li> <a href="JavaScript:void(0)">Support</a></li>
+
+<li class="mobile-side-learn"> <a href="https://forum.core-electronics.com.au/">- Forum</a></li>
+<li class="mobile-side-learn"> <a href="https://core-electronics.com.au/customer-service/">- FAQ</a></li>
+<li class="mobile-side-learn"> <a href="https://www.education.core-electronics.com.au/">- Teachers &amp; Educators</a></li>
+
+<li><a href="https://core-electronics.com.au/electronics-blog">Blog</a></li>
+
+
+			<li><a href="https://core-electronics.com.au/customer/account/">Account Area</a></li>
+			<li><a href="https://core-electronics.com.au/customer/account/logout/">Sign Out</a></li>
+<li class="mobile_phone">
+
+	<div><a class="mobile_phone_img" href="tel:+61 2 4058 2818"><span>02 4058 2818</span></a></div>	<!--<span class="mobile_phone_img">
+	<img src=""/></span><span><a href="tel:(02) 4957 7931">(02) 4957 7931</a></span>--></li>
+
+
+
+		</ul>
+	</div>
+</div>
+<script>
+	 $rp =jQuery.noConflict();
+</script>
+<script>
+function mobilemenu(id) {
+
+
+var e = document.getElementById(id);
+if(e.style.display == 'block')
+e.style.display = 'none';
+else
+e.style.display = 'block';
+
+	$rp("body").toggleClass("body_menu");
+
+$rp( document ).width();
+
+}
+
+</script>
+<div class="site-overlay"></div>
+<div class="wrapper">
+        <noscript>
+        <div class="global-site-notice noscript">
+            <div class="notice-inner">
+                <p>
+                    <strong>JavaScript seems to be disabled in your browser.</strong><br />
+                    You must have JavaScript enabled in your browser to utilize the functionality of this website.                </p>
+            </div>
+        </div>
+    </noscript>
+    <div class="page">
+        
+<div class="mobile_header">
+<div class="mobile_header_left"><a style="cursor:pointer;" onclick="mobilemenu(&#39;mobile_menulist&#39;)"></a></div>
+<div class="mobile_header_middal"><a href="https://core-electronics.com.au/"> <img src="./Pycom FiPy Getting Started - Tutorial Australia_files/logo.png" alt="Core Electronics"> </a></div>
+<div class="header-aw-acp-cart">
+<div class="mobile_header_right">
+<a href="https://core-electronics.com.au/checkout/cart/"><h1></h1></a></div>
+</div>
+<div class="mobile-searchbox">
+<div class="mobile_search"><form id="search_mini_form" action="https://core-electronics.com.au/search/index/post/" method="get">
+<input type="hidden" id="solrrun" value="0">
+<fieldset>
+<div class="input-box">
+<label for="search">Search:</label>
+<input id="searchmob" type="text" name="q" value="Search" class="input-text mob-input-text" autocomplete="off">
+<button type="submit" title="" class="button search-button"><span><span>search</span></span></button>
+<div id="search_autocomplete" class="search-autocomplete"></div>
+<script type="text/javascript">
+//<![CDATA[
+var searchForm = new Varien.searchForm('search_mini_form', 'searchmob', 'Search');
+var SolrBridgeAutocomplete = new SolrBridgeSearch('searchmob',{id:'autocomplete',target:'#search_mini_form',inputid:'searchmob',containerid:'search_mini_form',boxWidth:469,searchTextPlaceHolder:'Search',currencySign:'&nbsp;$&nbsp;',currencycode:'AUD',ajaxBaseUrl:'https://core-electronics.com.au/',searchResultUrl:'https://core-electronics.com.au/search',viewAllResultText:'View all search results for %s',categoryText:'Categories',viewAllCategoryText:'View all categories >>',viewAllBrandsText:'View all brands >>',keywordsText:'Keywords',productText:'product',productsText:'products',brandText:'Brands',storetimestamp:'1556508110',storeid:'1',customergroupid:'0',categoryRedirect:'0',showBrand:'1',showBrandAttributeCode:'aw_shopbybrand_brand',displaykeywordsuggestion:'true',displayResultOfText:'Search results for %s',displayResultOfInsteadText:'Search results for %s instead',currencyPos:'before',displayThumb:'1',allowFilter:'1',categoryLimit:'3',brandLimit:'3',fromPriceText:'from',ajaxprice:1});
+var brandimagepaths = {"Arduino":"aw_shopbybrand\/solrimage\/\/a\/r\/arduino_logo_sml_1.png","Ciseco":"aw_shopbybrand\/solrimage\/\/c\/i\/ciseco_logo_small.png","Mecanique":"aw_shopbybrand\/solrimage\/\/m\/e\/mecanique_logo_small.png","Kinsten":"aw_shopbybrand\/solrimage\/\/k\/i\/kinsten_logo_small.png","Sure Electronics":"aw_shopbybrand\/solrimage\/\/s\/u\/sure_electronics_logo_small.png","DFRobot":"aw_shopbybrand\/solrimage\/\/d\/f\/dfrobot_logo_small.png","Saleae":"aw_shopbybrand\/solrimage\/\/s\/a\/saleae_logo_small.png","Adafruit":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit_small.png","Rigol":"aw_shopbybrand\/solrimage\/\/r\/i\/rigol_small_1.png","Pololu":"aw_shopbybrand\/solrimage\/\/p\/o\/pololu_australia_small.png","Seeed Studio":"aw_shopbybrand\/solrimage\/\/s\/e\/seeed_studio_australia_logo.png","Pimoroni":"aw_shopbybrand\/solrimage\/\/p\/i\/pimoroni_australia_logo_sm_1.png","Intel Edison":"aw_shopbybrand\/solrimage\/\/i\/n\/intel_edison_australia_logo_sm.png","Sparkfun":"aw_shopbybrand\/solrimage\/\/s\/p\/sparkfun_logo_small.png","Freetronics":"aw_shopbybrand\/solrimage\/\/f\/r\/freetronics_logo_small.png","LulzBot":"aw_shopbybrand\/solrimage\/\/l\/u\/lulzbot_logo_sml_png.png","Core Electronics":"aw_shopbybrand\/solrimage\/\/c\/o\/core-electronics-solr.png","Micropython":"aw_shopbybrand\/solrimage\/\/m\/i\/micropython_logo_small.png","LittleBits":"aw_shopbybrand\/solrimage\/\/l\/i\/littlebits_logo_small.png","Particle":"aw_shopbybrand\/solrimage\/\/p\/a\/particle_solr.png","Solarbotics":"aw_shopbybrand\/solrimage\/\/s\/o\/solarbotics_australia_solr.png","Makeblock":"aw_shopbybrand\/solrimage\/\/m\/a\/makeblock-logo-solr_1.png","Metas Innobits":"aw_shopbybrand\/solrimage\/\/m\/e\/metas_innobits_solr.png","Raspberry Pi":"aw_shopbybrand\/solrimage\/\/r\/a\/raspberry-pi-solr.png","Genuino":"aw_shopbybrand\/solrimage\/\/g\/e\/genuino-solr.png","Chibitronics":"aw_shopbybrand\/solrimage\/\/c\/h\/chibitronics-logo-solr.png","Makey Makey":"aw_shopbybrand\/solrimage\/\/m\/a\/makey-makey-solr.png","LattePanda":"aw_shopbybrand\/solrimage\/\/l\/a\/lattepanda-solr.png","Teensy":"aw_shopbybrand\/solrimage\/\/p\/j\/pjrc-solr.png","Hobby Creek":"aw_shopbybrand\/solrimage\/\/h\/o\/hobby-creek-solr.png","8Bitdo":"aw_shopbybrand\/solrimage\/\/8\/b\/8bitdo-logo-solr.png","Hakko":"aw_shopbybrand\/solrimage\/\/h\/a\/hakko-solr.png","PanaVise":"aw_shopbybrand\/solrimage\/\/p\/a\/panavise-solr.png","Adafruit Feather":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit-feather-solr.png","Pi-Top":"aw_shopbybrand\/solrimage\/\/p\/i\/pi-top-australia-solr.png","RetroPie":"aw_shopbybrand\/solrimage\/\/r\/e\/retropie-logo-solr.png","Snap Circuits":"aw_shopbybrand\/solrimage\/\/s\/n\/snapcircuits-logo-solr.png","Espressif ESP32 & ESP8266":"aw_shopbybrand\/solrimage\/\/e\/s\/espressif-logo-solr.png","Mooshimeter":"aw_shopbybrand\/solrimage\/\/m\/o\/mooshim-logo-solr.png","Ozobot":"aw_shopbybrand\/solrimage\/\/o\/z\/ozobot-logo-solr.png","Circuit Scribe":"aw_shopbybrand\/solrimage\/\/c\/i\/circuitscribe-logo-solr.png","Strawbees":"aw_shopbybrand\/solrimage\/\/s\/t\/strawbees-logo-solr.png","Marbles the Brain Store":"aw_shopbybrand\/solrimage\/\/m\/a\/marblebrain-logo-solr.png","STEMTera":"aw_shopbybrand\/solrimage\/\/s\/t\/stemtera-logo-solr.png","Proto-Pasta":"aw_shopbybrand\/solrimage\/\/p\/r\/protopasta-logo-solr.png","Polymaker":"aw_shopbybrand\/solrimage\/\/p\/o\/polymaker-logo-solr.png","NinjaFlex":"aw_shopbybrand\/solrimage\/\/n\/i\/ninjaflex-logo-solr.png","Filaform":"aw_shopbybrand\/solrimage\/\/f\/i\/filaform-logo-solr.png","Nordic":"aw_shopbybrand\/solrimage\/\/n\/o\/nordic-logo-solr.png","Sphero":"aw_shopbybrand\/solrimage\/\/s\/p\/sphero-logo-solr.png","Village Plastics":"aw_shopbybrand\/solrimage\/\/v\/i\/villageplastics-logo-solr.png","micro:bit":"aw_shopbybrand\/solrimage\/\/m\/i\/microbit-logo-solr.png","Siglent":"aw_shopbybrand\/solrimage\/\/s\/i\/siglent-logo-solr.png","Kitronik":"aw_shopbybrand\/solrimage\/\/k\/i\/kitronik-logo-solr.png","Bee-Bot":"aw_shopbybrand\/solrimage\/\/b\/e\/beebot-logo-solr.png","Picaxe":"aw_shopbybrand\/solrimage\/\/p\/i\/picaxe-logo-solr.png","Onion Omega":"aw_shopbybrand\/solrimage\/\/o\/n\/onion-logo-solr.png","Proto-PIC":"aw_shopbybrand\/solrimage\/\/p\/r\/protopic-logo-solr.png","Pycom":"aw_shopbybrand\/solrimage\/\/p\/y\/pycom-logo-solr.png","colorFabb":"aw_shopbybrand\/solrimage\/\/c\/o\/colorfabb-logo-solr.png","Arckit":"aw_shopbybrand\/solrimage\/\/a\/r\/arckit-logo-solr.png","Bantam Tools":"aw_shopbybrand\/solrimage\/\/b\/a\/bantam-logo-solr.png","Primo Toys":"aw_shopbybrand\/solrimage\/\/p\/r\/primo-logo-solr.png","Zometool":"aw_shopbybrand\/solrimage\/\/z\/o\/zome-logo-solr.png","BeagleBone":"aw_shopbybrand\/solrimage\/\/b\/e\/beaglebone-logo-solr.png","Labcenter Electronics":"aw_shopbybrand\/solrimage\/\/p\/r\/proteus-solr.jpg","MikroElektronika":"aw_shopbybrand\/solrimage\/\/m\/i\/mikroelectronika-solr.jpg","Hologram":"aw_shopbybrand\/solrimage\/\/h\/o\/hologram-logo-solr.png","Kano":"aw_shopbybrand\/solrimage\/\/k\/a\/kano-logo-solr.png","4tronix":"aw_shopbybrand\/solrimage\/\/4\/t\/4tronix-logo-solr.png","ModMyPi":"aw_shopbybrand\/solrimage\/\/m\/o\/modmypi-logo-solr.png","Bare Conductive":"aw_shopbybrand\/solrimage\/\/b\/a\/bareconductive-logo-solr.png","Pi Supply":"aw_shopbybrand\/solrimage\/\/p\/i\/pisupply-logo-solr.png","Makedo":"aw_shopbybrand\/solrimage\/\/m\/a\/makedo-logo-solr.png","Robobloq":"aw_shopbybrand\/solrimage\/\/r\/o\/robobloq-logo-solr.png","Monk Makes":"aw_shopbybrand\/solrimage\/\/m\/o\/monkmakes-logo-solr.png","MG Chemicals":"aw_shopbybrand\/solrimage\/\/l\/o\/logo-mgchemicals-solr.png","Polyalchemy":"aw_shopbybrand\/solrimage\/\/p\/o\/polyalchemy-logo-solr.png","Edison":"aw_shopbybrand\/solrimage\/\/e\/d\/edison-logo-solr.png","Anki":"aw_shopbybrand\/solrimage\/\/a\/n\/anki-logo-solr.png","Qoitech":"aw_shopbybrand\/solrimage\/q\/o\/qoitech-logo-solr.png","DJI":"aw_shopbybrand\/solrimage\/d\/j\/dji-logo-solr.png","Ultimaker":"aw_shopbybrand\/solrimage\/u\/l\/ultimake-logo-solr.png","Dremel":"aw_shopbybrand\/solrimage\/d\/r\/dremel-logo-solr.png"};
+var searchurllinks={"links":"<div class='searchinconceptdiv'><\/div><span class='searchinconceptspan'>Products<\/span><a class='searchinconceptspan' href='http:\/\/forum.core-electronics.com.au\/search?q=%s'>Forum<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/tutorials\/search\/query\/%s\/'>Tutorials<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/projects\/search\/?text=%s'>Projects<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/videos\/search\/query\/%s\/'>Videos<\/a>"};
+//]]>
+</script>
+</div>
+</fieldset>
+</form>
+</div> </div>
+</div>
+<div class="header-language-background">
+<div class="header-language-container">
+<div class="store-language-container"> </div>
+<p class="welcome-msg">empowering creative people </p>
+</div>
+</div>
+<header id="header" class="page-header">
+<div class="header_main_container">
+<div class="header-container">
+<div class="header_logo_main"><a class="logo" href="https://core-electronics.com.au/"> <img src="./Pycom FiPy Getting Started - Tutorial Australia_files/logo.png" alt="Core Electronics" class="large"> <img src="./Pycom FiPy Getting Started - Tutorial Australia_files/logo.gif" alt="Core Electronics" class="small"> </a></div>
+<div class="header_search_mainn">
+<div class="header_search_link_mainn">
+<div class="header_top_links">
+<div class="links" style="float:left;">
+<div class="phone_number"><div class="phone"><a href="tel:+61 2 4058 2818">02 4058 2818</a></div></div>
+<div class="sign_in_header"><a class="signup" href="https://core-electronics.com.au/customer/account/create/"><span>Register</span></a></div>
+<div class="sign_in_header"><a class="signin" href="https://core-electronics.com.au/customer/account/login/"><span>Sign In</span></a></div>
+</div>
+<div class="skip-links cart_header" style="clear:none;">
+<div class="header-minicart">
+<div class="aw-minicart-wrapper">
+<a href="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html#header-cart" class="skip-link skip-cart no-count">
+<span class="icon"></span>
+<span class="label">Cart</span>
+<span class="count">0</span>
+</a>
+<div id="header-cart" class="block block-cart skip-content">
+<div id="minicart-error-message" class="minicart-message"></div>
+<div id="minicart-success-message" class="minicart-message"></div>
+<div class="minicart-wrapper">
+<p class="block-subtitle">
+Recently added item(s) <a class="close skip-link-close" href="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html#" title="Close">×</a>
+</p>
+<p class="empty">You have no items in your shopping cart.</p>
+</div>
+</div>
+</div>
+ </div>
+</div>
+</div>
+</div>
+<div class="minibannersearch">
+<div class="minibanners">
+<a href="https://core-electronics.com.au/customer-service/" class="minicustomerservice" title="customer service"></a>
+<a href="https://core-electronics.com.au/purchase-orders/" class="minipurchaseorder" title="purchase orders"></a>
+</div>
+<div class="newsearchbox">
+<form id="search_mini_form" action="https://core-electronics.com.au/search/index/post/" method="get">
+<input type="hidden" id="solrrun" value="0">
+<fieldset>
+<div class="input-box">
+<input id="search" type="text" name="q" value="Search" class="input-text" autocomplete="off">
+<button type="submit" onclick="displaysearch();" title="" class="button search-button"><span><span>search</span></span></button>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+var searchForm = new Varien.searchForm('search_mini_form', 'search', 'Search');
+var SolrBridgeAutocomplete = new SolrBridgeSearch('search',{id:'autocomplete',target:'#search_mini_form',inputid:'search',containerid:'search_mini_form',boxWidth:469,searchTextPlaceHolder:'Search',currencySign:'&nbsp;$&nbsp;',currencycode:'AUD',ajaxBaseUrl:'https://core-electronics.com.au/',searchResultUrl:'https://core-electronics.com.au/search',viewAllResultText:'View all search results for %s',categoryText:'Categories',viewAllCategoryText:'View all categories >>',viewAllBrandsText:'View all brands >>',keywordsText:'Keywords',productText:'product',productsText:'products',brandText:'Brands',storetimestamp:'1556511779',storeid:'1',customergroupid:'0',categoryRedirect:'0',showBrand:'1',showBrandAttributeCode:'aw_shopbybrand_brand',displaykeywordsuggestion:'true',displayResultOfText:'Search results for %s',displayResultOfInsteadText:'Search results for %s instead',currencyPos:'before',displayThumb:'1',allowFilter:'1',categoryLimit:'3',brandLimit:'3',fromPriceText:'from',ajaxprice:1});
+var brandimagepaths = {"Arduino":"aw_shopbybrand\/solrimage\/\/a\/r\/arduino_logo_sml_1.png","Ciseco":"aw_shopbybrand\/solrimage\/\/c\/i\/ciseco_logo_small.png","Mecanique":"aw_shopbybrand\/solrimage\/\/m\/e\/mecanique_logo_small.png","Kinsten":"aw_shopbybrand\/solrimage\/\/k\/i\/kinsten_logo_small.png","Sure Electronics":"aw_shopbybrand\/solrimage\/\/s\/u\/sure_electronics_logo_small.png","DFRobot":"aw_shopbybrand\/solrimage\/\/d\/f\/dfrobot_logo_small.png","Saleae":"aw_shopbybrand\/solrimage\/\/s\/a\/saleae_logo_small.png","Adafruit":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit_small.png","Rigol":"aw_shopbybrand\/solrimage\/\/r\/i\/rigol_small_1.png","Pololu":"aw_shopbybrand\/solrimage\/\/p\/o\/pololu_australia_small.png","Seeed Studio":"aw_shopbybrand\/solrimage\/\/s\/e\/seeed_studio_australia_logo.png","Pimoroni":"aw_shopbybrand\/solrimage\/\/p\/i\/pimoroni_australia_logo_sm_1.png","Intel Edison":"aw_shopbybrand\/solrimage\/\/i\/n\/intel_edison_australia_logo_sm.png","Sparkfun":"aw_shopbybrand\/solrimage\/\/s\/p\/sparkfun_logo_small.png","Freetronics":"aw_shopbybrand\/solrimage\/\/f\/r\/freetronics_logo_small.png","LulzBot":"aw_shopbybrand\/solrimage\/\/l\/u\/lulzbot_logo_sml_png.png","Core Electronics":"aw_shopbybrand\/solrimage\/\/c\/o\/core-electronics-solr.png","Micropython":"aw_shopbybrand\/solrimage\/\/m\/i\/micropython_logo_small.png","LittleBits":"aw_shopbybrand\/solrimage\/\/l\/i\/littlebits_logo_small.png","Particle":"aw_shopbybrand\/solrimage\/\/p\/a\/particle_solr.png","Solarbotics":"aw_shopbybrand\/solrimage\/\/s\/o\/solarbotics_australia_solr.png","Makeblock":"aw_shopbybrand\/solrimage\/\/m\/a\/makeblock-logo-solr_1.png","Metas Innobits":"aw_shopbybrand\/solrimage\/\/m\/e\/metas_innobits_solr.png","Raspberry Pi":"aw_shopbybrand\/solrimage\/\/r\/a\/raspberry-pi-solr.png","Genuino":"aw_shopbybrand\/solrimage\/\/g\/e\/genuino-solr.png","Chibitronics":"aw_shopbybrand\/solrimage\/\/c\/h\/chibitronics-logo-solr.png","Makey Makey":"aw_shopbybrand\/solrimage\/\/m\/a\/makey-makey-solr.png","LattePanda":"aw_shopbybrand\/solrimage\/\/l\/a\/lattepanda-solr.png","Teensy":"aw_shopbybrand\/solrimage\/\/p\/j\/pjrc-solr.png","Hobby Creek":"aw_shopbybrand\/solrimage\/\/h\/o\/hobby-creek-solr.png","8Bitdo":"aw_shopbybrand\/solrimage\/\/8\/b\/8bitdo-logo-solr.png","Hakko":"aw_shopbybrand\/solrimage\/\/h\/a\/hakko-solr.png","PanaVise":"aw_shopbybrand\/solrimage\/\/p\/a\/panavise-solr.png","Adafruit Feather":"aw_shopbybrand\/solrimage\/\/a\/d\/adafruit-feather-solr.png","Pi-Top":"aw_shopbybrand\/solrimage\/\/p\/i\/pi-top-australia-solr.png","RetroPie":"aw_shopbybrand\/solrimage\/\/r\/e\/retropie-logo-solr.png","Snap Circuits":"aw_shopbybrand\/solrimage\/\/s\/n\/snapcircuits-logo-solr.png","Espressif ESP32 & ESP8266":"aw_shopbybrand\/solrimage\/\/e\/s\/espressif-logo-solr.png","Mooshimeter":"aw_shopbybrand\/solrimage\/\/m\/o\/mooshim-logo-solr.png","Ozobot":"aw_shopbybrand\/solrimage\/\/o\/z\/ozobot-logo-solr.png","Circuit Scribe":"aw_shopbybrand\/solrimage\/\/c\/i\/circuitscribe-logo-solr.png","Strawbees":"aw_shopbybrand\/solrimage\/\/s\/t\/strawbees-logo-solr.png","Marbles the Brain Store":"aw_shopbybrand\/solrimage\/\/m\/a\/marblebrain-logo-solr.png","STEMTera":"aw_shopbybrand\/solrimage\/\/s\/t\/stemtera-logo-solr.png","Proto-Pasta":"aw_shopbybrand\/solrimage\/\/p\/r\/protopasta-logo-solr.png","Polymaker":"aw_shopbybrand\/solrimage\/\/p\/o\/polymaker-logo-solr.png","NinjaFlex":"aw_shopbybrand\/solrimage\/\/n\/i\/ninjaflex-logo-solr.png","Filaform":"aw_shopbybrand\/solrimage\/\/f\/i\/filaform-logo-solr.png","Nordic":"aw_shopbybrand\/solrimage\/\/n\/o\/nordic-logo-solr.png","Sphero":"aw_shopbybrand\/solrimage\/\/s\/p\/sphero-logo-solr.png","Village Plastics":"aw_shopbybrand\/solrimage\/\/v\/i\/villageplastics-logo-solr.png","micro:bit":"aw_shopbybrand\/solrimage\/\/m\/i\/microbit-logo-solr.png","Siglent":"aw_shopbybrand\/solrimage\/\/s\/i\/siglent-logo-solr.png","Kitronik":"aw_shopbybrand\/solrimage\/\/k\/i\/kitronik-logo-solr.png","Bee-Bot":"aw_shopbybrand\/solrimage\/\/b\/e\/beebot-logo-solr.png","Picaxe":"aw_shopbybrand\/solrimage\/\/p\/i\/picaxe-logo-solr.png","Onion Omega":"aw_shopbybrand\/solrimage\/\/o\/n\/onion-logo-solr.png","Proto-PIC":"aw_shopbybrand\/solrimage\/\/p\/r\/protopic-logo-solr.png","Pycom":"aw_shopbybrand\/solrimage\/\/p\/y\/pycom-logo-solr.png","colorFabb":"aw_shopbybrand\/solrimage\/\/c\/o\/colorfabb-logo-solr.png","Arckit":"aw_shopbybrand\/solrimage\/\/a\/r\/arckit-logo-solr.png","Bantam Tools":"aw_shopbybrand\/solrimage\/\/b\/a\/bantam-logo-solr.png","Primo Toys":"aw_shopbybrand\/solrimage\/\/p\/r\/primo-logo-solr.png","Zometool":"aw_shopbybrand\/solrimage\/\/z\/o\/zome-logo-solr.png","BeagleBone":"aw_shopbybrand\/solrimage\/\/b\/e\/beaglebone-logo-solr.png","Labcenter Electronics":"aw_shopbybrand\/solrimage\/\/p\/r\/proteus-solr.jpg","MikroElektronika":"aw_shopbybrand\/solrimage\/\/m\/i\/mikroelectronika-solr.jpg","Hologram":"aw_shopbybrand\/solrimage\/\/h\/o\/hologram-logo-solr.png","Kano":"aw_shopbybrand\/solrimage\/\/k\/a\/kano-logo-solr.png","4tronix":"aw_shopbybrand\/solrimage\/\/4\/t\/4tronix-logo-solr.png","ModMyPi":"aw_shopbybrand\/solrimage\/\/m\/o\/modmypi-logo-solr.png","Bare Conductive":"aw_shopbybrand\/solrimage\/\/b\/a\/bareconductive-logo-solr.png","Pi Supply":"aw_shopbybrand\/solrimage\/\/p\/i\/pisupply-logo-solr.png","Makedo":"aw_shopbybrand\/solrimage\/\/m\/a\/makedo-logo-solr.png","Robobloq":"aw_shopbybrand\/solrimage\/\/r\/o\/robobloq-logo-solr.png","Monk Makes":"aw_shopbybrand\/solrimage\/\/m\/o\/monkmakes-logo-solr.png","MG Chemicals":"aw_shopbybrand\/solrimage\/\/l\/o\/logo-mgchemicals-solr.png","Polyalchemy":"aw_shopbybrand\/solrimage\/\/p\/o\/polyalchemy-logo-solr.png","Edison":"aw_shopbybrand\/solrimage\/\/e\/d\/edison-logo-solr.png","Anki":"aw_shopbybrand\/solrimage\/\/a\/n\/anki-logo-solr.png","Qoitech":"aw_shopbybrand\/solrimage\/q\/o\/qoitech-logo-solr.png","DJI":"aw_shopbybrand\/solrimage\/d\/j\/dji-logo-solr.png","Ultimaker":"aw_shopbybrand\/solrimage\/u\/l\/ultimake-logo-solr.png","Dremel":"aw_shopbybrand\/solrimage\/d\/r\/dremel-logo-solr.png"};
+var searchurllinks={"links":"<div class='searchinconceptdiv'><\/div><span class='searchinconceptspan'>Products<\/span><a class='searchinconceptspan' href='http:\/\/forum.core-electronics.com.au\/search?q=%s'>Forum<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/tutorials\/search\/query\/%s\/'>Tutorials<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/projects\/search\/?text=%s'>Projects<\/a><a class='searchinconceptspan' href='https:\/\/core-electronics.com.au\/videos\/search\/query\/%s\/'>Videos<\/a>"};
+//]]>
+</script>
+</fieldset>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="page-header-container">
+<div>
+</div>
+<div id="header-nav" class="skip-content"> </div>
+</div>
+<div class="headerr_nav">
+<div id="menu-wrapper">
+<ul class="nav">
+<li class="home">
+<a href="https://core-electronics.com.au/"></a>
+</li>
+<li> <a href="https://core-electronics.com.au/categories/">shop</a>
+<div>
+<div class="nav-column" style="width: 100%; border-left:none;">
+<h3 class="menutitle"><a href="https://core-electronics.com.au/categories">Product categories</a></h3>
+<div class="yesfavdiv">
+<p>Maker Favourites</p>
+<ul class="favouriteyes">
+<li> <a href="https://core-electronics.com.au/raspberry-pi.html">
+Raspberry Pi (319)</a></li>
+<li> <a href="https://core-electronics.com.au/arduino.html">
+Arduino (163)</a></li>
+<li> <a href="https://core-electronics.com.au/onion-omega.html">
+Onion (16)</a></li>
+<li> <a href="https://core-electronics.com.au/educational.html">
+School Education (46)</a></li>
+<li> <a href="https://core-electronics.com.au/homeschool-stem-educational-kits.html">
+Home Education (26)</a></li>
+<li> <a href="https://core-electronics.com.au/makerspace.html">
+Makerspace (37)</a></li>
+<li> <a href="https://core-electronics.com.au/adafruit-circuit-playground.html">
+Circuit Playground (13)</a></li>
+<li> <a href="https://core-electronics.com.au/littlebits.html">
+littleBits (91)</a></li>
+<li> <a href="https://core-electronics.com.au/makey-makey-australia.html">
+Makey Makey (6)</a></li>
+<li> <a href="https://core-electronics.com.au/micro-bit-australia.html">
+micro:bit (52)</a></li>
+<li> <a href="https://core-electronics.com.au/particle.html">
+Particle (14)</a></li>
+<li> <a href="https://core-electronics.com.au/pycom.html">
+Pycom (16)</a></li>
+<li> <a href="https://core-electronics.com.au/f.html">
+Other Favourites (123)</a></li>
+</ul>
+</div>
+<div class="nofavdiv">
+<p>Our Range</p>
+<ul class="favouriteno">
+<li> <a href="https://core-electronics.com.au/gift-ideas.html">
+Gift Ideas (58)</a></li>
+<li> <a href="https://core-electronics.com.au/3d-printers-australia.html">
+3D Printing (296)</a></li>
+<li> <a href="https://core-electronics.com.au/electronics-books.html">
+Books (10)</a></li>
+<li> <a href="https://core-electronics.com.au/breakout-boards-and-modules.html">
+Breakouts &amp; Modules (109)</a></li>
+<li> <a href="https://core-electronics.com.au/cables.html">
+Cables (126)</a></li>
+<li> <a href="https://core-electronics.com.au/components.html">
+Components &amp; Parts (437)</a></li>
+<li> <a href="https://core-electronics.com.au/connectors-sockets.html">
+Connectors &amp; Sockets (133)</a></li>
+<li> <a href="https://core-electronics.com.au/development-boards.html">
+Development Boards (11)</a></li>
+<li> <a href="https://core-electronics.com.au/displays-screens.html">
+Displays &amp; Screens (38)</a></li>
+<li> <a href="https://core-electronics.com.au/drones.html">
+Drones (64)</a></li>
+<li> <a href="https://core-electronics.com.au/edison-australia.html">
+Edison (12)</a></li>
+<li> <a href="https://core-electronics.com.au/gizmos-gadgets.html">
+Gizmos &amp; Gadgets (13)</a></li>
+<li> <a href="https://core-electronics.com.au/hardware.html">
+Hardware (121)</a></li>
+<li> <a href="https://core-electronics.com.au/kits.html">
+Kits (34)</a></li>
+<li> <a href="https://core-electronics.com.au/merchandise.html">
+Merchandise (4)</a></li>
+<li> <a href="https://core-electronics.com.au/photography.html">
+Photography (23)</a></li>
+<li> <a href="https://core-electronics.com.au/power-batteries.html">
+Power &amp; Batteries (161)</a></li>
+<li> <a href="https://core-electronics.com.au/programmers.html">
+Programmers (13)</a></li>
+<li> <a href="https://core-electronics.com.au/prototyping.html">
+Prototyping (60)</a></li>
+<li> <a href="https://core-electronics.com.au/robotics.html">
+Robotics (21)</a></li>
+<li> <a href="https://core-electronics.com.au/services.html">
+Services (5)</a></li>
+<li> <a href="https://core-electronics.com.au/sensors.html">
+Sensors (185)</a></li>
+<li> <a href="https://core-electronics.com.au/software.html">
+Software (2)</a></li>
+<li> <a href="https://core-electronics.com.au/test-equipment.html">
+Test Equipment (52)</a></li>
+<li> <a href="https://core-electronics.com.au/tools.html">
+Tools (165)</a></li>
+<li> <a href="https://core-electronics.com.au/wearables.html">
+Wearables (42)</a></li>
+<li> <a href="https://core-electronics.com.au/wire.html">
+Wire (17)</a></li>
+<li> <a href="https://core-electronics.com.au/wireless.html">
+Wireless (168)</a></li>
+<li> <a href="https://core-electronics.com.au/workshops.html">
+Workshops (12)</a></li>
+<li> <a href="https://core-electronics.com.au/retired.html">
+Retired (3263)</a></li>
+<li> <a href="https://core-electronics.com.au/clearance.html">
+Clearance (6)</a></li>
+</ul>
+</div>
+</div>
+<div>
+<div class="nav-column"> <div>
+<h3 class="menutitle"><a href="https://core-electronics.com.au/new-products/">New Products</a></h3>
+<div class="carousel">
+<div class="slider">
+<div class="slide">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft">
+<div class="image">
+<a href="https://core-electronics.com.au/ultimaker-s5-3d-printer.html" title="Ultimaker S5 3D Printer">
+<img src="./Pycom FiPy Getting Started - Tutorial Australia_files/ultimaker-s5-1.jpg" alt="Ultimaker S5 3D Printer">
+</a>
+</div>
+</div>
+<div class="newleft">
+<h3 class="product-name"><a href="https://core-electronics.com.au/ultimaker-s5-3d-printer.html" title="Ultimaker S5 3D Printer">Ultimaker S5 3D Printer </a></h3>
+<div class="price">Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44571-new">
+<span class="price">$10,595.00</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+<div style="clear:both;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="slide">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft">
+<div class="image">
+<a href="https://core-electronics.com.au/retroflag-megapi-case-for-raspberry-pi-3-model-b.html" title="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">
+<img src="./Pycom FiPy Getting Started - Tutorial Australia_files/retroflag-megapi-case-for-raspberry-pi-3-model-b_-1_1.jpg" alt="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">
+</a>
+</div>
+</div>
+<div class="newleft">
+<h3 class="product-name"><a href="https://core-electronics.com.au/retroflag-megapi-case-for-raspberry-pi-3-model-b.html" title="Retroflag MEGAPi Case for Raspberry Pi 3 Model B+">Retroflag MEGAPi Case for Raspberry Pi 3 Model B+ </a></h3>
+<div class="price">Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44238-new">
+<span class="price">$34.95</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+<div style="clear:both;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> </div>
+<div class="nav_column_feature"><div>
+<h3 class="menutitle"><a href="https://core-electronics.com.au/featured-products/">Featured products</a></h3>
+<div class="carousel">
+<div class="slider">
+<div class="slide frslide1">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft newleft_img">
+<div class="image"> <a href="https://core-electronics.com.au/ugateway-for-lorawan-ttn.html">
+<img alt="uGateway for LoRaWAN &amp; TTN" src="./Pycom FiPy Getting Started - Tutorial Australia_files/lorawan-ugateway-1.jpg"> </a> </div>
+</div>
+<div class="newleft">
+<h3 class="product-name">
+<a href="https://core-electronics.com.au/ugateway-for-lorawan-ttn.html" title="uGateway for LoRaWAN &amp; TTN">uGateway for LoRaWAN &amp; TTN</a> </h3>
+<div class="price"> Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-44274">
+<span class="price">$225.00</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="slide frslide2">
+<div class="box-product-item">
+<div class="view-first">
+<div class="view-content">
+<div class="newleft newleft_img">
+<div class="image"> <a href="https://core-electronics.com.au/raspberry-pi-3-model-a-plus.html">
+<img alt="Raspberry Pi 3 Model A+ (Plus) 2018 Release" src="./Pycom FiPy Getting Started - Tutorial Australia_files/raspberry-a_-4-test.jpg"> </a> </div>
+</div>
+<div class="newleft">
+<h3 class="product-name">
+<a href="https://core-electronics.com.au/raspberry-pi-3-model-a-plus.html" title="Raspberry Pi 3 Model A+">Raspberry Pi 3 Model A+</a> </h3>
+<div class="price"> Price:
+<div class="price-box">
+<span class="regular-price" id="product-price-43910">
+<span class="price">$38.23</span> </span>
+<span class="taxinfospanmobile">AUD,&nbsp;inc&nbsp;GST</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> </div>
+</div>
+</div>
+</li>
+<li><a href="JavaScript:void(0)">Learn</a>
+<div class="learn-total">
+<div class="nav-column-learn learn-menu-main" style="width: 100%; border-left:none;">
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/tutorials"><img alt="Tutorials" src="./Pycom FiPy Getting Started - Tutorial Australia_files/tutorials.png" title="Tutorials"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/courses"><img alt="Courses" src="./Pycom FiPy Getting Started - Tutorial Australia_files/courses.png" title="Courses"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/workshops.html"><img alt="Workshops" src="./Pycom FiPy Getting Started - Tutorial Australia_files/workshops.png" title="Workshops"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/projects"><img src="./Pycom FiPy Getting Started - Tutorial Australia_files/projects.png" alt="Projects" title="Projects"></a></div>
+<div class="learn-menu">
+<a href="https://core-electronics.com.au/videos"><img alt="Videos" src="./Pycom FiPy Getting Started - Tutorial Australia_files/videos.png" title="Videos"></a></div>
+<div class="learn-menu">
+<a href="http://makerspacenewcastle.com.au/" target="_blank"><img alt="Makerspace Newcastle" src="./Pycom FiPy Getting Started - Tutorial Australia_files/makerspace-newcastle.png" title="Makerspace Newcastle"></a></div>
+</div>
+</div>
+</li>
+<li> <a href="JavaScript:void(0)">Support</a>
+<div class="support-total">
+<div class="nav-column-support support-menu-main" style="width: 100%; border-left:none;">
+<div class="support-menu">
+<a href="https://forum.core-electronics.com.au/"><img src="./Pycom FiPy Getting Started - Tutorial Australia_files/forum.png" alt="Forum" title="Forum"></a></div>
+<div class="support-menu">
+<a href="https://core-electronics.com.au/customer-service/"><img src="./Pycom FiPy Getting Started - Tutorial Australia_files/faq.png" alt="FAQ" title="FAQ"></a></div>
+<div class="support-menu">
+<a href="https://www.education.core-electronics.com.au/" target="_blank"><img alt="Teachers &amp; Educators" src="./Pycom FiPy Getting Started - Tutorial Australia_files/teachers-educators.png" title="Teachers &amp; Educators"></a></div>
+</div>
+</div>
+</li>
+<li class="blog_nav"> <a href="https://core-electronics.com.au/electronics-blog">Blog</a>
+</li>
+<li class="last"> <a href="https://core-electronics.com.au/contacts/">Contact Us</a></li>
+</ul>
+</div>
+</div>
+<div class="ddd" style=" width:100%;">
+</div>
+</header>
+		        <div class="main-container col1-layout">
+            <div class="main">
+                
+                <div class="col-main">
+                    <div id="amfpc-global_messages"></div>                    <script>(function () {
+  var sourceBaseUrl = /[&?]distrib/.test(location.search)
+      ? "../distrib/google-code-prettify/" : "https://core-electronics.com.au/shared/code-prettify-master/src/";
+  var sources = [
+      "prettify.js",
+      "lang-css.js",
+      "lang-erlang.js",
+      "lang-go.js",
+      "lang-hs.js",
+      "lang-lisp.js",
+      "lang-lua.js",
+      "lang-ml.js",
+      "lang-proto.js",
+      "lang-rust.js",
+      "lang-scala.js",
+      "lang-sql.js",
+      "lang-wiki.js",
+      "lang-vhdl.js",
+      "lang-vb.js",
+      "lang-yaml.js",
+  ];
+  var styles = [
+       "prettify.css"
+  ];
+  if (window.console) {
+  //  console.log("sourceBaseUrl=" + sourceBaseUrl);
+  }
+  for (var i = 0; i < sources.length; ++i) {
+    document.write(
+        "<script src=\"" + sourceBaseUrl + sources[i] + "\"><\/script>");
+  }
+  document.write(
+       "<script src=\"https://core-electronics.com.au/shared/code-prettify-master/test_base.js\" type=\"text/javascript\"><\/script>");
+  /*for (var i = 0; i < styles.length; ++i) {
+    document.write(
+        "<link rel=\"stylesheet\" href=\"" + sourceBaseUrl + styles[i] + "\">");
+  }*/
+})();
+
+window.onload = (function() {
+  var attempt = function() {
+    var go = window["go"];
+    var prettyPrint = window["prettyPrint"];
+    var goldens = window["goldens"];
+    if(go && prettyPrint && goldens) {
+      go(goldens);
+    } else {
+      setTimeout(attempt, 20);
+    }
+  };
+  return attempt;
+})();
+</script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/prettify.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-css.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-erlang.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-go.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-hs.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-lisp.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-lua.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-ml.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-proto.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-rust.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-scala.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-sql.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-wiki.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-vhdl.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-vb.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lang-yaml.js"></script><script src="./Pycom FiPy Getting Started - Tutorial Australia_files/test_base.js" type="text/javascript"></script>
+<script type="text/javascript">
+/**
+ * maps ids of rewritten code to the expected output.
+ * For brevity, <span class="foo"> has been changed to `FOO and </span>
+ * has been changed to `END.
+ */
+var goldens = {
+ python: (
+      '`COM#!/usr/bin/python2.4`END`PLN\n' +
+      '\n' +
+      '`END`KWDdef`END`PLN fib`END`PUN():`END`PLN\n' +
+      '  `END`STR\'\'\'\n' +
+      '  a generator that produces the elements of the fibonacci series' +
+          '\n' +
+      '  \'\'\'`END`PLN\n' +
+      '\n' +
+      '  a `END`PUN=`END`PLN `END`LIT1`END`PLN\n' +
+      '  b `END`PUN=`END`PLN `END`LIT1`END`PLN\n' +
+      '  `END`KWDwhile`END`PLN `END`KWDTrue`END`PUN:`END`PLN\n' +
+      '    a`END`PUN,`END`PLN b `END`PUN=`END`PLN a `END`PUN+`END' +
+          '`PLN b`END`PUN,`END`PLN a\n' +
+      '    `END`KWDyield`END`PLN a\n' +
+      '\n' +
+      '`END`KWDdef`END`PLN nth`END`PUN(`END`PLNseries`END`PUN,`END`PLN n`END' +
+          '`PUN):`END`PLN\n' +
+      '  `END`STR\'\'\'\n' +
+      '  returns the nth element of a series,\n' +
+      '  consuming the earlier elements of the series\n' +
+      '  \'\'\'`END`PLN\n' +
+      '\n' +
+      '  `END`KWDfor`END`PLN x `END`KWDin`END`PLN series`END`PUN:`END' +
+          '`PLN\n' +
+      '    n `END`PUN=`END`PLN n `END`PUN-`END`PLN `END`LIT1`END' +
+          '`PLN\n' +
+      '    `END`KWDif`END`PLN n `END`PUN&lt;=`END`PLN `END' +
+          '`LIT0`END`PUN:`END`PLN `END`KWDreturn`END`PLN x\n' +
+      '\n' +
+      '`END`KWDprint`END`PLN nth`END`PUN(`END`PLNfib`END`PUN(),`END`PLN `END' +
+          '`LIT10`END`PUN)`END'),
+		  };
+</script>
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/test_styles.css">
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/prettify.css">
+
+        
+<div class="kbase kbase-article" itemscope="" itemtype="http://schema.org/Article">
+  <meta itemscope="" itemprop="mainEntityOfPage" itemtype="https://schema.org/WebPage" itemid="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html">
+        <div class="home_add">
+<div class="kbase-block kbase-main-search">
+	<div class="title">
+    <h3 class="kbase-block-title">Search Tutorials</h3></div>
+    <div class="kbase-block-content">
+        <form action="https://core-electronics.com.au/tutorials/search/">
+           <!-- <label for="kbase_search_input"></label>-->
+            <input type="text" autocomplete="off" id="kbase_search_input" name="query" value="">
+			<div id="suggesstion-box" style="display:none;"></div>
+            <button type="submit" title="Search" class="button form-button"><span><span>Search</span></span></button>
+        </form>
+    </div>
+</div>
+<div>
+</div>
+</div>
+<input type="hidden" id="searchurl" value="https://core-electronics.com.au/kbase/article/searchresults/">
+<script type="text/javascript">
+        jQuery(document).ready(function(){
+		function sendsearchrequest()
+			{
+			jQuery.ajax({
+            type:'POST',
+            url:jQuery("#searchurl").val(),
+            data:'keyword='+jQuery("#kbase_search_input").val(),
+            encode          : true,
+        }) .success(function(data) {
+			if(data != '')
+			{
+			jQuery("#suggesstion-box").show();
+			jQuery("#suggesstion-box").html(data);
+		    }
+			else
+			{
+			jQuery("#suggesstion-box").hide();	
+			}
+		});
+			}
+		var timeout;
+        jQuery("#kbase_search_input").keyup(function(e){
+			 if (e.keyCode == 27) {
+   			jQuery("#suggesstion-box").hide();	
+             }
+			 else{
+	    if(timeout) {
+        clearTimeout(timeout);
+        timeout = null;
+        }
+        timeout = setTimeout(sendsearchrequest, 300);
+			 }
+	});
+});
+</script>    	<div id="amfpc-messages"></div>
+    <h1 itemprop="headline">Pycom FiPy Getting Started</h1>
+    <p class="kbase-article-author" style="font-size: 12px;">
+	By 
+	<span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+    <span itemprop="name">Chris</span></span>, updated on 	<span itemprop="datePublished" content="2018-07-10">
+	10 July 2018</span>
+	  <meta itemprop="dateModified" content="2018-07-10">
+	  	 
+	</p>
+   <!-- Source starts here-->
+
+        <!-- Source ends here-->
+	<div class="kbase-article-text">
+<p>Say you want to build a sun-tracking solar panel. You could add a tiny computer, like an <a href="https://core-electronics.com.au/arduino/boards.html" target="_self">Arduino</a>, to control it. That might be all you need. But what if you need to connect to it to control it from somewhere else? Connecting it into your home Wi-Fi would work.</p>
+<p>Now that it can connect to the Internet, a whole world of new possibilities open up! Want the solar panels to "park" if the weather forecast mentions hail? What about graphing the power output from day to day so you can see why the batteries aren't at full charge? We've now entered the world of The Internet of Things, or IoT for short.</p>
+<p><a href="https://core-electronics.com.au/pycom.html">Pycom devices</a> are built for the Internet of Things. They can all connect to the Internet. The five main connection technologies available today are available in the Pycom range. If you want to try them all out, why not get the one device that can do (almost) everything? The <a href="https://core-electronics.com.au/catalog/product/view/sku/CE04922">Pycom FiPy</a> includes the capabilities of all the Pycom devices except one: it doesn't do LoRa at 433MHz. If that's no impediment to you, then you get: Wi-Fi, LoRa, Sigfox, Cellular LTE data using either Cat-M1 or NB-IoT, as well as Bluetooth.</p>
+<h2>What to Get</h2>
+<p>I recommend using your FiPy with any of the Pycom expansion boards (see <a href="https://core-electronics.com.au/pycom.html">Pycom range</a>) as this immediately adds a microSD card socket, battery connector with charge controller and micro USB socket for power and programming. If you want to add jumper wires to attach your own circuit, then the <a href="https://core-electronics.com.au/catalog/product/view/sku/CE05545">Expansion Board 3.0</a> is the one.</p>
+<p>IMPORTANT!<br> You can use any of the Pycom devices on Wi-Fi or Bluetooth without having to install and external antenna. The reason is that there's an on-board antenna that is selected by default. For the other radio technologies: LoRa, Sigfox and cellular LTE, there <strong><em>MUST</em></strong><em> </em>be an antenna attached before using the device. You can permanently damage the radios if they are started without an antenna. Since LoRa and Sigfox share an antenna, you at least need:</p>
+<ul>
+<li>1 x <a href="https://core-electronics.com.au/catalog/product/view/sku/CE04928">Pycom LoRa &amp; Sigfox antenna kit</a></li>
+<li>1 x <a href="https://core-electronics.com.au/catalog/product/view/sku/CE04929">Pycom LTE-M Antenna Kit</a></li>
+</ul>
+<p>With those four items you're equipped to experiment with all the important Internet of Things (IoT) technologies of today. Once you get a taste for them you'll likely want more. Thankfully the other Pycom boards are cheaper than the FiPy!</p>
+<h2>Resources</h2>
+<p>When you're brand new to Pycom, you go to the <a href="https://docs.pycom.io/" target="_blank">Pycom Documentation</a> and start reading from the top of the page. You quickly get a grounding in what is possible and how to go about it. Often there'll be a reference to Github where the code is stored. You don't need to learn how to use Github: go to the web page <a href="https://github.com/pycom/pycom-libraries" target="_blank">https://github.com/pycom/pycom-libraries</a> and find the green <strong>Clone or download</strong> button, then click <strong>Download ZIP</strong>. That's it, you now have all the sample code to go with the documentation. Unzip it and put it in a folder for all your Pycom things.</p>
+<p align="center"><img alt="Downloading Pycom Libraries from Github" src="./Pycom FiPy Getting Started - Tutorial Australia_files/pycom-libraries-on-github.png"></p>
+<p align="center">Downloading Pycom Libraries from Github</p>
+<p>If you're new to programming Internet of Things devices don't worry! Although there's a pile of things to learn, most people experimenting with IoT are going through the same thing. When you run into problems, there are tonnes of places to go for information.</p>
+<p>Someone has usually struck the same obstacle as you before. They've likely asked, and had answered, the same question you have. Use <a href="http://www.google.com/" target="_blank">Google</a>, and learn to use <a href="https://www.google.com.au/advanced_search" target="_blank">Advanced Search</a>. Finding the information for yourself will always be the fastest way to a solution.</p>
+<p>Forums are a great place to ask a question that's relevant in that forum. Before posting your question, ensure you've searched the forum. You don't want a reply saying, "that's already been answered!" The <a href="https://forum.core-electronics.com.au/" target="_self">Core Electronics Forum</a> and <a href="https://forum.pycom.io/" target="_blank">Pycom Forums</a> are great communities of helpful people.</p>
+<h2>Integrated Development Environment (IDE)</h2>
+<p>Atom IDE is the ideal application to help you create MicroPython code to run on Pycom devices.</p>
+<ol>
+<li>Go to <a href="https://atom.io/" target="_blank">Atom IO</a> and click Download</li>
+<li>Click the file you downloaded. Atom will install itself without needing to ask questions. When the installation is done, Atom will open.</li>
+<li>You'll then need pymakr. Of course the documentation shows how: <a href="https://docs.pycom.io/chapter/pymakr/installation/atom.html" target="_blank">2.1.1 Atom</a></li>
+</ol>
+<p>If you've done software development in the Microsoft universe before, you've likely used Visual Studio, or the simpler free version <a href="https://code.visualstudio.com/" target="_blank">Visual Studio Code</a>. Pycom supports this too and <a href="https://docs.pycom.io/chapter/pymakr/installation/vscode.html" target="_blank">2.1.2 Visual Studio Code</a> in the documentation shows you how to set it all up.</p>
+<h2>Firmware</h2>
+<p>Even brand new devices can be months out of date by the time we receive them. It's best to do a firmware update on everything that can be updated. This means getting a fix for most of the problems that are known about up to today. So don't forget to read and do <a href="https://docs.pycom.io/chapter/gettingstarted/installation/firmwaretool.html" target="_blank">1.2.2 Updating Firmware</a>.</p>
+<h2>Trying Out Everything!</h2>
+<p>The first thing to experience is REPL. This Read-Evaluate-Print-Loop is how MicroPython works. You can write single lines of code in the "REPL Box" in Atom and the device will run them immediately.</p>
+<p align="center"><img alt="Using REPL in the Atom IDE to talk to a Pycom device" src="./Pycom FiPy Getting Started - Tutorial Australia_files/atom-ide-repl-code.png"></p>
+<p align="center">Using REPL in the Atom IDE to talk to a Pycom device</p>
+<p>From there, you need to get used to creating files in Atom. Save your files with the file extension <strong>.py</strong> so Atom will give you nicely coloured code to aid understanding. Head to <a href="https://docs.pycom.io/chapter/tutorials/" target="_blank">4. Tutorials and Examples</a> in the documentation to learn to use all the amazing features that Pycom devices have.</p>
+<p>Since the FiPy is the most capable and costly of the Pycom devices, I've left it until last to look at. The <a href="https://core-electronics.com.au/tutorials/pycom/" target="_self">Pycom Tutorials</a> are there to help you with everything you want to try out on your FiPy, except Sigfox which will be added later:</p>
+<p><span style="text-decoration: underline;">Wi-Fi</span></p>
+<p><a href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html" target="_self">Internet of Things with Pycom and Adafruit IO - From Zero to Hero</a></p>
+<p><span style="text-decoration: underline;">LoRa</span></p>
+<p><a href="https://core-electronics.com.au/tutorials/building-a-lorawan-nano-gateway-to-the-things-network.html" target="_self">Building a LoRaWAN Nano Gateway to The Things Network</a></p>
+<p><a href="https://core-electronics.com.au/tutorials/your-first-lorawan-node-on-the-things-network.html" target="_self">Your First LoRaWAN Node on The Things Network</a></p>
+<p><a href="https://core-electronics.com.au/tutorials/iot-with-lorawan-pycom-the-things-network-and-node-red.html" target="_self">IoT with LoRaWAN, Pycom, The Things Network &amp; Node-RED</a></p>
+<p><span style="text-decoration: underline;">Cellular LTE</span></p>
+<p><a href="https://core-electronics.com.au/tutorials/pycom-gpy-getting-started.html" target="_self">Pycom GPy Getting Started</a></p>
+<p><a href="https://core-electronics.com.au/tutorials/pycom-gpy-fipy-cellular-lte-firmware-update.html" target="_self">Pycom GPy &amp; FiPy Cellular LTE Firmware Update</a></p>
+<p><span style="text-decoration: underline;">Bluetooth</span></p>
+<p><a href="https://core-electronics.com.au/tutorials/pycom-bluetooth.html" target="_self">Pycom Bluetooth</a> (more an "about Bluetooth" than a how-to)</p>
+<p><span style="text-decoration: underline;">Sigfox</span></p>
+<p><a href="https://docs.pycom.io/chapter/tutorials/sigfox/" target="_blank">Pycom Documentation for Sigfox</a></p>
+<h2>More Information</h2>
+<p>To see how to do <em>everything </em>from start to finish, watch our video at <a href="https://core-electronics.com.au/tutorials/internet-of-things-with-pycom-and-adafruit-io.html" target="_self">Internet of Things with Pycom and Adafruit IO - From Zero to Hero</a>. The accompanying tutorial has even more detail!</p></div>
+
+	
+    
+    
+        <p class="kbase-article-category">
+            <span>Category:</span>
+                                                                <a href="https://core-electronics.com.au/tutorials/pycom/">
+					<span itemprop="articleSection">Pycom</span></a>
+                                   </p>
+
+        <p class="kbase-article-tag">
+            <span>Tags:</span>
+                            <a href="https://core-electronics.com.au/tutorials/tag/bluetooth/">bluetooth</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/cat-m1/">cat-m1</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/cellular%20lte/">cellular lte</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/fipy/">fipy</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/lora/">lora</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/lorawan/">lorawan</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/nb-iot/">nb-iot</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/pycom/">pycom</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/sigfox/">sigfox</a>
+                           <a href="https://core-electronics.com.au/tutorials/tag/wifi/">wifi</a>
+                   </p>
+		<input type="hidden" id="topicid" value="3074">
+<div id="discourse-comments"><iframe src="./Pycom FiPy Getting Started - Tutorial Australia_files/comments.html" id="discourse-embed-frame" width="100%" frameborder="0" scrolling="no" height="38px"></iframe></div>
+
+<script type="text/javascript">
+  DiscourseEmbed = { discourseUrl: 'https://forum.core-electronics.com.au/',
+                     topicId: document.getElementById('topicid').value };
+
+  (function() {
+    var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
+    d.src = DiscourseEmbed.discourseUrl + 'javascripts/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
+  })();
+</script>
+		
+    	
+    <div itemprop="articleBody" style="display:none;">
+        Say you want to build a sun-tracking solar panel. You could add a tiny computer, like an Arduino, to control it. That might b...         </div>			
+	<div style="display:none;" itemprop="image" itemscope="" itemtype="https://schema.org/ImageObject">
+    <img src="./Pycom FiPy Getting Started - Tutorial Australia_files/pycom-fipy-getting-started.jpg">
+    <meta itemprop="url" content="https://core-electronics.com.au/media/kbase/pycom-fipy-getting-started.jpg">
+    <meta itemprop="width" content="300">
+    <meta itemprop="height" content="300">
+    </div>
+    <meta itemprop="url" content="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html">
+  <div style="display:none;" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization">
+    <div itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject">
+      <img src="./Pycom FiPy Getting Started - Tutorial Australia_files/logo.png">
+      <meta itemprop="url" content="https://core-electronics.com.au/skin/frontend/white/default/images/logo.png">
+      <meta itemprop="width" content="267">
+      <meta itemprop="height" content="80">
+    </div>
+    <meta itemprop="name" content="Core Electronics">
+  </div>
+</div>
+ 		
+<script>
+/*jQuery(document).ready( function() {
+ jQuery("iframe").each(
+     function(index, elem) {
+         elem.setAttribute("allowFullScreen",'');
+     }
+ );
+});*/
+</script>
+<script type="text/javascript">
+(function(jQuery) {
+  jQuery.fn.iframe_to_div = function(options) {
+    var $context = jQuery(this);
+    if (!$context.is('iframe')) {
+      $context = $context.find('iframe:not(.youtube-player)')
+    }
+    else if ($context.hasClass('youtube-player')) {
+     // return $(this);
+    }
+    $context.each(function() {
+     var $iframe = jQuery(this);
+	 var iframesrc = $iframe.attr('src');
+	 var iframeurlpath=iframesrc.replace(/#.*$/, '').replace(/\?.*$/, '');
+	 var iframeurl=iframeurlpath.split("embed/");
+	  var style = $iframe.attr('style').replace(/\s/g,'');
+      var $loading = false;
+      $loading = jQuery("<div><div class='youtube-player' style=" + style + " data-id="+iframeurl[1]+"></div></div>");
+      $iframe.after($loading.addClass('youtube-container'));
+      $iframe.remove();
+    });
+    return jQuery(this);
+  };
+})(jQuery);jQuery('.kbase-article-text').iframe_to_div();
+</script>
+<script type="text/javascript">
+  (function() {
+    var v = document.getElementsByClassName("youtube-player");
+    for (var n = 0; n < v.length; n++) {
+        var p = document.createElement("div");
+        p.innerHTML = labnolThumb(v[n].dataset.id);
+        p.onclick = labnolIframe;
+        v[n].appendChild(p);
+    }
+})();
+function labnolThumb(id) {
+    return '<img class="youtube-thumb" src="//i.ytimg.com/vi/' + id + '/sddefault.jpg"><div class="play-button"></div>';
+}
+function labnolIframe() {
+    var iframe = document.createElement("iframe");
+    iframe.setAttribute("src", "//www.youtube.com/embed/" + this.parentNode.dataset.id + "?autoplay=1&autohide=2&border=0&wmode=opaque&enablejsapi=1&controls=1&showinfo=1");
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute('allowFullScreen', '');
+    iframe.setAttribute("id", "youtube-iframe");
+    this.parentNode.replaceChild(iframe, this);
+}
+</script>
+<script src="./Pycom FiPy Getting Started - Tutorial Australia_files/jquery.popupoverlay.js"></script>
+<div class="dynamicfootertext"> <p>Have a question? <a class="dynamicfooterunderline">Ask the Author</a> of this guide today!</p> </div>
+
+<script type="text/javascript">
+    //< ![CDATA[
+        var customForm = new VarienForm('forum-comments-form');
+    //]]>
+</script>
+<script>
+function CheckLength() {
+    if (document.getElementById("postcommentbox").value.length < 20) {
+document.getElementById("showmsg").style.display="block";
+        return false;
+
+    } else {
+    document.getElementById("showmsg").style.display="none";
+    document.getElementById("forum-comments-form").submit();
+  
+  }
+}
+$j = jQuery.noConflict();
+$j(document).ready(function () {
+  $j('#basic').popup({
+        pagecontainer: '.container',
+        transition: 'all 0.3s'
+    });
+jQuery(".dynamicfooterunderline").click(function() {
+jQuery.ajax({
+            type: "POST",
+			 async: false,
+            url: 'https://core-electronics.com.au/addtocart/forum/login/',
+                  data: '',
+            success: function (response) {
+				  if (response == 'active') {
+	 jQuery(".dynamicfooterunderline").addClass('initialism basic_open btn btn-success');
+	        }
+		 if (response == 'inactive') {
+    window.location.href ='https://core-electronics.com.au/addtocart/login/login/article_id/314/';
+		} 
+	}
+});
+});
+});
+</script>
+<script>
+$j(document).ready(function(){
+    $j(".dynamicfooterunderline").click(function(event){
+        event.preventDefault();
+    });
+});
+</script>
+
+<script>
+jQuery(window).scroll(function(){
+jQuery(".dynamicfootertext").animate({ scrollTop: $(document).height() + $(window).height() }, 1200);
+});
+</script>
+					
+					  					
+                </div>
+				
+            </div>
+				<div class="clear"></div>
+
+        </div>
+        
+    </div>
+</div>
+<div class="footer_bg">
+        <div class="footer-container">
+    <div class="footer">
+    <script src="./Pycom FiPy Getting Started - Tutorial Australia_files/lightwidget.js"></script><iframe id="footerinsta" src="./Pycom FiPy Getting Started - Tutorial Australia_files/c0173d654eb451c28e454fd3e9ae3c35.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width: 100%; border: 0px; overflow: hidden; padding-bottom: 10px; height: 128px;"></iframe>     
+        <div class="links newlinks">
+<ul>
+<li><a href="https://core-electronics.com.au/customer-service/">Customer Service</a></li>
+<li><a href="https://core-electronics.com.au/privacy-policy">Privacy Policy</a></li>
+<li><a href="https://core-electronics.com.au/about-us">About Us</a></li>
+<li><a href="https://core-electronics.com.au/employment">Jobs</a></li>
+</ul>
+</div>    
+      
+     <div class="links links_middle">
+<div class="ce-social-icons">
+	<ul class="ce-social-icons-ul">
+<li><a href="https://www.facebook.com/CoreElectronics/" title="facebook" target="_blank" class="footer-fb">
+</a></li>
+<li><a href="https://www.youtube.com/channel/UCp5ShPYJvi2EA4hLUERa86w?sub_confirmation=1" title="youtube" target="_blank" class="footer-youtube"></a></li>
+<li><a href="http://coreelec.io/instagram" title="instagram" target="_blank" class="footer-instagram"></a></li>
+<li><a href="https://twitter.com/coreelecau" title="twitter" target="_blank" class="footer-twitter"></a></li>
+<li><a href="http://coreelec.io/github" title="github" target="_blank" class="footer-googleplus"></a></li>
+<li><a href="https://www.linkedin.com/company/core-electronics-pty-ltd" title="linkedin" target="_blank" class="footer-linkedin"></a></li>
+<li><a href="http://eepurl.com/cqlMJr" title="newsletter" target="_blank" class="footer-newsletter"></a></li>
+<li><a href="http://coreelec.io/meetup" title="meetup" target="_blank" class="d-hubs"></a></li>
+</ul>
+</div>
+<div class="news-top makermailnew">
+<a href="https://core-electronics.com.au/newsletter">sign up for maker mail!</a>
+</div>
+
+<div class="news-bottom">
+<img alt="bottom-banner" src="./Pycom FiPy Getting Started - Tutorial Australia_files/bottom-banner.png" height="37" width="373">
+</div>
+</div>     <div id="footer-quote"><span class="quotes-medium">Empowering<br>Creative<br>People<br></span></div> 
+     
+      
+  		<!--<div class="footer_bottom_right">
+			<p><img src="" /></p>
+			<p><img src="" /></p>	
+		</div>-->
+                <!--<address class="copyright"></address>-->
+            <div id="back-top" style="display: none;">
+                <a href="https://core-electronics.com.au/tutorials/pycom-fipy-getting-started.html#top"><span></span></a>
+             </div>
+    </div>
+</div>
+<script>
+var $btt= jQuery.noConflict();
+$btt(document).ready(function(){
+
+    // hide #back-top first
+    $btt("#back-top").hide();
+    
+    // fade in #back-top
+    $btt(function () {
+        $btt(window).scroll(function () {
+            if ($btt(this).scrollTop() > 100) {
+                $btt('#back-top').fadeIn();
+            } else {
+                $btt('#back-top').fadeOut();
+            }
+        });
+
+        // scroll body to 0px on click
+        $btt('#back-top a').click(function () {
+            $btt('body,html').animate({
+                scrollTop: 0
+            }, 800);
+            return false;
+        });
+    });
+
+});
+</script>
+                
+
+</div></section><div id="fb-root" class=" fb_reset"><div style="position: absolute; top: -10000px; width: 0px; height: 0px;"><div><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Pycom FiPy Getting Started - Tutorial Australia_files/d_vbiawPdxB.html" style="border: none;"></iframe></div><div></div></div></div>
+
+
+<script type="text/javascript">
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+"event": "fireRemarketingTag",
+"google_tag_params":
+{
+"ecomm_pagetype": "other",
+"ecomm_prodid": "",
+"ecomm_totalvalue": "0",
+}
+});
+</script>
+
+<script type="text/javascript">
+ //<![CDATA[
+var google_conversion_id = 960799998;
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+//]]>
+</script>
+<script type="text/javascript" src="./Pycom FiPy Getting Started - Tutorial Australia_files/f.txt" style="display: none !important;">
+</script>
+<noscript>
+<div style="display:none;">
+<img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/960799998/?value=0&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+
+
+<link rel="stylesheet" type="text/css" href="./Pycom FiPy Getting Started - Tutorial Australia_files/fonts.css"><style type="text/css">
+#notification-bar a.democlose{display:none;}
+#notification-bar { border-bottom: 1px solid #006188!important; }
+</style><style type="text/css">
+  #basic {
+    -webkit-transform: scale(0.8);
+       -moz-transform: scale(0.8);
+        -ms-transform: scale(0.8);
+            transform: scale(0.8);
+}
+.popup_visible #basic {
+    -webkit-transform: scale(1);
+       -moz-transform: scale(1);
+        -ms-transform: scale(1);
+            transform: scale(1);
+}
+</style><style>
+.kbase-article .advanced_tutorials .advanced_tutorials_image {margin-right: 10px;}
+@media (min-width: 1356px)
+.kbase-article .advanced_tutorials {
+   margin-left: 0px;
+}
+</style><style>
+     @media only screen and (max-width: 1000px) {
+      #footerinsta{display:none;}
+     } 
+     @media (min-width:1000px){
+      #footerinsta{display:block;}
+     .footer_bg{height:310px;}
+     .footer{padding-top:15px;}
+     .wrapper{padding-bottom:310px;}
+      }
+    </style>
+<script type="text/javascript">
+new Ajax.Request('/tutorials/pycom-fipy-getting-started.html', {
+    parameters: {amfpc_ajax_blocks: 'kbase_header'},
+    onSuccess: function(response) {
+        var blocks = response.responseText.evalJSON();
+        for (var name in blocks)
+        {
+            $$('div[id="amfpc-'+name+'"]').each(function(element){
+                element.replace(blocks[name]);
+            });
+        }
+
+        var event = new CustomEvent("amfpc-ajax-loaded", { detail: {blocks: Object.keys(blocks)} });
+        document.dispatchEvent(event);
+    }
+});
+</script>
+
+
+
+<div id="itoris-wishlist-popup-box" class="" style="display: none;">
+<div id="itoris-wishlist-popup-mask"></div>
+<div id="itoris-wishlist-popup" class="window">
+<div id="itoris-wishlist-popup-loading" style="display: none;"></div>
+<h4>Please select a wishlist you wish to add selected product(s) to:</h4>
+<div id="itoris-wishlist-radiostack">
+<div>
+<input type="radio" class="itoris-wishlist-radio" name="itoris-wishlist-radio" value="main" id="itoris-wishlist-radio-main" checked="checked" alt="Main">
+<label for="itoris-wishlist-radio-main">Main</label>
+</div>
+<div>
+<input type="radio" class="itoris-wishlist-radio" name="itoris-wishlist-radio" value="new">
+or create a new wishlist: <input type="text" id="itoris-wishlist-new-name" width="50%">
+</div>
+</div>
+<div id="itoris-wishlist-popup-buttons">
+<button type="button" title="Select" class="itoris-wishlist-button-select">
+<span><span>Select</span></span>
+</button>
+<button type="button" title="Cancel" class="itoris-wishlist-button-cancel">
+<span><span>Cancel</span></span>
+</button>
+</div>
+</div>
+<script type="text/javascript">
+itorisWishlistPopup = new Itoris.WishlistPopup({"stay_on_page":false,"check_wishlist_url":"https:\/\/core-electronics.com.au\/wishlist\/index\/ajax\/","add_product_ajax_url":"https:\/\/core-electronics.com.au\/wishlist\/ajax\/addProduct\/","wishlist_url":"https:\/\/core-electronics.com.au\/wishlist\/","update_wishlist_link_url":"https:\/\/core-electronics.com.au\/wishlist\/index\/itemCount\/","message_empty_name":"Enter the name of new wishlist","message_name_exists":"Wishlist with such a name already exists. Please choose a different name.","route_name":"wishlist"});
+Event.observe(document, 'dom:loaded', function(){
+var body = $$('body')[0];
+if (body) {
+body.appendChild($('itoris-wishlist-popup-box'));
+}
+itorisWishlistPopup.mainWishlist = 'main';
+var protectedItems = [];
+$$('#wishlist-sidebar a.btn-remove').each(function(a){
+for(var i=0; i<protectedItems.length; i++) {
+if (a.href.indexOf('/wishlist/index/remove/item/'+protectedItems[i]+'/') > -1 ) {
+a.setStyle({visibility: 'hidden'});
+break;
+}
+}
+});
+});
+</script>
+</div><div style="position: absolute; display: none; z-index: 99999; top: 0px; left: -469px;" id="anonymous_element_1"><div id="sbs_searchmob_autocomplete_box" class="sbs_autocomplete_inner" style="width: 469px; padding: 0px;"><div id="sbs_searchmob_autocomplete_right" class="sbs_autocomplete_inner_right"></div><div id="sbs_searchmob_autocomplete_left" class="sbs_autocomplete_inner_left"></div><div id="sbs_searchmob_closed_button" class="sbs_autocomplete_close_button" style="top: 5px; left: 444px;">&nbsp;</div></div></div><div style="position: absolute; display: none; z-index: 99999; top: 90px; left: 1114px;" id="anonymous_element_2"><div id="sbs_search_autocomplete_box" class="sbs_autocomplete_inner" style="width: 469px; padding: 0px;"><div id="sbs_search_autocomplete_right" class="sbs_autocomplete_inner_right"></div><div id="sbs_search_autocomplete_left" class="sbs_autocomplete_inner_left"></div><div id="sbs_search_closed_button" class="sbs_autocomplete_close_button" style="top: 5px; left: 444px;">&nbsp;</div></div></div><div id="basic_background" class="popup_background" style="opacity: 0; visibility: hidden; background-color: black; position: fixed; top: 0px; right: 0px; bottom: 0px; left: 0px; z-index: 100000; transition: all 0.3s ease 0s;"></div><div id="basic_wrapper" class="popup_wrapper" style="opacity: 0; visibility: hidden; position: fixed; overflow: auto; z-index: 100001; transition: all 0.3s ease 0s; width: 100%; height: 100%; top: 0px; left: 0px; text-align: center; display: none;"><div id="basic" class="well popup_content" style="display: inline-block; opacity: 0; visibility: hidden; outline: none; transition: all 0.3s ease 0s; text-align: left; position: relative; vertical-align: middle;" data-popup-initialized="true" aria-hidden="true" role="dialog">
+    <h4>Your comment/question: </h4>
+    <button class="basic_close btn btn-default">X</button>
+    <form onsubmit="return CheckLength()" id="forum-comments-form" method="post" action="https://core-electronics.com.au/addtocart/forum/postarticlecomments/">
+      <input name="form_key" type="hidden" value="hM4lbYTmycHXQ8jl">
+	  <input type="hidden" name="article_id" value="314">
+      <textarea minlength="20" id="postcommentbox" name="postcommentbox" class="popuptextarea input-text required-entry"></textarea>
+      <p class="hide" id="showmsg" style="display:none;color:red;">Please enter minimum 20 characters</p>
+       <p style="width: 400px;padding-top: 10px;">Your comment will be posted (automatically) on our Support Forum which is publicly accessible. Don't enter private information, such as your phone number.
+</p>
+<p style="width: 400px;padding-top: 10px;">Expect a quick reply during business hours, many of us check-in over the weekend as well.</p>
+    <input id="commentsubmit" type="submit" value="Submit">
+   </form>
+</div><div class="popup_align" style="display: inline-block; vertical-align: middle; height: 100%;"></div></div><iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Pycom FiPy Getting Started - Tutorial Australia_files/saved_resource(1).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><script>
+    (function(d,s){var z=$zopim,$=z.s= d.createElement(s),e=d.getElementsByTagName(s)[0];
+    $.async=!0;$.setAttribute('charset','utf-8');
+    $.src='https://v2.zopim.com/?wyjIuwrG0MrJf3P3eSD6jtQ9SOeuyh3c';
+    z.t=+new Date;$. type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+  </script><div><iframe title="Opens a widget where you can find more information" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 1; width: 114px; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; left: 0px; bottom: 0px;" src="./Pycom FiPy Getting Started - Tutorial Australia_files/saved_resource(2).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition: opacity 250ms cubic-bezier(0.645, 0.045, 0.355, 1) 0s, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px;" src="./Pycom FiPy Getting Started - Tutorial Australia_files/saved_resource(3).html"></iframe></div><div class="zopim" __jx__id="___$_1" style="position: absolute; visibility: hidden; margin: 0px; padding: 0px; border: 0px; height: 0px; width: 0px;"></div><style></style></body></html>
